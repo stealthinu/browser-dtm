@@ -7,3 +7,9 @@
 - SoundFont（FluidR3, GeneralUser GS）— 各ライセンスに従う。同梱しない。
 
 各実装は、取り込んだ上流コードのヘッダと表示を消さないこと。
+
+## impl/claude-code が使う npm パッケージ（dist/ に束ねる。dist/ は commit しない）
+- `@onjmin/dtm` 2.1.38 — AGPL-3.0-or-later, (c) onjmin。
+- `@breezystack/lamejs` — LGPL-3.0（MP3 エンコーダ。LAME の JS 移植）。配布するときは LGPL の条件（差し替え可能な形・ソースの提供）に従う。
+- 開発用: `esbuild`（MIT）、`puppeteer-core`（Apache-2.0）、`@modelcontextprotocol/sdk`（MIT）、`tsx`（MIT）。
+- VocaTab の `ui/src/engine-web/*`・`engine.ts`・`model.ts`・`params.ts` などを esbuild で import して束ねる（上流のファイルは書き換えない。束ねた dist/ にも上流の MIT 表示が必要: 配布するときは上流の LICENSE を添える）。
