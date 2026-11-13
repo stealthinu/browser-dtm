@@ -1,0 +1,27 @@
+{
+  "name": "browser-dtm",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "node server/serve.mjs",
+    "test": "tsx --test test/*.test.ts",
+    "e2e": "node scripts/e2e.mjs",
+    "e2e:fx": "node scripts/e2e.mjs --fx",
+    "mcp": "tsx mcp/server.ts",
+    "mcp:smoke": "node scripts/mcp-smoke.mjs"
+  },
+  "dependencies": {
+    "@onjmin/dtm": "^2.1.38"
+  },
+  "devDependencies": {
+    "@breezystack/lamejs": "^1.2.7",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "esbuild": "^0.28.2",
+    "puppeteer-core": "^25.16.0",
+    "tsx": "^4.23.15",
+    "zod": "^4.6.7"
+  }
+}
