@@ -1,0 +1,12 @@
+node_modules/
+vendor/
+out/
+dist/
+*.onnx
+*.sf2
+*.sf3
+*.mp3
+*.wav
+.env
+.env.*
+.jev-plans/
