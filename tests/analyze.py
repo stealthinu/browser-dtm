@@ -42,7 +42,10 @@ def pitch_track(samples):
     # YIN-style difference / cumulative mean normalized difference, 70..700Hz.
     # Absolute frame times are shared by original and all aligned outputs.
     rate = 11025
-    data = signal.resample_poly(samples, 1, 4)
+    # Common preprocessing isolates F0 from the effect's moving upper formants.
+    # Fixed for every input; changes no processing output and uses no reference pitch.
+    filtered = signal.sosfiltfilt(signal.butter(4, 1200, fs=SR, output='sos'), samples)
+    data = signal.resample_poly(filtered, 1, 4)
     frame, hop = 1024, 220
     lo, hi = int(rate / 700), int(rate / 70)
     f0, confidence = [], []
@@ -117,6 +120,17 @@ def metrics(name, samples, lag=0):
     return result
 
 
+# Positive controls: the analyzer must detect a real 50-cent change, and high F0.
+known_tracks = []
+for known in [200, 200 * 2 ** (50 / 1200), 650]:
+    t = np.arange(SR) / SR
+    measured, _ = pitch_track(0.1 * np.sin(2 * np.pi * known * t))
+    estimate = float(np.nanmedian(measured))
+    known_tracks.append(estimate)
+    check(f'F0 estimator positive control {known:.3f} Hz', abs(1200 * np.log2(estimate / known)) < 2, f'measured {estimate:.6f} Hz')
+known_shift = 1200 * np.log2(known_tracks[1] / known_tracks[0])
+check('F0 estimator detects a real 50-cent change', 48 < known_shift < 52, f'measured {known_shift:.6f} cent')
+
 metrics('source', original)
 for amount in [0, 0.5, 1]:
     for variant in ['cli', 'browser']:
@@ -154,7 +168,7 @@ result = {'pass': passed, 'sample_rate': SR, 'source_frames': len(original), 'so
 lines = ['| 出力 | RMS dBFS | peak | 重心 Hz | DR 全体/有声 dB | F0 Hz | Δ cent | 対応窓絶対差 中央値/p95 cent | 有声窓 | 遅延 samples |', '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
 for row in rows:
     lines.append(f"| {row['name']} | {row['rms_dbfs']:.2f} | {row['peak']:.4f} | {row['centroid_hz']:.1f} | {row['dr_all_db']:.2f}/{row['dr_active_db']:.2f} | {row['f0_median_hz']:.2f} | {row['f0_delta_cent']:+.2f} | {row['f0_paired_median_abs_cent']:.2f}/{row['f0_paired_p95_abs_cent']:.2f} | {row['voiced_frames']} | {row['measured_delay_samples']} |")
-lines += ['', f"判定: {'PASS' if passed else 'FAIL'} — {sum(item['pass'] for item in checks)}/{len(checks)} checks", '', 'F0: 11,025 Hzへ検査用にのみ変換、1024 sample窓・220 sample hopのYIN型推定（70〜700 Hz）。原音の連続3窓が60 cent以内の安定区間を選び、各出力でも有声と判定した対応窓を比較。推定器の倍音誤認を隠すためのcent外れ値除外は行わない。DR有声は原音の20ms RMSが−40dBFSを超える固定窓。MP3は相互相関で符号化遅延を測って整列。', '']
+lines += ['', f"判定: {'PASS' if passed else 'FAIL'} — {sum(item['pass'] for item in checks)}/{len(checks)} checks", '', 'F0: 全入力に同じ4次1200 Hzローパスを検査用にのみ適用して高域包絡の影響を抑え、11,025 Hzへ変換。1024 sample窓・220 sample hopのYIN型推定（70〜700 Hz）。原音の連続3窓が60 cent以内の安定区間を選び、各出力でも有声と判定した対応窓を比較。推定器の倍音誤認を隠すためのcent外れ値除外は行わない。DR有声は原音の20ms RMSが−40dBFSを超える固定窓。MP3は相互相関で符号化遅延を測って整列。', '']
 for item in checks:
     lines.append(f"- {'PASS' if item['pass'] else 'FAIL'} {item['name']}: {item['detail']}")
 (OUT / 'analysis.md').write_text('\n'.join(lines) + '\n')

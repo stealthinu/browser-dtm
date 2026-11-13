@@ -1,3 +1,4 @@
+import { decodePcmWav } from './wav.js';
 const $ = id => document.getElementById(id);
 const context = new AudioContext();
 const analyser = context.createAnalyser();
@@ -38,22 +39,9 @@ function runWorker(url, data, type = 'module') {
 async function load(file) {
   stop(); busy = true; output = undefined; controls(); status('歌声を読み込んでいます…');
   try {
-    // A temporary offline decoder retains the file rate instead of using the device rate.
-    // WAV parsing supplies its rate; other formats use the normal 44.1kHz decode path.
     const bytes = await file.arrayBuffer();
-    const view = new DataView(bytes);
-    let rate = 44100;
-    if (bytes.byteLength >= 12 && view.getUint32(0, false) === 0x52494646 && view.getUint32(8, false) === 0x57415645) {
-      for (let p = 12; p + 8 <= bytes.byteLength;) {
-        const size = view.getUint32(p + 4, true);
-        if (view.getUint32(p, false) === 0x666d7420 && size >= 16 && p + 24 <= bytes.byteLength) {
-          rate = view.getUint32(p + 12, true); break;
-        }
-        p += 8 + size + (size & 1);
-      }
-    }
-    const decoder = new OfflineAudioContext(1, 1, rate);
-    input = await decoder.decodeAudioData(bytes);
+    const decoder = new OfflineAudioContext(1, 1, 44100);
+    input = decodePcmWav(bytes, decoder) ?? await decoder.decodeAudioData(bytes);
     if (input.numberOfChannels > 2) throw new Error('mono / stereo の歌声を選んでください');
     $('fileInfo').textContent = `${file.name} · ${input.duration.toFixed(2)} 秒 · ${input.sampleRate} Hz · ${input.numberOfChannels} ch`;
     status('強度を選び「この強度で処理」を押してください。');
