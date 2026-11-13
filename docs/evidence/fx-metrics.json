@@ -1,0 +1,91 @@
+{
+  "dry": {
+    "rms": 0.10240048200041388,
+    "peak": 0.47655731439590454,
+    "onsetMs": 259.5691609977324,
+    "durationMs": 8556.55328798186
+  },
+  "rows": [
+    {
+      "effect": "kerokero",
+      "amount": 0,
+      "rms": 0.10240048200041388,
+      "peak": 0.47655731439590454,
+      "onsetMs": 259.5691609977324,
+      "rmsDelta": 0,
+      "peakDelta": 0,
+      "changed": true
+    },
+    {
+      "effect": "kerokero",
+      "amount": 1,
+      "rms": 0.09809553094459321,
+      "peak": 0.460451602935791,
+      "onsetMs": 310.8616780045351,
+      "rmsDelta": -0.004304951055820669,
+      "peakDelta": -0.016105711460113525,
+      "changed": true
+    },
+    {
+      "effect": "vocoder",
+      "amount": 0,
+      "rms": 0.10240048200041388,
+      "peak": 0.47655731439590454,
+      "onsetMs": 259.5691609977324,
+      "rmsDelta": 0,
+      "peakDelta": 0,
+      "changed": true
+    },
+    {
+      "effect": "vocoder",
+      "amount": 1,
+      "rms": 0.19551901307185696,
+      "peak": 0.800000011920929,
+      "onsetMs": 262.4263038548753,
+      "rmsDelta": 0.09311853107144308,
+      "peakDelta": 0.3234426975250244,
+      "changed": true
+    },
+    {
+      "effect": "bitcrusher",
+      "amount": 0,
+      "rms": 0.10240048200041388,
+      "peak": 0.47655731439590454,
+      "onsetMs": 259.5691609977324,
+      "rmsDelta": 0,
+      "peakDelta": 0,
+      "changed": true
+    },
+    {
+      "effect": "bitcrusher",
+      "amount": 1,
+      "rms": 0.10865406786737541,
+      "peak": 0.5,
+      "onsetMs": 268.0725623582766,
+      "rmsDelta": 0.006253585866961536,
+      "peakDelta": 0.02344268560409546,
+      "changed": true
+    },
+    {
+      "effect": "doubling",
+      "amount": 0,
+      "rms": 0.10240048200041388,
+      "peak": 0.47655731439590454,
+      "onsetMs": 259.5691609977324,
+      "rmsDelta": 0,
+      "peakDelta": 0,
+      "changed": true
+    },
+    {
+      "effect": "doubling",
+      "amount": 1,
+      "rms": 0.10145761769536175,
+      "peak": 0.5776626467704773,
+      "onsetMs": 259.70521541950114,
+      "rmsDelta": -0.000942864305052124,
+      "peakDelta": 0.10110533237457275,
+      "changed": true
+    }
+  ],
+  "pass": true
+}

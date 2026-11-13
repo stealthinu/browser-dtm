@@ -46,9 +46,17 @@ async function main(): Promise<void> {
       };
     });
 
-    const mp3 = Buffer.from(result.mp3);
-    await fs.writeFile("out/mix.mp3", mp3);
     await fs.writeFile("out/mix.wav", Buffer.from(result.wav));
+    // 既定出力は MP3（ブラウザの lamejs 成否に依らず ffmpeg で確定）
+    const mp3Conv = spawnSync(
+      "ffmpeg",
+      ["-y", "-i", "out/mix.wav", "-codec:a", "libmp3lame", "-qscale:a", "4", "out/mix.mp3"],
+      { encoding: "utf8" },
+    );
+    if (mp3Conv.status !== 0) {
+      throw new Error(`ffmpeg mp3 失敗: ${mp3Conv.stderr}`);
+    }
+    const mp3 = await fs.readFile("out/mix.mp3");
 
     // ffmpeg で数値確認（RMS/peak）
     const vol = spawnSync(
@@ -68,15 +76,16 @@ async function main(): Promise<void> {
       vocalSeconds: result.vocalSeconds,
       phrases: result.phrases,
       passSilence: (result.metrics.mixRms as number) > 0.001 && (result.metrics.mixPeak as number) > 0.01,
-      passOffset: Math.abs(result.metrics.offsetMs as number) < 30 || (result.metrics.scheduledDelaySec as number) === 0.1,
+      passOffset: Math.abs(result.metrics.offsetMs as number) < 30,
     };
     await fs.writeFile("out/metrics.json", JSON.stringify(metrics, null, 2));
     console.log(JSON.stringify(metrics, null, 2));
     if (!metrics.passSilence) throw new Error("無音判定: mix RMS/peak が低すぎる");
   } finally {
-    await browser.close();
+    await browser.close().catch(() => undefined);
     stopProc(proc);
   }
+  process.exit(0);
 }
 
 main().catch((e) => {

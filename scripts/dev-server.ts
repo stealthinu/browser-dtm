@@ -5,6 +5,7 @@ export function startDevServer(port = 5300): Promise<{ proc: ChildProcess; base:
     cwd: process.cwd(),
     stdio: ["ignore", "pipe", "pipe"],
     env: { ...process.env },
+    detached: true,
   });
   const base = `http://127.0.0.1:${port}/`;
   return new Promise((resolve, reject) => {
@@ -36,7 +37,21 @@ export function startDevServer(port = 5300): Promise<{ proc: ChildProcess; base:
 }
 
 export function stopProc(proc: ChildProcess): void {
-  if (!proc.killed) {
-    proc.kill("SIGTERM");
+  if (!proc.pid) return;
+  try {
+    process.kill(-proc.pid, "SIGTERM");
+  } catch {
+    try {
+      proc.kill("SIGTERM");
+    } catch {
+      /* ignore */
+    }
   }
+  setTimeout(() => {
+    try {
+      if (proc.pid) process.kill(-proc.pid, "SIGKILL");
+    } catch {
+      /* ignore */
+    }
+  }, 1500).unref();
 }

@@ -84,9 +84,10 @@ async function main(): Promise<void> {
     console.log(JSON.stringify(out, null, 2));
     if (!pass) throw new Error("エフェクト差分が検出できない行がある");
   } finally {
-    await browser.close();
+    await browser.close().catch(() => undefined);
     stopProc(proc);
   }
+  process.exit(0);
 }
 
 main().catch((e) => {

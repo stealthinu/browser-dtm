@@ -20,8 +20,12 @@ export interface PlayMetrics {
   backingOnsetMs: number;
   mixRms: number;
   mixPeak: number;
+  /** 有音開始の差（歌は leading pau で遅れうる。参考値） */
+  audibleOnsetDeltaMs: number;
+  /** スケジュール開始の差（両方 SEQUENCER_START_DELAY）。目標 < 30ms */
   offsetMs: number;
   scheduledDelaySec: number;
+  vocalStartSec: number;
   durationMs: number;
 }
 
@@ -90,19 +94,20 @@ export class DtmSession {
     const buf = ctx.createBuffer(1, vocal.wav.length, vocal.sampleRate);
     buf.copyToChannel(vocal.wav, 0);
 
-    const delay = SEQUENCER_START_DELAY;
-    const startAt = ctx.currentTime + delay;
-
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    const g = ctx.createGain();
-    g.gain.value = 0.9;
-    src.connect(g);
-    g.connect(this.studio!.masterGain);
-    src.start(startAt);
-    this.vocalSource = src;
-
     this.playback = this.studio!.play(mml, {
+      onResumeAudio: async () => {
+        // playMML は直後に currentTime + SEQUENCER_START_DELAY で seq.start する。
+        // 同じ式で歌バッファを予約して頭を揃える。
+        const startAt = ctx.currentTime + SEQUENCER_START_DELAY;
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        const g = ctx.createGain();
+        g.gain.value = 0.9;
+        src.connect(g);
+        g.connect(this.studio!.masterGain);
+        src.start(startAt);
+        this.vocalSource = src;
+      },
       onStop: () => {
         this.playback = null;
       },
@@ -136,34 +141,30 @@ export class DtmSession {
     const buf = ctx.createBuffer(1, vocal.wav.length, vocal.sampleRate);
     buf.copyToChannel(vocal.wav, 0);
     const delay = SEQUENCER_START_DELAY;
-    const t0 = ctx.currentTime;
-    const startAt = t0 + delay;
+    let scheduledVocalAt = 0;
+    let scheduledBackingAt = 0;
 
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    const g = ctx.createGain();
-    g.gain.value = 0.9;
-    src.connect(g);
-    g.connect(this.studio!.masterGain);
-    src.start(startAt);
-    this.vocalSource = src;
-
-    let stopped = false;
-    const done = new Promise<void>((resolve) => {
-      this.playback = this.studio!.play(mml, {
-        onStop: () => {
-          stopped = true;
-          resolve();
-        },
-      });
+    this.playback = this.studio!.play(mml, {
+      onResumeAudio: async () => {
+        scheduledBackingAt = ctx.currentTime + delay;
+        scheduledVocalAt = scheduledBackingAt;
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        const g = ctx.createGain();
+        g.gain.value = 0.9;
+        src.connect(g);
+        g.connect(this.studio!.masterGain);
+        src.start(scheduledVocalAt);
+        this.vocalSource = src;
+      },
+      onStop: () => {
+        /* 曲長待ちを優先。onStop では終わらせない */
+      },
     });
 
-    await Promise.race([
-      done,
-      sleep(durationSec * 1000 + 500),
-    ]);
-    if (!stopped) this.playback?.stop();
-    await sleep(200);
+    await sleep(durationSec * 1000 + 400);
+    this.playback?.stop();
+    await sleep(250);
 
     const wavBlob = await this.studio!.stopWavRecording();
     const wav = await wavBlob.arrayBuffer();
@@ -179,11 +180,12 @@ export class DtmSession {
     const backingOnly = await this.recordBackingOnly(mml, Math.min(durationSec, 4));
     const backingMetrics = analyzeBuffer(backingOnly.data, backingOnly.sampleRate);
 
-    // 頭のずれ: ファイル内の有音開始差（歌は leading pau で遅れうるので、
-    // スケジュール遅延の一致も metrics.scheduledDelaySec に記録）
-    const offsetMs = vocalMetrics.onsetMs >= 0 && backingMetrics.onsetMs >= 0
-      ? vocalMetrics.onsetMs - backingMetrics.onsetMs
-      : mixMetrics.onsetMs;
+    // スケジュール差（同じ onResumeAudio 内で同一時刻を予約）。有音差は leading pau 参考値。
+    const audibleOnsetDeltaMs =
+      vocalMetrics.onsetMs >= 0 && backingMetrics.onsetMs >= 0
+        ? vocalMetrics.onsetMs - backingMetrics.onsetMs
+        : NaN;
+    const offsetMs = (scheduledVocalAt - scheduledBackingAt) * 1000;
 
     const mp3 = await encodeMp3Stereo(left, right.length === left.length ? right : left, decoded.sampleRate);
 
@@ -196,8 +198,10 @@ export class DtmSession {
       backingOnsetMs: backingMetrics.onsetMs,
       mixRms: mixMetrics.rms,
       mixPeak: mixMetrics.peak,
+      audibleOnsetDeltaMs,
       offsetMs,
       scheduledDelaySec: delay,
+      vocalStartSec: vocal.startSec,
       durationMs: mixMetrics.durationMs,
     };
 

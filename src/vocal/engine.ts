@@ -161,9 +161,14 @@ export class VocalEngine {
           retake_mel: {},
         },
       });
-      parts.push({ start: ph.startFrame * HOP, wav: synth.wav });
+      const wavArr =
+        synth.wav instanceof Float32Array
+          ? synth.wav
+          : new Float32Array(synth.wav as unknown as ArrayLike<number>);
+      parts.push({ start: Math.floor(ph.startFrame * HOP), wav: wavArr });
     }
 
+    if (!parts.length) throw new Error("合成された句が無い");
     const wav = assembleParts(parts);
     const effected = applyVocalFx(wav, SAMPLE_RATE, opts.effects);
     const startSec = analyzed.phrases[0]?.start_sec ?? 0;
@@ -183,17 +188,36 @@ export class VocalEngine {
 }
 
 function assembleParts(parts: Array<{ start: number; wav: Float32Array }>): Float32Array {
+  const normalized = parts.map((p) => {
+    const start = Math.max(0, Math.floor(Number(p.start) || 0));
+    const wav =
+      p.wav instanceof Float32Array
+        ? p.wav
+        : new Float32Array(p.wav as unknown as ArrayLike<number>);
+    return { start, wav };
+  });
   let end = 0;
-  for (const p of parts) end = Math.max(end, p.start + p.wav.length);
-  const out = new Float32Array(end);
-  for (const p of parts) out.set(p.wav, p.start);
+  for (const p of normalized) end = Math.max(end, p.start + p.wav.length);
+  const out = new Float32Array(Math.max(1, end));
+  for (const p of normalized) {
+    if (p.wav.length === 0) continue;
+    if (p.start + p.wav.length > out.length) {
+      throw new Error(
+        `assembleParts overflow: start=${p.start} wav=${p.wav.length} end=${out.length}`,
+      );
+    }
+    out.set(p.wav, p.start);
+  }
   return out;
 }
 
 export function resolveVocatabUrls(): { baseUrl: string; workerUrl: string } {
-  const base = (import.meta as { env?: { VITE_VOCATAB_BASE?: string } }).env?.VITE_VOCATAB_BASE || "/vocatab/";
+  const basePath =
+    (import.meta as { env?: { VITE_VOCATAB_BASE?: string } }).env?.VITE_VOCATAB_BASE || "/vocatab/";
+  const origin = typeof location !== "undefined" ? location.href : "http://127.0.0.1:5300/";
+  const baseUrl = new URL(basePath, origin).href;
   return {
-    baseUrl: base,
-    workerUrl: new URL("ui/dist/engine-worker.js", base).href,
+    baseUrl,
+    workerUrl: new URL("ui/dist/engine-worker.js", baseUrl).href,
   };
 }

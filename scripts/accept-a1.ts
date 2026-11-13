@@ -46,9 +46,10 @@ async function main(): Promise<void> {
     await fs.writeFile("out/a1.json", JSON.stringify(report, null, 2));
     console.log(JSON.stringify(report, null, 2));
   } finally {
-    await browser.close();
+    await browser.close().catch(() => undefined);
     stopProc(proc);
   }
+  process.exit(0);
 }
 
 main().catch((e) => {

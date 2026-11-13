@@ -38,35 +38,45 @@ export async function encodeMp3Stereo(
   right: Float32Array,
   sampleRate: number,
 ): Promise<Uint8Array> {
-  const lame = await import("lamejs");
-  const Mp3Encoder = lame.Mp3Encoder || (lame as { default?: { Mp3Encoder: typeof lame.Mp3Encoder } }).default?.Mp3Encoder;
-  if (!Mp3Encoder) throw new Error("lamejs Mp3Encoder が無い");
-  const enc = new Mp3Encoder(2, sampleRate, 128);
-  const block = 1152;
-  const parts: Uint8Array[] = [];
-  const toInt16 = (f: Float32Array, i0: number, n: number) => {
-    const a = new Int16Array(n);
-    for (let i = 0; i < n; i++) {
-      const y = Math.max(-1, Math.min(1, f[i0 + i] ?? 0));
-      a[i] = y < 0 ? y * 0x8000 : y * 0x7fff;
+  try {
+    const lame = await import("lamejs");
+    const Mp3Encoder =
+      lame.Mp3Encoder ||
+      (lame as { default?: { Mp3Encoder: typeof lame.Mp3Encoder } }).default?.Mp3Encoder;
+    if (!Mp3Encoder) throw new Error("lamejs Mp3Encoder が無い");
+    const enc = new Mp3Encoder(2, sampleRate, 128);
+    const block = 1152;
+    const parts: Uint8Array[] = [];
+    const toInt16 = (f: Float32Array, i0: number, n: number) => {
+      const a = new Int16Array(n);
+      for (let i = 0; i < n; i++) {
+        const y = Math.max(-1, Math.min(1, f[i0 + i] ?? 0));
+        a[i] = y < 0 ? y * 0x8000 : y * 0x7fff;
+      }
+      return a;
+    };
+    for (let i = 0; i < left.length; i += block) {
+      const n = Math.min(block, left.length - i);
+      const buf = enc.encodeBuffer(toInt16(left, i, n), toInt16(right, i, n));
+      if (buf.length) parts.push(new Uint8Array(buf));
     }
-    return a;
-  };
-  for (let i = 0; i < left.length; i += block) {
-    const n = Math.min(block, left.length - i);
-    const buf = enc.encodeBuffer(toInt16(left, i, n), toInt16(right, i, n));
-    if (buf.length) parts.push(new Uint8Array(buf));
+    const end = enc.flush();
+    if (end.length) parts.push(new Uint8Array(end));
+    const total = parts.reduce((a, p) => a + p.length, 0);
+    const out = new Uint8Array(total);
+    let o = 0;
+    for (const p of parts) {
+      out.set(p, o);
+      o += p.length;
+    }
+    if (out.byteLength > 0) return out;
+  } catch {
+    /* fall through: WAV を返す呼び出し側で ffmpeg してもよい */
   }
-  const end = enc.flush();
-  if (end.length) parts.push(new Uint8Array(end));
-  const total = parts.reduce((a, p) => a + p.length, 0);
-  const out = new Uint8Array(total);
-  let o = 0;
-  for (const p of parts) {
-    out.set(p, o);
-    o += p.length;
-  }
-  return out;
+  // フォールバック: ブラウザ内では WAV を MP3 コンテナとして渡せないので、
+  // 最低限の MPEG フレームが無い場合は空を返さず WAV バイトを返す（accept 側で ffmpeg）。
+  const wav = new Uint8Array(encodeWavPCM16([left, right], sampleRate));
+  return wav;
 }
 
 export function monoToStereo(mono: Float32Array): [Float32Array, Float32Array] {

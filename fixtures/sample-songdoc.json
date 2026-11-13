@@ -42,14 +42,14 @@
       "kind": "inst",
       "program": "Acoustic Grand Piano",
       "font": "FluidR3",
-      "mml": "o4 l4 'ceg' 'ceg' 'cfa' 'cfa' 'ceg' 'ceg' 'cfa' 'cga'"
+      "mml": "o4 l4 'ceg' 'ceg' 'cfa' 'cfa' 'ceg' 'ceg' 'cfa' 'cga' 'ceg' 'ceg' 'cfa' 'cfa' 'ceg' 'ceg' 'cfa' 'cga' 'ceg' 'ceg' 'cfa' 'cfa' 'ceg' 'ceg' 'cfa' 'cga' 'ceg' 'ceg' 'cfa' 'cfa' 'ceg' 'ceg' 'cfa' 'cga'"
     },
     {
       "id": "bs",
       "kind": "inst",
       "program": "Electric Bass (finger)",
       "font": "FluidR3",
-      "mml": "o2 l2 c c f f c c f g"
+      "mml": "o2 l2 c c f f c c f g c c f f c c f g"
     },
     {
       "id": "dr",

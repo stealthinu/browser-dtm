@@ -68,6 +68,7 @@ async function main(): Promise<void> {
   } finally {
     await client.close();
   }
+  process.exit(0);
 }
 
 main().catch((e) => {

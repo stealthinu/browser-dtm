@@ -1,0 +1,22 @@
+{
+  "vocalRms": 0.10240048200041388,
+  "vocalPeak": 0.47655731439590454,
+  "vocalOnsetMs": 259.5691609977324,
+  "backingRms": 0.3775722293617348,
+  "backingPeak": 0.97674560546875,
+  "backingOnsetMs": 123.80952380952381,
+  "mixRms": 0.3606711683532104,
+  "mixPeak": 0.977569580078125,
+  "audibleOnsetDeltaMs": 135.75963718820861,
+  "offsetMs": 0,
+  "scheduledDelaySec": 0.1,
+  "vocalStartSec": -0.3049999997019768,
+  "durationMs": 17554.285714285714,
+  "ffmpegMeanDb": -8.9,
+  "ffmpegMaxDb": 0,
+  "mp3Bytes": 200932,
+  "vocalSeconds": 8.55655328798186,
+  "phrases": 1,
+  "passSilence": true,
+  "passOffset": true
+}
