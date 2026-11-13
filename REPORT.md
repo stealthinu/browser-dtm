@@ -1,63 +1,135 @@
-# vocaloid フィルター作業記録
+# vocaloid フィルター最終報告
+
+**実装・指定MP3 6本を作成済み。受入試験は一部未達（数値検証50/51）。修復上限2回に達したため、追加修正せず終了。**
 
 ## GOAL
-VocaTab の生成歌声を、F0 を変更せず音色とダイナミクスでボカロ風にする独立エフェクト `vocaloid` を作る。強度は 0〜1、0 は完全な素通し。ブラウザと CLI は同一 DSP を使う。既存アプリへは埋め込まない。
 
-## ACCEPTANCE TESTS（実行予定コマンドと判定条件）
-1. `node --test tests/vocaloid.test.js` — amount=0、クランプ、長さ、無音、非有限値の扱い、ピッチを変えない合成波テストが全件 PASS。
-2. `node tests/render-cli.js` — 提供 WAV を強度 0 / 0.5 / 1 で `/workspace/vocaloid-filter-demo/vocaloid-{amount}.mp3` に書き出す。全件成功。
-3. `node tests/browser.js` — `/usr/bin/google-chrome` を headless で使い、ローカル WAV を実際に Web Audio で再生し、同じ3強度をブラウザで MP3 化して `out/browser-vocaloid-{amount}.mp3` に保存。エラーなし、非無音、クリップなし。
-4. `python3 tests/analyze.py` — 原音・両版の3強度について RMS、重心、短窓 RMS の95–5百分位差、F0 中央値と原音からの cent 差を表にする。amount=0 の DSP 出力は入力と一致。非ゼロ強度で音が変化、CLI/ブラウザの RMS・重心差は各5%未満、F0 中央値差は20 cent未満、全出力が非無音で連続クリップなし。
-5. `git diff --check` — 空白エラーなし。`git status --short` と `git ls-files` で音声・モデル・秘密が追跡されていないことを確認。
+VocaTabの生成歌声を、F0を変えず音色とダイナミクスで「ボカロっぽく」する独立エフェクト `vocaloid` を1つ作る。強度0〜1、0は素通し。既存3アプリへ埋め込まない。
 
-## 制約・進行
-- 開始: 2026-11-13 21:58 JST。締切: 23:20 JST（全体90分以内）。
-- ブランチ: feat/vocaloid-filter のみ。各節目に自分のファイルだけ commit / `git push origin HEAD`。
-- 受け入れテスト失敗後の修復は最大2回、プロバイダ切替は最大1回（有料 API は使わない）。
-- 開発サーバーは5400〜5499。終了時に自分のサーバーを停止。
-- 接続障害は復旧しない。指示の JEV_NEEDS_MUGI 行を出力し記録する。
+## ACCEPTANCE TESTS と最終結果
 
-## 事前確認
-- 現在ブランチと clean な作業ツリーを確認。
-- 指定 WAV と SOURCE.txt が存在。VocaTab の受入テスト生成、44.1kHz mono 約8.60秒。音声は追跡しない。
-- ffmpeg / node / Chrome が存在。Python は `python3` を使用する（`python` コマンドは存在しない）。
+| コマンド | 判定 | 実測・条件 |
+|---|---|---|
+| `node --test tests/vocaloid.test.js` | PASS | 8/8。強度0、範囲、入力保護、長さ、無音、短音、不正値、既知倍音源のF0、包絡上方移動、インパルス時刻 |
+| `node tests/render-cli.js` | PASS | 0 / 0.5 / 1のMP3各1本＋MP3入力の追加1件。各379,260 frames |
+| `node tests/browser.js` | PASS | Chrome実再生3/3、MP3保存3/3、adapterとデモの最大差0、ブラウザエラー0 |
+| `python3 tests/analyze.py` | **FAIL** | **50/51**。出力についての47チェックはすべてPASS。推定器の追加陽性対照4件中650Hz絶対精度のみFAIL |
+| `git diff --check` / 追跡ファイル確認 | PASS | 空白エラーなし、wav/mp3/onnx/SoundFont追跡0。5447番の自分のサーバー停止確認済み |
 
-## 実装・処理チェーン・調査
-作業中。
+合格基準は、強度0 PCMが原音と一致、同じ強度のCLI/ブラウザPCMが最大差1e-5未満、MP3のRMS・重心差が各5%未満、歌声のF0中央値差と対応窓絶対差中央値が20cent未満、非無音かつクリップ0。非ゼロ強度で差分RMS>0.005、発声区間DRが低下することも確認した。受入試験の失敗を成功扱いにはしていない。
 
-## テスト結果
-未実施。
+## 実装と処理チェーン（日本語）
+
+- 共通API: `effects/vocaloid/dsp.js` の `applyVocaloid(input: Float32Array, sampleRate: number, amount: number): Float32Array`。0以下は同じ配列を返す。1超は1に制限、出力の長さとレートを維持。
+- Web Audio / OfflineAudioContext用adapter: `effects/vocaloid/browser.js`。デモは `demo/vocaloid/`、重い処理とMP3変換はWorker。CLIは `cli/vocaloid-filter.js`、WAV/MP3入力→192kbps MP3出力。DSPは両版とも同じソース。
+- 起動: `npm ci --ignore-scripts` → `npm run demo` → `http://127.0.0.1:5447/demo/vocaloid/`。外部公開なし。実行後はCtrl-Cで終了。CLI例: `node cli/vocaloid-filter.js --input in.wav --output out.mp3 --amount 0.5`。
+
+まず−48dBFS付近の弱い部分をエキスパンダで抑え、−24dBFSから最大8:1のコンプレッサーで音量変化を減らす。次にケプストラムで滑らかなスペクトル包絡だけを取り出し、最大1.8半音相当だけ上方に動かす。元の複素スペクトルの周波数位置と位相を保ったまま、包絡の比率だけを掛ける。90Hzローカット、3.2kHzの明瞭さと9kHzのエアを少し持ち上げ、5.5kHz以上の強い歯擦音を抑える。最後に軽いtanh飽和と必要時の一定ゲインでピークを抑える。
+
+ピッチ補正・ケロケロ・ピッチ平坦化・リサンプリング・タイムストレッチはDSPに入れていない。短いダブリングは必須ではないと判断し省略した。ブレス抑制は音量に基づくため、大きな息だけを分離する処理ではない。全ファイルを先に処理する方式で、ストリーミングAudioWorkletではない。長いファイルはメモリを使い、ステレオは各チャンネル独立処理。サチュレーションはオーバーサンプリングなし。
+
+## 根拠調査
+
+処理の根拠・パラメーター・出典は [docs/vocaloid-filter.md](docs/vocaloid-filter.md)。本文を確認した資料は以下。
+
+- [VOCALOID6公式マニュアル p.51](https://rsc-net.vocaloid.com/assets/pdf_files/bb/VOCALOID_Reference_Manual_ENG.pdf#page=51): Characterのフォルマント調整とPitch Bendの音高調整を区別。[公式6.3説明](https://www.vocaloid.com/en/learn/ln6212/) でCharacterは旧Gender Factorに相当することを確認。
+- [Shureのボーカル処理解説](https://www.shure.com/en-EU/insights/how-to-record-and-mix-vocals) と [iZotopeのチェーン例](https://www.izotope.com/community/blog/vocal-cheet-sheet): ハイパス、明瞭さ・エアEQ、コンプ、ディエッサー、軽い歪みという一般ボーカル制作の根拠。
+- [iZotopeのフォルマントを変えるダブルの例](https://www.izotope.com/community/blog/8-tips-for-mixing-rap-and-hip-hop): ポップ／ラップの制作例であり、ボカロ曲固有の定石だとは主張しない。未確認の二次資料は根拠にしていない。
+- [Julius O. Smithの技術解説](https://www.dsprelated.com/freebooks/sasp/Parameter_Modifications_Step_6.html) と [ケプストラム包絡法](https://www.dsprelated.com/freebooks/sasp/Spectral_Envelope_Cepstral_Windowing.html)、[RBJ Audio EQ Cookbook](https://www.w3.org/TR/audio-eq-cookbook/) を参照。
+
+指定Sound on SoundページはHTTP 403で本文未確認。旧Crypton配布マニュアルは先頭の取得後にHTTP 503となり該当箇所を確認できなかったため、取得できた現行公式資料を使用。ネットワーク設定・サービスの復旧操作は行わず、gitの接続は正常だった。
+
+## 数値結果
+
+原音: 379,260 frames / 44,100 Hz mono / 8.60秒。全出力クリップサンプル0。
+
+| 出力 | RMS dBFS | peak | 重心 Hz | DR 全体/発声 dB | F0 Hz | Δ cent | 対応窓絶対差 中央値/p95 cent | 有声窓 | 遅延 samples |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| source | -24.00 | 0.3097 | 3152.3 | 178.78/6.23 | 334.04 | +0.00 | 0.00/0.00 | 347 | 0 |
+| cli-pcm-0 | -24.00 | 0.3097 | 3152.3 | 178.78/6.23 | 334.04 | +0.00 | 0.00/0.00 | 347 | 0 |
+| cli-mp3-0 | -24.27 | 0.3007 | 3137.5 | 178.51/6.21 | 334.04 | -0.01 | 0.01/0.04 | 347 | 0 |
+| browser-pcm-0 | -24.00 | 0.3097 | 3152.3 | 178.78/6.23 | 334.04 | +0.00 | 0.00/0.00 | 347 | 0 |
+| browser-mp3-0 | -24.27 | 0.3017 | 3112.8 | 178.51/6.22 | 334.03 | -0.04 | 0.01/0.04 | 347 | 1105 |
+| cli-pcm-0.5 | -23.81 | 0.3038 | 3548.7 | 178.28/4.11 | 333.98 | -0.29 | 0.38/4.64 | 347 | 0 |
+| cli-mp3-0.5 | -24.07 | 0.2948 | 3526.0 | 178.01/4.11 | 333.98 | -0.29 | 0.39/4.59 | 347 | 0 |
+| browser-pcm-0.5 | -23.81 | 0.3038 | 3548.7 | 178.28/4.11 | 333.98 | -0.29 | 0.38/4.64 | 347 | 0 |
+| browser-mp3-0.5 | -24.07 | 0.2947 | 3491.9 | 178.02/4.10 | 333.98 | -0.28 | 0.38/4.66 | 347 | 1105 |
+| cli-pcm-1 | -20.02 | 0.4319 | 3694.3 | 181.94/4.01 | 333.97 | -0.36 | 0.42/5.34 | 347 | 0 |
+| cli-mp3-1 | -20.28 | 0.4201 | 3664.0 | 181.67/4.02 | 333.97 | -0.37 | 0.41/5.36 | 347 | -1 |
+| browser-pcm-1 | -20.02 | 0.4319 | 3694.3 | 181.94/4.01 | 333.97 | -0.36 | 0.42/5.34 | 347 | 0 |
+| browser-mp3-1 | -20.28 | 0.4183 | 3618.8 | 181.68/4.02 | 333.97 | -0.37 | 0.41/5.38 | 347 | 1104 |
+
+DRは20ms窓RMSの95–5百分位差。全体DRが約180dBと大きいのは、末尾などの無音窓を−200dBFSで打ち切って計算するため。音量平坦化の評価には、原音の窓RMSが−40dBFSを超える**同じ発声窓**だけを比較した値を用いた（6.23 → 4.11 / 4.01dB）。重心は2048 sample STFTの振幅重み付き全窓集計。
+
+F0は検査用に全入力へ同じ4次1200Hzローパスを適用後、11,025Hz・1024sample窓・220sample hopのYIN型推定。範囲70〜700Hz。原音の連続3窓が60cent以内の安定区間を選び、両方で有声だった347窓を比較。出力のcent差に基づく外れ値除外なし。MP3は相互相関で符号化遅延を測って整列した。これは測定用処理であり、書き出す音声には含めない。
+
+| 強度 | PCM両版 最大絶対差 | MP3両版 RMS相対差 | MP3両版 重心相対差 |
+|---|---:|---:|---:|
+| 0 | 0.0 | 0.000902% | 0.787252% |
+| 0.5 | 1.1102230246251565e-16 | 0.004616% | 0.964742% |
+| 1 | 0.0 | 0.000342% | 1.233555% |
+
+強度0のCLI/ブラウザPCMは原音と最大絶対差0。MP3の強度0は符号化によってRMSが約0.27dB下がる。原音との差分RMSは強度0.5で0.017598、強度1で0.052629。各出力の長さは379,260 samples、最大peakは0.432未満。
+
+ブラウザ実再生の検査値:
+
+| 強度 | AudioContext経過 秒 | analyser最大RMS | 保存MP3 bytes |
+|---|---:|---:|---:|
+| 0 | 2.208 | 0.092899 | 207516 |
+| 0.5 | 2.304 | 0.080402 | 207516 |
+| 1 | 2.304 | 0.120181 | 207516 |
+
+全測定値と51チェックの機械可読データ: [docs/vocaloid-filter-results.json](docs/vocaloid-filter-results.json)。ブラウザのスクリーンショットは `out/vocaloid-demo.png`（非追跡）。
+
+## 失敗・修復と停止理由
+
+1. 初回ブラウザ試験FAIL: 固定2.5秒待機では起動の遅れる音声時計が2秒に達しなかった。診断で時計の進行とRMS 0.025〜0.063の実信号を確認。修復1は、音声時計が2.2秒進むまで最大8秒の有界待ちに変更。再試験PASS。
+2. 初回数値試験FAIL（36/47）: ChromeのWAVデコードで正側の値がffmpegの32768/32767倍となる微差を確認（原音との最大差8.64e-6）。また高域をそのまま含むF0推定は全体中央値差+22.85/+23.01centとなったが、対応窓絶対差中央値0.45/0.65cent、p95は4.79/5.70cent。2〜3窓の推定差が旋律の二群の間にある全体中央値を変えていた。共通ローパスを700/900/1200/1600/2200Hzの5設定で独立診断すると、全体中央値差はすべて−0.82〜+0.25cent、p95は6.16cent以下だったため、音高操作ではなく推定器の音色依存と判断した。
+3. 修復2は、ブラウザのPCM WAVを共通スケールで直接読み込む変更と、検査のみの共通1200Hzローパス＋既知周波数の陽性対照追加。**音のDSPは変更せず、ピッチ補正は追加していない。**
+4. 最終数値試験は**50/51 FAIL**。200Hzの推定200.032482Hz、既知50cent差は49.834908centと検出。650Hzの推定が651.064039Hz（約+2.83cent）となり、追加陽性対照の2cent許容を超えた。歌声のF0保持基準20centとは別の、推定器そのものの絶対精度テストである。**上限2修復に達したため、閾値変更や追加修復はせず停止。**
+
+生ログ: `out/unit-tests-final.log`, `out/cli-test.log`, `out/browser-test-final.log`, `out/analysis-test-final.log`。初回失敗表は `out/analysis-initial-failure.md` / `.json` に保持（いずれも非追跡）。
+
+## デモMP3とsample source
+
+| 版 | 強度 | ファイル | bytes |
+|---|---:|---|---:|
+| CLI | 0 | `/workspace/vocaloid-filter-demo/vocaloid-0.mp3` | 208186 |
+| CLI | 0.5 | `/workspace/vocaloid-filter-demo/vocaloid-0.5.mp3` | 208186 |
+| CLI | 1 | `/workspace/vocaloid-filter-demo/vocaloid-1.mp3` | 208186 |
+| browser | 0 | `out/browser-vocaloid-0.mp3` | 207516 |
+| browser | 0.5 | `out/browser-vocaloid-0.5.mp3` | 207516 |
+| browser | 1 | `out/browser-vocaloid-1.mp3` | 207516 |
+
+6本ともffprobeでMP3 / 44.1kHz / mono、コンテナ上約8.6465秒と確認。CLIのgaplessメタデータとブラウザエンコーダーの遅延情報の違いは、測定時に整列して比較した。
+
+原音: `/workspace/vocaloid-filter-demo/source/vocatab-codex-vocal.wav`。出所は同ディレクトリの `SOURCE.txt`。VocaTabをheadlessで鳴らした歌トラックで、impl/codexの受入テスト生成物を依頼側がコピーしたもの（「ゆうやけ そらに とけていく」系フィクスチャ）。元の他worktree・ブランチには書き込んでいない。音声モデルは個人・非商用・再配布禁止、原音も処理音もcommitしていない。
 
 ## commits
-初期計画 commit は git 履歴に記録。以降も節目ごとに記録する。
 
-## sample source
-`/workspace/vocaloid-filter-demo/source/SOURCE.txt`。原音: `/workspace/vocaloid-filter-demo/source/vocatab-codex-vocal.wav`。モデル・原音・処理後音声は commit しない。
+| commit | 内容 | push |
+|---|---|---|
+| `a3cd77c` | GOAL / ACCEPTANCE TESTS / 使用量ログ初期化 | origin/feat/vocaloid-filter 済 |
+| `325278d` | 共通DSP・CLI・Web Audioデモ・出典文書・テスト | 済 |
+| `02999c5` | WAV数値統一・F0測定の音色依存対処・失敗を含む数値保存 | 済 |
+| 最終docs commit | 本報告と手書き使用量ログの確定。hashは `git log -1 --format=%h` で確認 | このcommitも `git push origin HEAD` で保存 |
+
+操作は担当ブランチ `feat/vocaloid-filter` のみ。force-push / PR / 公開 / 他ブランチの変更 / 外部メッセージ / 有料API / GPU / 音声やモデルのcommitは行っていない。依存インストールはnpmのみ、プロバイダ切替0。自分のサーバーは試験のfinallyで停止、5447番にlistenerがないことを確認。
 
 ## NEXT STEPS
-根拠調査、共通 DSP / CLI / ブラウザデモ実装、受け入れ試験、最終記録。
+
+- **本セッションの追加修復は行わない。** 次の作業を依頼する場合、650Hz付近のYIN補間精度を調べ、2cent陽性対照を満たす推定器に改善する（音声にピッチ補正を加えない）。
+- 依頼者が6本を聴き比べ、音色が狙いに合うか判断する。数値試験は主観的な「ボカロらしさ」の証明にはならない。
+- 別途依頼があれば任意の既存実装へadapterを接続する。今回は独立モジュールとして終了。
+- 共有KB更新とトークン集計スクリプトは依頼側が実施。こちらは実行せず、トークン数も推測しない。
 
 ## BLOCKED APPROVALS
-なし。公開・PR・外部メッセージ・有料APIの利用は実施しない。
 
-## 節目1 — 独立モジュールと試験ハーネス
-- 共通DSP、Web Audio / OfflineAudioContext adapter、CLI、ローカル専用デモ、lamejs Worker MP3エンコーダーを実装。
-- 根拠・パラメーター・既知の限界を docs/vocaloid-filter.md に記録。指定SOS本文は403で未確認。現行VOCALOID公式マニュアルは取得成功。
-- 単体8/8 PASS。CLI強度3種類とMP3入力 PASS。
-- ブラウザ実再生の初回試験は固定2.5秒待ちでAudioContext経過2秒に達せず FAIL。診断では開始が遅れるが音声時計は進み、analyser RMS 0.025〜0.063 の実信号を確認。DSP障害ではなく初期デバイス起動待ち不足。
-- 修復1/2: 音声時計が2.2秒進むまで監視、最大8秒の有界待ちに変更。閾値を下げず実再生を確認する。
+なし。PR・公開・外部送信・購入・認証情報・データ削除・有料APIに関する承認依頼は発生していない。数値試験1件の未達は承認待ちではなく、修復回数上限による停止。
 
-## 節目2 — 受入テストの実測と修復2
-- ブラウザ再試験は3強度で実再生・MP3保存 PASS。音声時計2.208〜2.261秒、再生analyser最大RMS 0.0848〜0.1269。adapterとの差0。
-- 数値検証初回 FAIL: 36/47。強度0 browser の外部原音比較に最大8.64e-6差。原因を調べたところ正側のみ32768/32767倍というブラウザデコード差。デモ内の入力→強度0出力は差0だった。
-- F0初回: 未前処理YINで全体中央値差 +22.85 / +23.01 cent。一方、対応窓絶対差中央値0.45 / 0.65 cent、p95 4.79 / 5.70 cent。346窓中2〜3窓の高域による推定差が、旋律の二群の間にある全体中央値を押し上げていた。
-- 独立診断: 検査のみに共通4次ローパスを適用。cutoff 700/900/1200/1600/2200Hz のすべてで、両強度の全体中央値差は−0.82〜+0.25 cent、対応窓絶対差p95は6.16cent以下。実際のF0変更を示す挙動ではないと判断した。単一合成倍音源の独立周波数測定も2cent未満。
-- 修復2/2: WAV PCMのブラウザ読み込みスケールをffmpegと揃え、F0検査には全入力で同じ1200Hzローパスを採用。既知200/650Hzと既知50cent差の陽性対照を追加。音のDSPは変更せず、ピッチ補正も追加していない。
-- 未前処理での初回表は out/analysis-initial-failure.md / .json に保持（非追跡）。以後、追加修復は行わない。
+## 作業時間
 
-## 修復上限後の最終判定
-- 最終数値試験: **FAIL — 50/51**。歌声・出力についての47検査はすべてPASS。追加した推定器の陽性対照4件中、650Hz絶対精度（許容2cent）のみFAIL。実測651.064039Hz、誤差約+2.83cent。既知50cent差は49.834908centと検出できた。
-- 契約の修復上限2回に達したので、追加修正を行わず開発を終了し、成果物と到達点を記録する。
-- 最終ブラウザ: 3強度のMP3を保存、各2.208〜2.304秒の実再生を確認。最終analyser最大RMS 0.0804〜0.1202、ブラウザエラー0、adapterとの差0。
-- 歌声のF0中央値差は最大0.371cent、対応窓絶対差p95は最大5.38cent（347有声窓）。ピッチ補正なし。
-- PCM両版最大絶対差 ≤1.11e-16、強度0は両版とも原音との差0。MP3両版の重心相対差最大1.234%、RMS相対差最大0.00462%。
+- 開始: 2026-11-13 21:58:22 JST
+- 終了記録: 2026-11-13 22:14:13 JST（最終commit/push直前）
+- 所要: 15分51秒（記録時点）。23:20 JSTの締切・90分以内。
+- 修復2回 / CLI・プロバイダ切替0回。
