@@ -83,7 +83,12 @@ Chrome DevTools の Runtime 呼び出しの時間切れであり、ssh/tailscale
 - 検証環境: Node24.22.1、npm11.21.1、Chrome156.0.8078.47、ffmpeg7.1.5、VocaTab2d2a48b、dtm2.1.38。
 
 ## Commits
-最終更新時に記録する。
+- `5b4960e` — GOAL と ACCEPTANCE TESTS を最初に記録。push済み。
+- `6eec0c9` — 初回実装、実ブラウザ/音声/MCP成功時の証拠。push済み。
+- `90b2cbf` — 修復2回分、README/ライセンス、最終ブラウザ失敗の記録。push済み。
+- 最終報告コミット — 本 REPORT と `logs/usage-codex.md` の完了記録（自身のhashは `git log -1 --oneline` で確認）。
+
+すべて `impl/codex` へ `git push origin HEAD` のみ。main/他のimplブランチは変更していない。
 
 ## NEXT STEPS
 このセッションの実装・修復は終了。次の別作業で、Chromeの状態を合成前後・dtm描画前後・export前後に分けて観測し、Runtime timeoutの発生箇所を特定する。先に問題を再現し、原因を決め打ちしない。解消後にREADME記載の5コマンドを通し、ボコーダー補正後の数値を取り直す。現時点の最新状態を合格品として扱わない。
@@ -92,3 +97,8 @@ Chrome DevTools の Runtime 呼び出しの時間切れであり、ssh/tailscale
 
 ## BLOCKED APPROVALS
 なし。公開・投稿・有料API・上流への連絡は行わない。
+
+## 終了記録
+終了記録時刻: 2026-11-13 21:24:29 JST。開始から48分46秒。自動修復2回、CLI/プロバイダ切替0回。Opus問い合わせ0回。
+
+自分のChromeとサーバーは各検証のfinallyで終了。最終 `ss -ltn` で5200/5201のlistenなし。`git ls-files` にモデル・SoundFont・MP3/WAV・out/vendorの追跡ファイルなし。秘密値の記載なし。最終ブラウザFAILを受けて追加修復・追加の受け入れテストは停止し、この報告をcommit/pushして終了する。
