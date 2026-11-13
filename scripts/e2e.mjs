@@ -61,6 +61,14 @@ try {
     const head = { accOnsetMs: accOnset, vocalPlacementLagMs: voxLag, vocalOnsetRecordedMs: voxOnsetRec, vocalOnsetRenderedMs: voxOnsetRef,
                    scheduledDiffMs: +((s.scheduled.vocalSongZero - s.scheduled.accStart) * 1000).toFixed(3),
                    headOffsetMs: +Math.abs(voxLag - accOnset).toFixed(3) };
+    // 録音の傷（参照: 合成したままの歌と、録った歌の 256 サンプル区間ごとの食い違い）。合否には使わない計測値
+    let glitchBlocks = 0;
+    for (let i = 0; i + 256 <= Math.min(ref.length, vox.length); i += 256) {
+      let d = 0;
+      for (let k = i; k < i + 256; k++) d = Math.max(d, Math.abs(vox[k] - ref[k]));
+      if (d > 0.02) glitchBlocks++;
+    }
+    head.recorderGlitchBlocks256 = glitchBlocks;
     Object.assign(results, { mp3, perBar, sections, head });
     console.log(JSON.stringify({ mp3, sections, head }, null, 1));
     console.table(perBar);
@@ -80,7 +88,6 @@ try {
         await page.evaluate((fx) => window.app.setEffects(fx), [{ type, amount }]);
         const name = `fx-${type}-${amount}`;
         const s = await page.evaluate((n) => window.app.exportAudio({ format: "mp3", name: n, toServer: true, stems: true }), name);
-        const [vl, vr] = [readWav(out(`${name}.vox-ref.wav`))[0], null];
         fxRes[`${type}@${amount}`] = { name, vox: s.vox, mixL: s.mixL, mixR: s.mixR };
         if (amount === 0) base = name;
       }
@@ -88,6 +95,13 @@ try {
     // 強度 0 と 1 の差: 歌の stem（録ったもの）の相関と差分の大きさ、MP3 の L/R の差（ダブリングはステレオになる）
     const [b0] = readWav(out(`${base}.vox.wav`));
     const [m0L] = decodeMp3(out(`${base}.mp3`));
+    // 対照: エフェクト無しをもう一度書き出し、同じ設定なら歌の stem がほぼ同じになる（差はエフェクトのせい）ことを確かめる
+    await page.evaluate(() => window.app.setEffects([]));
+    await page.evaluate(() => window.app.exportAudio({ format: "mp3", name: "fx-none-repeat", toServer: true, stems: true }));
+    const [rep] = readWav(out("fx-none-repeat.vox.wav"));
+    const ctl = { corrVox: corr(b0, rep), diffVoxDb: +diffDb(b0, rep).toFixed(2) };
+    fxRes.control = ctl;
+    check("A4.control(no-fx twice)", ctl.corrVox > 0.999, ctl);
     for (const type of types) {
       const n = `fx-${type}-1`;
       const [v1] = readWav(out(`${n}.vox.wav`));

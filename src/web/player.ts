@@ -121,7 +121,9 @@ export class Player {
     src.connect(g).connect(this.voxBus);
 
     const leadSec = lead / SR;
-    const frozen = this.ctx.currentTime + leadSec + 0.15; // 歌の頭の余白より先に曲の頭を置く
+    // 曲の頭はサンプルの境目ちょうどに置く（歌のバッファの開始と録音の窓が 1 サンプルもずれないように）
+    const songZeroFrame = Math.ceil((this.ctx.currentTime + leadSec + 0.15 + SEQUENCER_START_DELAY) * SR);
+    const frozen = songZeroFrame / SR - SEQUENCER_START_DELAY; // 歌の頭の余白より先に曲の頭を置く
     const real = this.ctx;
     const proxy = new Proxy(real, {
       get(target, prop) {
@@ -131,11 +133,11 @@ export class Player {
       },
     });
     let frozenNow: number | null = frozen;
-    const songZero = frozen + SEQUENCER_START_DELAY;
+    const songZero = songZeroFrame / SR;
     const mmlPlay = playMML(mml, { audioContext: proxy as AudioContext, destination: this.accBus, pauseWhenHidden: false,
                                    onStop: () => undefined });
     frozenNow = null;
-    const vocalStartAt = songZero - leadSec;
+    const vocalStartAt = (songZeroFrame - lead) / SR;
     src.start(vocalStartAt);
     this.songZero = songZero;
 
@@ -148,7 +150,7 @@ export class Player {
           ok({ mix: [l, r], acc, vox, scheduled: { accStart: songZero, vocalSongZero: vocalStartAt + lead / SR } });
         };
       });
-      recNode.port.postMessage({ from: Math.round(songZero * SR), len });
+      recNode.port.postMessage({ from: songZeroFrame, len });
     }
     const timer = window.setTimeout(() => {
       this.stop();

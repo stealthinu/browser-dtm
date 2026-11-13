@@ -128,6 +128,8 @@ async function exportAudio(o: ExportOpts = {}) {
 
 const COLORS = ["#ffb454", "#59c2ff", "#95e6cb", "#d2a6ff", "#f07178", "#c2d94c"];
 
+let instCache: { mml: string; inst: Array<{ t: number; dur: number; midi: number; tr: number }> } | null = null;
+
 function drawRoll(playSec = -1) {
   const cv = $<HTMLCanvasElement>("roll");
   const g = cv.getContext("2d")!;
@@ -137,14 +139,19 @@ function drawRoll(playSec = -1) {
   const totalTicks = d.bars * d.beatsPerBar * TPQ;
   const v = vocalTrack(d)!;
   const vt = toVocaTabNotes(d, v);
-  const inst: Array<{ t: number; dur: number; midi: number; tr: number }> = [];
-  try {
-    for (const p of parseMML(toDtmMML(d)).placements) {
-      inst.push({ t: p.startStep * 10, dur: p.durationSteps * 10, midi: p.pitchUnits / 31, tr: p.trackIndex });
+  const mml = toDtmMML(d);
+  if (instCache?.mml !== mml) {
+    const inst: Array<{ t: number; dur: number; midi: number; tr: number }> = [];
+    try {
+      for (const p of parseMML(mml).placements) {
+        inst.push({ t: p.startStep * 10, dur: p.durationSteps * 10, midi: p.pitchUnits / 31, tr: p.trackIndex });
+      }
+    } catch (e) {
+      log(`MML parse error: ${e}`);
     }
-  } catch (e) {
-    log(`MML parse error: ${e}`);
+    instCache = { mml, inst };
   }
+  const inst = instCache.inst;
   const all = [...vt.map((n) => n.pitch), ...inst.map((n) => n.midi)];
   const lo = Math.min(...all) - 2;
   const hi = Math.max(...all) + 2;
