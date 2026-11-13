@@ -1,0 +1,10 @@
+import {build} from 'esbuild';
+import {access,mkdir,copyFile} from 'node:fs/promises';
+import path from 'node:path';
+export const vocatabDir=path.resolve(process.env.VOCATAB_DIR ?? '/workspace/dtm-research/vocatab');
+await access(path.join(vocatabDir,'ui/src/engine-web/core.ts'));
+await mkdir('dist',{recursive:true});
+await build({entryPoints:['src/app.mjs'],bundle:true,format:'esm',outfile:'dist/app.js',legalComments:'eof'});
+await build({entryPoints:['src/vocal-worker.ts'],bundle:true,format:'iife',outfile:'dist/vocal-worker.js',alias:{vocatab:path.join(vocatabDir,'ui/src')},legalComments:'eof'});
+for(const file of ['LICENSE','THIRD_PARTY_NOTICES.md']) await copyFile(path.join(vocatabDir,file),path.join('dist',`VocaTab-${file}`));
+console.log('Built host and VocaTab adapter; upstream files unchanged.');

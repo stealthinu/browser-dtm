@@ -1,0 +1,11 @@
+{
+  "name": "browser-dtm-codex", "version": "0.1.0", "private": true, "type": "module", "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "build": "node scripts/build.mjs", "start": "node scripts/server.mjs",
+    "test": "node --test test/song.test.mjs", "test:browser": "node scripts/test-browser.mjs",
+    "verify:audio": "node scripts/verify-audio.mjs", "test:mcp": "node scripts/test-mcp.mjs",
+    "mcp": "node scripts/mcp.mjs"
+  },
+  "dependencies": {"@onjmin/dtm": "2.1.38", "@modelcontextprotocol/sdk": "1.25.3", "onnxruntime-web": "1.20.1"},
+  "devDependencies": {"esbuild": "0.28.1", "puppeteer-core": "24.31.0"}
+}

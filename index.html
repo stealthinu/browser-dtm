@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ことのは Studio — Browser DTM</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header><a class="brand" href="/">◒ <span>ことのは<span class="light"> Studio</span></span></a><span class="badge">LOCAL / CPU</span></header>
+<main>
+  <section class="intro"><div><p class="eyebrow">WORDS INTO MUSIC</p><h1>ことばから、ひとつの曲へ。</h1><p>歌詞とイメージを LLM に渡して、歌声と伴奏をここで聴こう。</p></div><span class="sun" aria-hidden="true">♫</span></section>
+  <div class="workspace">
+    <aside>
+      <section class="card"><h2><span class="step">01</span> 曲を伝える</h2><label for="lyrics">歌詞（かな）</label><textarea id="lyrics" rows="2">ゆうやけ そらに とけていく</textarea><label for="image">イメージ</label><input id="image" value="BPM 120、明るく穏やかなポップス、4小節"><button id="prompt-button" class="secondary">LLM 用プロンプトを作る</button><details><summary>プロンプトを表示・コピー</summary><textarea id="prompt" rows="7" readonly aria-label="LLM 用プロンプト"></textarea><button id="copy" class="quiet">コピー</button></details></section>
+      <section class="card"><h2><span class="step">02</span> 返答を読み込む</h2><p class="hint">LLM の返答を、JSON または文章ごと貼り付け。</p><textarea id="reply" rows="6" placeholder="SongDoc JSON をここに…" aria-label="LLM の返答"></textarea><div class="row"><button id="load" class="secondary">検査して読み込む</button><button id="example" class="quiet">見本を使う</button></div><pre id="errors" role="alert" hidden></pre><textarea id="repair" rows="5" readonly hidden aria-label="LLM への修正依頼"></textarea></section>
+    </aside>
+    <div class="composition">
+      <section class="card song-card"><div class="song-heading"><div><p class="eyebrow">YOUR SONG</p><h2 id="title">読み込み中…</h2><p id="meta" class="hint"></p></div><span class="song-icon" aria-hidden="true">♪</span></div><div class="transport"><button id="play" class="primary">▶ 合成して再生</button><button id="stop" class="secondary">■ 停止</button><span id="status" role="status">準備中</span></div></section>
+      <section class="card roll-card"><div class="row spread"><h2>ピアノロール</h2><div class="legend"><span class="vocal">● 歌</span><span class="piano">● Piano</span><span class="bass">● Bass</span></div></div><div class="canvas-scroll"><canvas id="roll" width="1000" height="350" aria-label="歌と伴奏の音符を表示するピアノロール"></canvas></div><p class="hint">歌：波音リツ（音源収録：カノン） · 伴奏：dtm シンセ</p></section>
+      <section class="card"><h2><span class="step">03</span> 歌声を彩る</h2><p class="hint">各つまみの 0 はオフ。組み合わせて使えます。変更は次の再生・書き出しに反映。</p><div id="effects" class="effect-grid"></div></section>
+      <section class="card export-card"><div><h2>曲を持ち帰る</h2><p class="hint">歌と伴奏、エフェクトをまとめて保存。</p></div><div class="row"><button id="export" class="primary">↓ MP3 書き出し</button><button id="wav" class="secondary">WAV</button><button id="json" class="quiet">JSON</button></div><a id="download" hidden download>音声を保存</a></section>
+    </div>
+  </div>
+</main>
+<footer>個人・非商用のローカル制作向け · VocaTab © 2026 wavtechyukky (MIT) · dtm © onjmin (AGPL-3.0-or-later) · <a href="/NOTICE.md">第三者の著作権表示</a></footer>
+<script type="module" src="/dist/app.js"></script></body></html>

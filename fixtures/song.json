@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "title": "夕焼けのスケッチ",
+  "bpm": 120,
+  "beatsPerBar": 4,
+  "bars": 4,
+  "chords": "| C | F | G | C |",
+  "tracks": [
+    {
+      "id": "vo",
+      "kind": "vocal",
+      "singer": "ritsu",
+      "volume": 0.65,
+      "effects": {
+        "kerokero": 0,
+        "vocoder": 0,
+        "bitcrusher": 0,
+        "doubling": 0
+      },
+      "notes": [
+        {
+          "bar": 1,
+          "beat": 1,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "ゆ"
+        },
+        {
+          "bar": 1,
+          "beat": 2,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "う"
+        },
+        {
+          "bar": 1,
+          "beat": 3,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "や"
+        },
+        {
+          "bar": 1,
+          "beat": 4,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "け"
+        },
+        {
+          "bar": 2,
+          "beat": 1,
+          "len": "4",
+          "pitch": "F4",
+          "lyric": "そ"
+        },
+        {
+          "bar": 2,
+          "beat": 2,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "ら"
+        },
+        {
+          "bar": 2,
+          "beat": 3,
+          "len": "2",
+          "pitch": "A4",
+          "lyric": "に"
+        },
+        {
+          "bar": 3,
+          "beat": 1,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "と"
+        },
+        {
+          "bar": 3,
+          "beat": 2,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "け"
+        },
+        {
+          "bar": 3,
+          "beat": 3,
+          "len": "4",
+          "pitch": "D4",
+          "lyric": "て"
+        },
+        {
+          "bar": 3,
+          "beat": 4,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "い"
+        },
+        {
+          "bar": 4,
+          "beat": 1,
+          "len": "1",
+          "pitch": "C4",
+          "lyric": "く"
+        }
+      ]
+    },
+    {
+      "id": "pf",
+      "kind": "inst",
+      "program": "piano",
+      "volume": 0.36,
+      "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'cfa' 'cfa' 'cfa' 'cfa' 'dgb' 'dgb' 'dgb' 'dgb' 'ceg' 'ceg' 'ceg' 'ceg'"
+    },
+    {
+      "id": "bs",
+      "kind": "inst",
+      "program": "bass",
+      "volume": 0.3,
+      "mml": "o2 l4 c g c g f c f c g d g d c g c2"
+    }
+  ]
+}
