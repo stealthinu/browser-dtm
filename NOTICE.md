@@ -7,3 +7,5 @@
 - SoundFont（FluidR3, GeneralUser GS）— 各ライセンスに従う。同梱しない。
 
 各実装は、取り込んだ上流コードのヘッダと表示を消さないこと。
+- **lamejs 1.2.1 / LAME** — https://github.com/zhuker/lamejs / https://lame.sourceforge.io/ — LGPL（lamejs配布の `LICENSE` を参照）。ブラウザデモが `node_modules/lamejs/lame.min.js` を独立・無改変で読み込む。DSP自体は依存しない。
+- **puppeteer-core** — https://github.com/puppeteer/puppeteer — Apache-2.0、ローカルのブラウザ検証用開発依存。

@@ -1,0 +1,15 @@
+{
+  "name": "browser-dtm-vocaloid-filter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/vocaloid.test.js",
+    "demo": "node tools/serve-vocaloid.js",
+    "test:cli": "node tests/render-cli.js",
+    "test:browser": "node tests/browser.js",
+    "analyze": "python3 tests/analyze.py"
+  },
+  "dependencies": { "lamejs": "1.2.1" },
+  "devDependencies": { "puppeteer-core": "24.31.0" }
+}

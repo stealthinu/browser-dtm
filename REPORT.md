@@ -39,3 +39,10 @@ VocaTab の生成歌声を、F0 を変更せず音色とダイナミクスでボ
 
 ## BLOCKED APPROVALS
 なし。公開・PR・外部メッセージ・有料APIの利用は実施しない。
+
+## 節目1 — 独立モジュールと試験ハーネス
+- 共通DSP、Web Audio / OfflineAudioContext adapter、CLI、ローカル専用デモ、lamejs Worker MP3エンコーダーを実装。
+- 根拠・パラメーター・既知の限界を docs/vocaloid-filter.md に記録。指定SOS本文は403で未確認。現行VOCALOID公式マニュアルは取得成功。
+- 単体8/8 PASS。CLI強度3種類とMP3入力 PASS。
+- ブラウザ実再生の初回試験は固定2.5秒待ちでAudioContext経過2秒に達せず FAIL。診断では開始が遅れるが音声時計は進み、analyser RMS 0.025〜0.063 の実信号を確認。DSP障害ではなく初期デバイス起動待ち不足。
+- 修復1/2: 音声時計が2.2秒進むまで監視、最大8秒の有界待ちに変更。閾値を下げず実再生を確認する。

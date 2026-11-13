@@ -8,3 +8,7 @@
 - 使用量ログ: `logs/usage-<手法>.md`（集計は `tools/collect-usage.py`）
 
 **このリポジトリは公開しない。** 歌声モデル・ボコーダ・SoundFont は commit しない（SPEC §4）。
+
+## 独立エフェクト vocaloid
+
+ピッチを変えずに音色とダイナミクスを整える、強度0〜1の共通DSP・CLI・Web Audioデモ。[使い方・処理チェーン・出典](docs/vocaloid-filter.md) / [検証結果](REPORT.md)。`npm ci --ignore-scripts` → `npm run demo`（localhost:5447、ローカル専用）。既存3アプリへの組み込みは行っていない。
