@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "title": "ゆうやけサンプル",
+  "bpm": 120,
+  "beatsPerBar": 4,
+  "key": "C",
+  "bars": 8,
+  "chords": "| C | G | Am | F | C | G | Am | F |",
+  "tracks": [
+    {
+      "id": "vo",
+      "kind": "vocal",
+      "engine": "vocatab",
+      "singer": 2,
+      "singerName": "ritsu",
+      "voicebank": "leapsinger_ja_3singer",
+      "effects": {
+        "kerokero": 0,
+        "vocoder": 0,
+        "bitcrusher": 0,
+        "doubling": 0
+      },
+      "notes": [
+        { "bar": 1, "beat": 1, "len": "4", "pitch": "G4", "lyric": "ゆ" },
+        { "bar": 1, "beat": 2, "len": "4", "pitch": "A4", "lyric": "う" },
+        { "bar": 1, "beat": 3, "len": "4", "pitch": "G4", "lyric": "や" },
+        { "bar": 1, "beat": 4, "len": "4", "pitch": "E4", "lyric": "け" },
+        { "bar": 2, "beat": 1, "len": "4", "pitch": "G4", "lyric": "そ" },
+        { "bar": 2, "beat": 2, "len": "4", "pitch": "A4", "lyric": "ら" },
+        { "bar": 2, "beat": 3, "len": "4", "pitch": "G4", "lyric": "に" },
+        { "bar": 2, "beat": 4, "len": "4", "pitch": "E4", "lyric": "ー" },
+        { "bar": 3, "beat": 1, "len": "4", "pitch": "F4", "lyric": "と" },
+        { "bar": 3, "beat": 2, "len": "4", "pitch": "G4", "lyric": "け" },
+        { "bar": 3, "beat": 3, "len": "4", "pitch": "A4", "lyric": "て" },
+        { "bar": 3, "beat": 4, "len": "4", "pitch": "G4", "lyric": "い" },
+        { "bar": 4, "beat": 1, "len": "2", "pitch": "E4", "lyric": "く" },
+        { "bar": 4, "beat": 3, "len": "2", "pitch": "C4", "lyric": "ー" }
+      ]
+    },
+    {
+      "id": "pf",
+      "kind": "inst",
+      "program": "Acoustic Grand Piano",
+      "font": "FluidR3",
+      "mml": "o4 l4 'ceg' 'ceg' 'cfa' 'cfa' 'ceg' 'ceg' 'cfa' 'cga'"
+    },
+    {
+      "id": "bs",
+      "kind": "inst",
+      "program": "Electric Bass (finger)",
+      "font": "FluidR3",
+      "mml": "o2 l2 c c f f c c f g"
+    },
+    {
+      "id": "dr",
+      "kind": "drums",
+      "pattern": "8beat"
+    }
+  ]
+}

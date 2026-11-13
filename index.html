@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>browser-dtm (cursor)</title>
+  </head>
+  <body>
+    <h1>browser-dtm</h1>
+    <p class="sub">VocaTab の歌声 + dtm の伴奏 · プロンプトコピペ最小版（手法 cursor）</p>
+
+    <div class="layout">
+      <div>
+        <section>
+          <h2>ピアノロール</h2>
+          <canvas id="roll" width="900" height="280"></canvas>
+          <div class="row">
+            <button class="primary" id="btn-play" type="button">Play</button>
+            <button id="btn-stop" type="button">Stop</button>
+            <button id="btn-export" type="button">Export MP3</button>
+            <button id="btn-load-sample" type="button">見本を読込</button>
+          </div>
+          <div id="status" class="status"></div>
+        </section>
+
+        <section>
+          <h2>歌エフェクト（強度 0〜1）</h2>
+          <div class="fx-grid">
+            <label>ケロケロ <input id="fx-kerokero" type="number" min="0" max="1" step="0.1" value="0" /></label>
+            <label>ボコーダー <input id="fx-vocoder" type="number" min="0" max="1" step="0.1" value="0" /></label>
+            <label>ビットクラッシュ <input id="fx-bitcrusher" type="number" min="0" max="1" step="0.1" value="0" /></label>
+            <label>ダブリング <input id="fx-doubling" type="number" min="0" max="1" step="0.1" value="0" /></label>
+          </div>
+        </section>
+      </div>
+
+      <div>
+        <section>
+          <h2>LLM プロンプト（コピー）</h2>
+          <div class="row">
+            <input id="lyrics" type="text" placeholder="歌詞" />
+          </div>
+          <div class="row">
+            <input id="image" type="text" placeholder="イメージ" />
+          </div>
+          <textarea id="prompt"></textarea>
+          <div class="row">
+            <button id="btn-prompt" type="button">プロンプト生成＆コピー</button>
+          </div>
+        </section>
+
+        <section>
+          <h2>LLM 返答の貼り戻し</h2>
+          <textarea id="paste"></textarea>
+          <div class="row">
+            <button class="primary" id="btn-paste" type="button">検査して読込</button>
+          </div>
+          <h2>修正依頼文（エラー時）</h2>
+          <textarea id="correction" placeholder="エラーが無いときは空"></textarea>
+        </section>
+      </div>
+    </div>
+
+    <p class="notice">
+      著作権表示: <a href="./NOTICE.md">NOTICE.md</a> /
+      VocaTab (MIT) · @onjmin/dtm (AGPL-3.0-or-later)。歌声モデルは再配布禁止のため vendor から実行時読込。
+    </p>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
