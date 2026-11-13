@@ -48,11 +48,14 @@ export function inspectMml(mml, song) {
     if(c==='o'){if(value<0||value>8)throw new Error(`MML octave は0〜8: 文字位置 ${pos}`);octave=value;}
     else if(c==='l'){lengthTicks(token.slice(1));defaultLen=token.slice(1);}
     else if(c==='v'){if(value<0||value>127)throw new Error(`MML velocity は0〜127: 文字位置 ${pos}`);velocity=value;}
-    else if(c==='>')octave++;else if(c==='<')octave--;
+    else if(c==='>')octave=Math.min(8,octave+1);else if(c==='<')octave=Math.max(0,octave-1);
     else if(/[a-gr']/.test(c)){
       const parts=c==="'" ? /^'([^']+)'(.*)$/.exec(token) : /^([a-gr][+#-]?)(.*)$/.exec(token);
       const suffix=parts[2], len=/^\./.test(suffix)?defaultLen+suffix:suffix||defaultLen;
-      const durationSteps=lengthTicks(len)/10;
+      lengthTicks(len); // Validate the denominator/dot count, then follow dtm timing.
+      const lengthParts=/^(\d+)(\.*)$/.exec(len);
+      let durationSteps=Math.round(192/Number(lengthParts[1]));
+      for(const dot of lengthParts[2])durationSteps=Math.round(durationSteps*1.5);
       if(c!=='r') for(const p of parts[1].match(/[a-g][+#-]?/g)??[]){
         const pitch=midiPitch(p[0].toUpperCase()+(p[1]==='-'?'b':p[1]==='+'?'#':p[1]??'')+octave);
         placements.push({trackIndex:0,startStep:step,durationSteps,pitchUnits:pitch*31,velocity});
@@ -67,7 +70,7 @@ export function inspectMml(mml, song) {
   return { placements, noteCount: placements.length, endStep, remainingSteps: song.bars * 192 - endStep };
 }
 export function toDtmMml(song) {
-  return song.tracks.filter(t => t.kind === 'inst').map((t, i) => `@${i} t${song.bpm} ${t.mml};`).join('\n');
+  return song.tracks.filter(t => t.kind === 'inst').map((t, i) => `@${i} t${song.bpm} o4 l4 v100 ${t.mml};`).join('\n');
 }
 export function validateSong(song) {
   const errors = [];

@@ -26,6 +26,7 @@ for(const effect of ['kerokero','vocoder','bitcrusher','doubling']){
   for(let i=0;i<zero.length;i++){sum+=(one[i]-zero[i])**2;baseDiff+=(zero[i]-dry[i])**2;}
   const differenceRms=Math.sqrt(sum/zero.length),bypassDifferenceRms=Math.sqrt(baseDiff/zero.length);
   const mp3Zero=stats(decode(`out/${effect}-0.mp3`)),mp3One=stats(decode(`out/${effect}-1.mp3`));
+  assert.ok(stats(one).peak<0.99&&stats(one).clipSamples===0,`${effect} vocal stem has headroom`);
   assert.ok(differenceRms>0.0001,`${effect} audible numeric difference`);assert.equal(bypassDifferenceRms,0,`${effect} strength zero bypass`);
   assert.ok(mp3One.rms>0.001&&mp3One.peak<0.99);
   result.effects[effect]={differenceRms,bypassDifferenceRms,zero:stats(zero),one:stats(one),mp3Zero,mp3One};

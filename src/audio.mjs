@@ -1,5 +1,5 @@
 import { createSynth, parseMML } from '@onjmin/dtm';
-import { toVocaNotes, toDtmMml, requireSong } from './song.mjs';
+import { toVocaNotes, toDtmMml, requireSong, inspectMml } from './song.mjs';
 export const RATE = 44100;
 let worker, seq = 0;
 const waiting = new Map(), voiceCache = new Map();
@@ -43,6 +43,12 @@ function vocode(input, notes, bpm) {
     }
     output[i]=value;
   }
+  // Filter-bank resonances depend on the singer and melody. Match the wet RMS to
+  // the dry singer and keep headroom before PCM16 conversion, including stems.
+  let dryEnergy=0,wetEnergy=0,peak=0;
+  for(let i=0;i<input.length;i++){dryEnergy+=input[i]**2;wetEnergy+=output[i]**2;peak=Math.max(peak,Math.abs(output[i]));}
+  const gain=Math.min(Math.sqrt(dryEnergy/Math.max(1e-20,wetEnergy)),0.8/Math.max(1e-10,peak));
+  for(let i=0;i<output.length;i++)output[i]*=gain;
   return output;
 }
 export function applyPcmEffects(input, effects, notes, bpm) {
@@ -92,6 +98,13 @@ export async function renderSong(song, onProgress = ()=>{}) {
   for(let i=0;i<length;i++) stems.vocal[i]=processed[i]*(vocal.volume??0.7);
   onProgress('dtm / 伴奏を描画中…');
   const placements=parseMML(toDtmMml(song)).placements;
+  // Check the strict subset against the actual dtm parser before playing it.
+  for(let i=0;i<insts.length;i++) {
+    const expected=inspectMml(insts[i].mml,song).placements;
+    const actual=placements.filter(p=>p.trackIndex===i).map(p=>({...p,trackIndex:0}));
+    const keys=['trackIndex','startStep','durationSteps','pitchUnits','velocity'];
+    if(expected.length!==actual.length||expected.some((p,n)=>keys.some(k=>p[k]!==actual[n][k])))throw new Error(`dtm MML conversion differs: ${insts[i].id}`);
+  }
   for(let index=0;index<insts.length;index++) {
     const t=insts[index],ctx=new OfflineAudioContext(1,length,RATE);
     const tone=t.program==='piano'?{wave:'triangle',decay:true,gain:0.8}:t.program==='bass'?{wave:'sine',gain:0.8}:{wave:'sawtooth',attack:0.04,gain:0.5};

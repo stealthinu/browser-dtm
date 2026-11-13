@@ -2,6 +2,7 @@ import {Client} from '@modelcontextprotocol/sdk/client/index.js';
 import {StdioClientTransport} from '@modelcontextprotocol/sdk/client/stdio.js';
 import {readFile,stat,writeFile} from 'node:fs/promises';
 import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
 const fixture=JSON.parse(await readFile('fixtures/song.json','utf8'));
 const transport=new StdioClientTransport({command:process.execPath,args:['scripts/mcp.mjs'],stderr:'pipe'});
 const client=new Client({name:'acceptance-test',version:'1.0.0'});
@@ -15,6 +16,8 @@ try{
   const lyrics=await call('set_lyrics',{trackId:'vo',text:'ゆうやけ そらに とけていく'});assert.equal(lyrics.missing,0);assert.deepEqual(lyrics.extra,[]);
   for(const t of fixture.tracks.filter(t=>t.kind==='inst'))await call('set_track_mml',{trackId:t.id,mml:t.mml,program:t.program});
   const output=await call('export');assert.match(output.file,/\.mp3$/);assert.ok((await stat(output.file)).size>1000);
-  await writeFile('out/mcp-result.json',JSON.stringify({toolNames:tools.map(t=>t.name),steps},null,2)+'\n');
+  const probe=JSON.parse(execFileSync('ffprobe',['-v','error','-show_entries','stream=codec_name,sample_rate:format=duration','-of','json',output.file],{encoding:'utf8'}));
+  assert.equal(probe.streams[0].codec_name,'mp3');assert.ok(Number(probe.format.duration)>=8);
+  await writeFile('out/mcp-result.json',JSON.stringify({toolNames:tools.map(t=>t.name),steps,probe},null,2)+'\n');
   console.log(`A6 MCP tools/list → new_song → notes → lyrics → 2 MML tracks → export: PASS (${output.file})`);
 }finally{await client.close();await transport.close();}

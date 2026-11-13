@@ -38,6 +38,10 @@ test('MML strict subset: chords, rests, dotted values, diagnostics and end bound
   const r=inspectMml("o4 l4 'ceg'2 r4 c8.",song);
   assert.equal(r.noteCount,4);assert.equal(r.endStep,180);
   assert.equal(r.placements[0].pitchUnits,60*31);
+  assert.equal(inspectMml('c4..',song).endStep,108); // dtm repeats ×1.5, unlike SongDoc length.
+  assert.equal(inspectMml('c64.',song).endStep,5); // dtm rounds every step to an integer.
+  assert.equal(inspectMml('c',song).endStep,48); // host explicitly sets l4.
+  assert.equal(inspectMml('o8 > c',song).placements[0].pitchUnits,108*31);
   for(const bad of ['o4 c4 ???','c0','c3','t90 c4','o99 c4','c1 c1 c1 c1 c1','#audio=https://example.com c4','v999 c4'])assert.throws(()=>inspectMml(bad,song));
 });
 test('API: same definitions, transactional failures, lyric counts and mix persistence',async()=>{
@@ -47,5 +51,6 @@ test('API: same definitions, transactional failures, lyric counts and mix persis
   const short=await api.call('set_lyrics',{trackId:'vo',text:'きゃ'});assert.equal(short.saved,false);assert.equal(short.missing,11);assert.equal(JSON.stringify(api.song),before);
   await api.call('set_lyrics',{trackId:'vo',text:'ゆうやけそらにとけていく'});
   await api.call('set_mix',{trackId:'vo',effects:{doubling:0.5}});assert.equal(api.song.tracks[0].effects.doubling,0.5);
+  await api.call('set_track_notes',{trackId:'vo',singer:'oniku',notes:song.tracks[0].notes});assert.equal(api.song.tracks[0].singer,'oniku');
   assert.equal((await api.call('export')).format,'mp3');
 });

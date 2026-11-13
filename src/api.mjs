@@ -35,6 +35,7 @@ export class SongApi {
       if (t && t.kind !== 'vocal') throw new Error('歌トラックではありません');
       t ??= {id:a.trackId,kind:'vocal',singer:a.singer ?? 'ritsu',effects:{},volume:0.7};
       if (!next.tracks.includes(t)) next.tracks.push(t);
+      t.singer = a.singer ?? t.singer;
       t.notes = a.notes.map(n => ({...n,lyric:n.lyric ?? 'あ'}));
       result = {noteCount:t.notes.length};
     } else if (name === 'set_track_mml') {

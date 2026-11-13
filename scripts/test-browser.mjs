@@ -12,16 +12,20 @@ try{
   assert.ok((await page.$eval('#repair',e=>e.value)).includes('JSON'));
   await page.$eval('#reply',(e,text)=>e.value=text,fixture);await page.click('#load');
   assert.equal(await page.$eval('#errors',e=>e.hidden),true);
+  assert.equal(await page.$eval('#repair',e=>getComputedStyle(e).display),'none');
   await page.screenshot({path:'docs/evidence/piano-roll.png',fullPage:true});
   console.log('Paste workflow and piano roll: PASS. Synthesizing VocaTab on CPU…');
   const baseline=await page.evaluate(async()=>{
+    try {
     const h=window.dtmHost,r=await h.render(),play=await h.play(r);
     const files={};
     for(const [id,data]of Object.entries({...r.stems,backing:r.backing,mix:r.mix}))files[id]=await h.saveAudio(data,id,'wav');
     files.mp3=await h.saveAudio(r.mix,'baseline','mp3');
     const stats=data=>{let sum=0,peak=0;for(const x of data){sum+=x*x;peak=Math.max(peak,Math.abs(x));}return{rms:Math.sqrt(sum/data.length),peak};};
     return {play,files,timing:r.timing,duration:r.duration,stats:Object.fromEntries(Object.entries(r.stems).map(([k,d])=>[k,stats(d)]))};
+    } catch(e) {return {error:e.message};}
   });
+  assert.equal(baseline.error,undefined,baseline.error);
   assert.equal(baseline.play.contextState,'running');
   assert.ok(baseline.stats.vocal.rms>0.001);assert.ok(baseline.stats.pf.rms>0.001);assert.ok(baseline.stats.bs.rms>0.001);
   // Let the full rendered song actually pass through the real AudioContext destination.
