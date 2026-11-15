@@ -95,7 +95,7 @@ test('headroom safety, finite outputs and time alignment for an impulse', () => 
 });
 
 
-test('harmonic gate removes noise, not just quiet passages (independent sinusoid projection)', () => {
+test('harmonic gate removes noise, not just quiet passages (independent sinusoid projection)', context => {
   let seed = 123456789;
   const f0 = 200, input = Float32Array.from({ length: sr * 0.6 }, (_, i) => {
     seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
@@ -122,7 +122,8 @@ test('harmonic gate removes noise, not just quiet passages (independent sinusoid
   const bypass = suppressAperiodicity(input, sr, 0);
   assert.ok(rms(bypass.map((x, i) => x - input[i])) < 1e-7);
   const output = suppressAperiodicity(input, sr, 1);
-  const improvement = projectedHnr(output) - projectedHnr(input);
+  const before = projectedHnr(input), after = projectedHnr(output), improvement = after - before;
+  context.diagnostic(`projected HNR ${before.toFixed(2)} -> ${after.toFixed(2)} dB; improvement=${improvement.toFixed(2)}dB`);
   assert.ok(improvement > 6, `HNR improvement=${improvement.toFixed(2)}dB`);
   assert.ok(rms(output) > rms(input) * 0.5, 'harmonics must survive');
 });

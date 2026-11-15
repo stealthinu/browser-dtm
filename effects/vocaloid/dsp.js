@@ -116,11 +116,19 @@ function spectralTransform(input, sampleRate, semitones, amount = 0, guide = nul
         for (let k = Math.max(1, Math.floor(predicted - radius)); k <= Math.min(half - 1, Math.ceil(predicted + radius)); k++) {
           if (magnitudes[k] > magnitudes[peak]) peak = k;
         }
+        // Reject noise-only peaks: a harmonic must stand above the local
+        // interharmonic power floor, not merely be near an integer multiple.
+        let noisePower = 0, noiseBins = 0;
+        const periodBins = f0 / binHz;
+        for (let k = Math.max(1, Math.floor(peak - periodBins * 0.48)); k <= Math.min(half, Math.ceil(peak + periodBins * 0.48)); k++) {
+          if (Math.abs(k - peak) >= periodBins * 0.28) { noisePower += magnitudes[k] ** 2; noiseBins++; }
+        }
+        const tonality = clamp(1 - 2 * noisePower / Math.max(1e-20, noiseBins * magnitudes[peak] ** 2), 0, 1);
         // Preserve the observed partial including vibrato spread; suppress gaps.
         const width = Math.min(f0 * 0.30 / binHz, Math.max(1.5, predicted * 0.004));
         for (let k = Math.max(1, Math.floor(peak - width * 1.7)); k <= Math.min(half, Math.ceil(peak + width * 1.7)); k++) {
           const distance = Math.abs(k - peak) / Math.max(width, 0.5);
-          const keep = distance < 0.65 ? 1 : distance < 1.7 ? 0.5 + 0.5 * Math.cos(Math.PI * (distance - 0.65) / 1.05) : 0;
+          const keep = tonality * (distance < 0.65 ? 1 : distance < 1.7 ? 0.5 + 0.5 * Math.cos(Math.PI * (distance - 0.65) / 1.05) : 0);
           mask[k] = Math.max(mask[k], (0.35 + 0.65 * keep) * (1 - voiced) + (VOCALOID_DEFAULTS.noiseFloor + (1 - VOCALOID_DEFAULTS.noiseFloor) * keep) * voiced);
         }
       }
