@@ -1,0 +1,840 @@
+{
+  "pass": true,
+  "sample_rate": 44100,
+  "source_frames": 379260,
+  "source_duration_s": 8.6,
+  "rows": [
+    {
+      "name": "source",
+      "samples": 379260,
+      "rms": 0.0630808597200139,
+      "rms_dbfs": -24.002047927308574,
+      "peak": 0.309722900390625,
+      "clip_samples": 0,
+      "centroid_hz": 3152.3111672854893,
+      "dr_all_db": 178.77721068295762,
+      "dr_active_db": 6.226766623220019,
+      "f0_median_hz": 333.92694677406354,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": 0.0,
+      "f0_paired_median_abs_cent": 0.0,
+      "f0_paired_p95_abs_cent": 0.0,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 0,
+      "spectral_hnr_db": 30.17204669674235,
+      "hnr_frames": 542,
+      "difference_rms": 0.0,
+      "rms_matched_difference": 0.0,
+      "dropout_windows": 0
+    },
+    {
+      "name": "cli-pcm-0",
+      "samples": 379260,
+      "rms": 0.0630808597200139,
+      "rms_dbfs": -24.002047927308574,
+      "peak": 0.309722900390625,
+      "clip_samples": 0,
+      "centroid_hz": 3152.3111672854893,
+      "dr_all_db": 178.77721068295762,
+      "dr_active_db": 6.226766623220019,
+      "f0_median_hz": 333.92694677406354,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": 0.0,
+      "f0_paired_median_abs_cent": 0.0,
+      "f0_paired_p95_abs_cent": 0.0,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 0,
+      "spectral_hnr_db": 30.17204669674235,
+      "hnr_frames": 542,
+      "difference_rms": 0.0,
+      "rms_matched_difference": 0.0,
+      "dropout_windows": 0
+    },
+    {
+      "name": "cli-mp3-0",
+      "samples": 379260,
+      "rms": 0.06118998941191271,
+      "rms_dbfs": -24.266392439040807,
+      "peak": 0.3006874620914459,
+      "clip_samples": 0,
+      "centroid_hz": 3137.472525742497,
+      "dr_all_db": 178.51363703771614,
+      "dr_active_db": 6.210244350944503,
+      "f0_median_hz": 333.9251096451197,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": -0.009524565057743978,
+      "f0_paired_median_abs_cent": 0.009321741629952973,
+      "f0_paired_p95_abs_cent": 0.03474662723878297,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 0,
+      "spectral_hnr_db": 30.17419465467206,
+      "hnr_frames": 542,
+      "difference_rms": 0.0019107777134477247,
+      "rms_matched_difference": 0.00027931991099538854,
+      "dropout_windows": 0
+    },
+    {
+      "name": "browser-pcm-0",
+      "samples": 379260,
+      "rms": 0.0630808597200139,
+      "rms_dbfs": -24.002047927308574,
+      "peak": 0.309722900390625,
+      "clip_samples": 0,
+      "centroid_hz": 3152.3111672854893,
+      "dr_all_db": 178.77721068295762,
+      "dr_active_db": 6.226766623220019,
+      "f0_median_hz": 333.92694677406354,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": 0.0,
+      "f0_paired_median_abs_cent": 0.0,
+      "f0_paired_p95_abs_cent": 0.0,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 0,
+      "spectral_hnr_db": 30.17204669674235,
+      "hnr_frames": 542,
+      "difference_rms": 0.0,
+      "rms_matched_difference": 0.0,
+      "dropout_windows": 0
+    },
+    {
+      "name": "browser-mp3-0",
+      "samples": 379260,
+      "rms": 0.06119054161496142,
+      "rms_dbfs": -24.266314054436677,
+      "peak": 0.301663875579834,
+      "clip_samples": 0,
+      "centroid_hz": 3112.7727175163714,
+      "dr_all_db": 178.50985990001982,
+      "dr_active_db": 6.219147771319655,
+      "f0_median_hz": 333.9196108339262,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": -0.038033375192414655,
+      "f0_paired_median_abs_cent": 0.01012399034101151,
+      "f0_paired_p95_abs_cent": 0.04114693663025395,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 1105,
+      "spectral_hnr_db": 30.152445826443987,
+      "hnr_frames": 542,
+      "difference_rms": 0.001913895509054314,
+      "rms_matched_difference": 0.0003040794657208407,
+      "dropout_windows": 0
+    },
+    {
+      "name": "cli-pcm-0.5",
+      "samples": 379260,
+      "rms": 0.12419536219823778,
+      "rms_dbfs": -18.11789243251573,
+      "peak": 0.478218138217926,
+      "clip_samples": 0,
+      "centroid_hz": 3982.573974614986,
+      "dr_all_db": 183.2299156048033,
+      "dr_active_db": 2.2747051052109377,
+      "f0_median_hz": 333.7510945489369,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": -0.9119406298868924,
+      "f0_paired_median_abs_cent": 0.7138383147895745,
+      "f0_paired_p95_abs_cent": 5.032277325338758,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 0,
+      "spectral_hnr_db": 33.258890838285275,
+      "hnr_frames": 542,
+      "difference_rms": 0.069160955961414,
+      "rms_matched_difference": 0.02307436032288609,
+      "dropout_windows": 0
+    },
+    {
+      "name": "cli-mp3-0.5",
+      "samples": 379260,
+      "rms": 0.12046502086871323,
+      "rms_dbfs": -18.38278079605747,
+      "peak": 0.4630138874053955,
+      "clip_samples": 0,
+      "centroid_hz": 3945.7055993191457,
+      "dr_all_db": 182.96952477744742,
+      "dr_active_db": 2.284628954819265,
+      "f0_median_hz": 333.75550626015655,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": -0.8890563477871042,
+      "f0_paired_median_abs_cent": 0.7315935490258164,
+      "f0_paired_p95_abs_cent": 5.075269589798315,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": -1,
+      "spectral_hnr_db": 33.19794451164738,
+      "hnr_frames": 542,
+      "difference_rms": 0.06450779753842892,
+      "rms_matched_difference": 0.02132341314346084,
+      "dropout_windows": 0
+    },
+    {
+      "name": "browser-pcm-0.5",
+      "samples": 379260,
+      "rms": 0.12419536219823778,
+      "rms_dbfs": -18.11789243251573,
+      "peak": 0.478218138217926,
+      "clip_samples": 0,
+      "centroid_hz": 3982.573974614986,
+      "dr_all_db": 183.2299156048033,
+      "dr_active_db": 2.2747051052109377,
+      "f0_median_hz": 333.7510945489369,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": -0.9119406298868924,
+      "f0_paired_median_abs_cent": 0.7138383147895745,
+      "f0_paired_p95_abs_cent": 5.032277325338758,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 0,
+      "spectral_hnr_db": 33.258890838285275,
+      "hnr_frames": 542,
+      "difference_rms": 0.069160955961414,
+      "rms_matched_difference": 0.02307436032288609,
+      "dropout_windows": 0
+    },
+    {
+      "name": "browser-mp3-0.5",
+      "samples": 379260,
+      "rms": 0.12047196607890245,
+      "rms_dbfs": -18.382280039988444,
+      "peak": 0.4643022418022156,
+      "clip_samples": 0,
+      "centroid_hz": 3898.3128225373644,
+      "dr_all_db": 182.9747751042121,
+      "dr_active_db": 2.289960467142162,
+      "f0_median_hz": 333.7502742247918,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": -0.9161958214349002,
+      "f0_paired_median_abs_cent": 0.7280582178208151,
+      "f0_paired_p95_abs_cent": 5.074428962567477,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 1104,
+      "spectral_hnr_db": 33.187821036206614,
+      "hnr_frames": 542,
+      "difference_rms": 0.0645152273422744,
+      "rms_matched_difference": 0.0213247810591987,
+      "dropout_windows": 0
+    },
+    {
+      "name": "cli-pcm-1",
+      "samples": 379260,
+      "rms": 0.16746741725139905,
+      "rms_dbfs": -15.521393549785339,
+      "peak": 0.6353067755699158,
+      "clip_samples": 0,
+      "centroid_hz": 4365.245214055451,
+      "dr_all_db": 185.22284767330135,
+      "dr_active_db": 0.5334525464438382,
+      "f0_median_hz": 333.4822381909311,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": -2.3071146526447412,
+      "f0_paired_median_abs_cent": 1.2288901344721188,
+      "f0_paired_p95_abs_cent": 8.88265696724519,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 0,
+      "spectral_hnr_db": 39.15551983412135,
+      "hnr_frames": 542,
+      "difference_rms": 0.12458113072105247,
+      "rms_matched_difference": 0.04173381433737469,
+      "dropout_windows": 0
+    },
+    {
+      "name": "cli-mp3-1",
+      "samples": 379260,
+      "rms": 0.1624377731735106,
+      "rms_dbfs": -15.78625945592336,
+      "peak": 0.617520809173584,
+      "clip_samples": 0,
+      "centroid_hz": 4308.096936558349,
+      "dr_all_db": 184.95286699977999,
+      "dr_active_db": 0.5229674560839523,
+      "f0_median_hz": 333.47573901871345,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": -2.3408546741117817,
+      "f0_paired_median_abs_cent": 1.2307924819054306,
+      "f0_paired_p95_abs_cent": 8.923976770065785,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": -2,
+      "spectral_hnr_db": 39.002472854046516,
+      "hnr_frames": 542,
+      "difference_rms": 0.11664115340981203,
+      "rms_matched_difference": 0.038076354702616,
+      "dropout_windows": 0
+    },
+    {
+      "name": "browser-pcm-1",
+      "samples": 379260,
+      "rms": 0.16746741725139905,
+      "rms_dbfs": -15.521393549785339,
+      "peak": 0.6353067755699158,
+      "clip_samples": 0,
+      "centroid_hz": 4365.245214055451,
+      "dr_all_db": 185.22284767330135,
+      "dr_active_db": 0.5334525464438382,
+      "f0_median_hz": 333.4822381909311,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": -2.3071146526447412,
+      "f0_paired_median_abs_cent": 1.2288901344721188,
+      "f0_paired_p95_abs_cent": 8.88265696724519,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 0,
+      "spectral_hnr_db": 39.15551983412135,
+      "hnr_frames": 542,
+      "difference_rms": 0.12458113072105247,
+      "rms_matched_difference": 0.04173381433737469,
+      "dropout_windows": 0
+    },
+    {
+      "name": "browser-mp3-1",
+      "samples": 379260,
+      "rms": 0.16243969672645084,
+      "rms_dbfs": -15.786156600107862,
+      "peak": 0.6173620820045471,
+      "clip_samples": 0,
+      "centroid_hz": 4249.020678285646,
+      "dr_all_db": 184.9553483341089,
+      "dr_active_db": 0.5232633059767391,
+      "f0_median_hz": 333.47643967409067,
+      "f0_reference_median_hz": 333.92694677406354,
+      "f0_delta_cent": -2.337217236572937,
+      "f0_paired_median_abs_cent": 1.2390228731534267,
+      "f0_paired_p95_abs_cent": 8.904594940467128,
+      "voiced_frames": 347,
+      "stable_reference_frames": 347,
+      "measured_delay_samples": 1103,
+      "spectral_hnr_db": 38.98043064720639,
+      "hnr_frames": 542,
+      "difference_rms": 0.11663959428203485,
+      "rms_matched_difference": 0.03807232511567557,
+      "dropout_windows": 0
+    }
+  ],
+  "checks": [
+    {
+      "name": "F0 estimator positive control 200.000 Hz",
+      "pass": true,
+      "detail": "measured 200.006928 Hz"
+    },
+    {
+      "name": "F0 estimator positive control 205.860 Hz",
+      "pass": true,
+      "detail": "measured 205.869150 Hz"
+    },
+    {
+      "name": "F0 estimator positive control 650.000 Hz",
+      "pass": true,
+      "detail": "measured 650.269316 Hz"
+    },
+    {
+      "name": "F0 estimator detects a real 50-cent change",
+      "pass": true,
+      "detail": "measured 50.013213 cent"
+    },
+    {
+      "name": "source: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.063081, peak=0.309723"
+    },
+    {
+      "name": "source: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=0.000 cent; paired abs median=0.000 cent; frames=347"
+    },
+    {
+      "name": "source: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "cli-0: exact PCM length",
+      "pass": true,
+      "detail": "379260 / 379260"
+    },
+    {
+      "name": "cli-pcm-0: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.063081, peak=0.309723"
+    },
+    {
+      "name": "cli-pcm-0: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=0.000 cent; paired abs median=0.000 cent; frames=347"
+    },
+    {
+      "name": "cli-pcm-0: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "cli: exact bypass PCM",
+      "pass": true,
+      "detail": "max abs error=0.0"
+    },
+    {
+      "name": "cli-mp3-0: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.061190, peak=0.300687"
+    },
+    {
+      "name": "cli-mp3-0: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=-0.010 cent; paired abs median=0.009 cent; frames=347"
+    },
+    {
+      "name": "cli-mp3-0: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "browser-0: exact PCM length",
+      "pass": true,
+      "detail": "379260 / 379260"
+    },
+    {
+      "name": "browser-pcm-0: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.063081, peak=0.309723"
+    },
+    {
+      "name": "browser-pcm-0: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=0.000 cent; paired abs median=0.000 cent; frames=347"
+    },
+    {
+      "name": "browser-pcm-0: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "browser: exact bypass PCM",
+      "pass": true,
+      "detail": "max abs error=0.0"
+    },
+    {
+      "name": "browser-mp3-0: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.061191, peak=0.301664"
+    },
+    {
+      "name": "browser-mp3-0: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=-0.038 cent; paired abs median=0.010 cent; frames=347"
+    },
+    {
+      "name": "browser-mp3-0: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "cross-platform PCM 0",
+      "pass": true,
+      "detail": "max abs difference=0.0"
+    },
+    {
+      "name": "cross-platform MP3 0: rms",
+      "pass": true,
+      "detail": "relative difference=0.000902%"
+    },
+    {
+      "name": "cross-platform MP3 0: centroid_hz",
+      "pass": true,
+      "detail": "relative difference=0.787252%"
+    },
+    {
+      "name": "cli-0.5: exact PCM length",
+      "pass": true,
+      "detail": "379260 / 379260"
+    },
+    {
+      "name": "cli-pcm-0.5: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.124195, peak=0.478218"
+    },
+    {
+      "name": "cli-pcm-0.5: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=-0.912 cent; paired abs median=0.714 cent; frames=347"
+    },
+    {
+      "name": "cli-pcm-0.5: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "cli-mp3-0.5: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.120465, peak=0.463014"
+    },
+    {
+      "name": "cli-mp3-0.5: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=-0.889 cent; paired abs median=0.732 cent; frames=347"
+    },
+    {
+      "name": "cli-mp3-0.5: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "browser-0.5: exact PCM length",
+      "pass": true,
+      "detail": "379260 / 379260"
+    },
+    {
+      "name": "browser-pcm-0.5: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.124195, peak=0.478218"
+    },
+    {
+      "name": "browser-pcm-0.5: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=-0.912 cent; paired abs median=0.714 cent; frames=347"
+    },
+    {
+      "name": "browser-pcm-0.5: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "browser-mp3-0.5: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.120472, peak=0.464302"
+    },
+    {
+      "name": "browser-mp3-0.5: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=-0.916 cent; paired abs median=0.728 cent; frames=347"
+    },
+    {
+      "name": "browser-mp3-0.5: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "cross-platform PCM 0.5",
+      "pass": true,
+      "detail": "max abs difference=0.0"
+    },
+    {
+      "name": "cross-platform MP3 0.5: rms",
+      "pass": true,
+      "detail": "relative difference=0.005765%"
+    },
+    {
+      "name": "cross-platform MP3 0.5: centroid_hz",
+      "pass": true,
+      "detail": "relative difference=1.201123%"
+    },
+    {
+      "name": "cli-1: exact PCM length",
+      "pass": true,
+      "detail": "379260 / 379260"
+    },
+    {
+      "name": "cli-pcm-1: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.167467, peak=0.635307"
+    },
+    {
+      "name": "cli-pcm-1: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=-2.307 cent; paired abs median=1.229 cent; frames=347"
+    },
+    {
+      "name": "cli-pcm-1: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "cli-mp3-1: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.162438, peak=0.617521"
+    },
+    {
+      "name": "cli-mp3-1: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=-2.341 cent; paired abs median=1.231 cent; frames=347"
+    },
+    {
+      "name": "cli-mp3-1: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "browser-1: exact PCM length",
+      "pass": true,
+      "detail": "379260 / 379260"
+    },
+    {
+      "name": "browser-pcm-1: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.167467, peak=0.635307"
+    },
+    {
+      "name": "browser-pcm-1: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=-2.307 cent; paired abs median=1.229 cent; frames=347"
+    },
+    {
+      "name": "browser-pcm-1: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "browser-mp3-1: finite/non-silent/no clipping",
+      "pass": true,
+      "detail": "RMS=0.162440, peak=0.617362"
+    },
+    {
+      "name": "browser-mp3-1: F0 unchanged",
+      "pass": true,
+      "detail": "median delta=-2.337 cent; paired abs median=1.239 cent; frames=347"
+    },
+    {
+      "name": "browser-mp3-1: no active dropout",
+      "pass": true,
+      "detail": "0 / 378 active windows"
+    },
+    {
+      "name": "cross-platform PCM 1",
+      "pass": true,
+      "detail": "max abs difference=8.271806125530277e-25"
+    },
+    {
+      "name": "cross-platform MP3 1: rms",
+      "pass": true,
+      "detail": "relative difference=0.001184%"
+    },
+    {
+      "name": "cross-platform MP3 1: centroid_hz",
+      "pass": true,
+      "detail": "relative difference=1.371284%"
+    },
+    {
+      "name": "amount 0.5: audible signal change",
+      "pass": true,
+      "detail": "difference RMS=0.069161"
+    },
+    {
+      "name": "amount 0.5: active dynamics reduced",
+      "pass": true,
+      "detail": "6.227 -> 2.275 dB"
+    },
+    {
+      "name": "amount 1: audible signal change",
+      "pass": true,
+      "detail": "difference RMS=0.124581"
+    },
+    {
+      "name": "amount 1: active dynamics reduced",
+      "pass": true,
+      "detail": "6.227 -> 0.533 dB"
+    },
+    {
+      "name": "v2: centroid rise",
+      "pass": true,
+      "detail": "3152.31 -> 4365.25 Hz"
+    },
+    {
+      "name": "v2: spectral HNR rise >=6 dB",
+      "pass": true,
+      "detail": "30.17 -> 39.16 dB; 542 fixed source frames"
+    },
+    {
+      "name": "v2: active DR falls >=3 dB",
+      "pass": true,
+      "detail": "6.23 -> 0.53 dB"
+    },
+    {
+      "name": "v2: large difference, beyond v1",
+      "pass": true,
+      "detail": "RMS difference=0.124581; v1=0.052629"
+    },
+    {
+      "name": "v2: level-matched difference beyond v1",
+      "pass": true,
+      "detail": "matched difference=0.041734; v1=0.029973"
+    }
+  ],
+  "source": "/workspace/vocaloid-filter-demo/source/vocatab-codex-vocal.wav",
+  "browser_integration": {
+    "results": [
+      {
+        "amount": 0,
+        "rms": 0.0630808597200139,
+        "peak": 0.309722900390625,
+        "maxBypassDifference": 0,
+        "length": 379260,
+        "sampleRate": 44100,
+        "playback": {
+          "state": "running",
+          "elapsed": 2.272,
+          "maxRms": 0.0903940262559166
+        },
+        "mp3Bytes": 207516
+      },
+      {
+        "amount": 0.5,
+        "rms": 0.12419536219824764,
+        "peak": 0.478218138217926,
+        "maxBypassDifference": 0.301989883184433,
+        "length": 379260,
+        "sampleRate": 44100,
+        "playback": {
+          "state": "running",
+          "elapsed": 2.304,
+          "maxRms": 0.14139132018238096
+        },
+        "mp3Bytes": 207516
+      },
+      {
+        "amount": 1,
+        "rms": 0.16746741725140984,
+        "peak": 0.6353067755699158,
+        "maxBypassDifference": 0.5488632321357727,
+        "length": 379260,
+        "sampleRate": 44100,
+        "playback": {
+          "state": "running",
+          "elapsed": 2.304000000000001,
+          "maxRms": 0.18013634088694863
+        },
+        "mp3Bytes": 207516
+      }
+    ],
+    "adapter": {
+      "difference": 0,
+      "length": 379260
+    },
+    "errors": []
+  },
+  "artifacts": {
+    "v1_unchanged_files": 9,
+    "outputs": [
+      {
+        "path": "/workspace/vocaloid-filter-demo/v2/vocaloid-v2-0.5.mp3",
+        "bytes": 208186,
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "duration": "8.646531"
+        }
+      },
+      {
+        "path": "/workspace/vocaloid-filter-demo/v2/vocaloid-v2-0.mp3",
+        "bytes": 208186,
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "duration": "8.646531"
+        }
+      },
+      {
+        "path": "/workspace/vocaloid-filter-demo/v2/vocaloid-v2-1.mp3",
+        "bytes": 208186,
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "duration": "8.646531"
+        }
+      },
+      {
+        "path": "/workspace/browser-dtm-wt/vocaloid-filter/out/browser-vocaloid-v2-0.5.mp3",
+        "bytes": 207516,
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "duration": "8.646500"
+        }
+      },
+      {
+        "path": "/workspace/browser-dtm-wt/vocaloid-filter/out/browser-vocaloid-v2-0.mp3",
+        "bytes": 207516,
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "duration": "8.646500"
+        }
+      },
+      {
+        "path": "/workspace/browser-dtm-wt/vocaloid-filter/out/browser-vocaloid-v2-1.mp3",
+        "bytes": 207516,
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 1
+          }
+        ],
+        "format": {
+          "duration": "8.646500"
+        }
+      }
+    ]
+  },
+  "listening_proxy": {
+    "source": {
+      "peak": 0.309722900390625,
+      "active_20ms_rms_min": 0.010153468439132817,
+      "active_20ms_rms_median": 0.06595471648613493,
+      "active_20ms_rms_max": 0.13274589635270123,
+      "active_zero_windows": 0,
+      "samples_above_0_8": 0
+    },
+    "v2_amount_1": {
+      "peak": 0.6353067755699158,
+      "active_20ms_rms_min": 0.01794712129795866,
+      "active_20ms_rms_median": 0.1789059711669968,
+      "active_20ms_rms_max": 0.1843467927160217,
+      "active_zero_windows": 0,
+      "samples_above_0_8": 0
+    }
+  },
+  "repairs": 1,
+  "cli_switches": 0
+}
