@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { applyVocaloid, shiftFormants } from '../effects/vocaloid/dsp.js';
+import { applyVocaloid, shiftFormants, suppressAperiodicity, VOCALOID_DEFAULTS } from '../effects/vocaloid/dsp.js';
 const sr = 44100;
 const tone = (hz, seconds = 0.25) => Float32Array.from({ length: Math.round(sr * seconds) }, (_, i) => 0.2 * Math.sin(2 * Math.PI * hz * i / sr));
 const rms = data => Math.sqrt(data.reduce((sum, x) => sum + x * x, 0) / data.length);
@@ -82,8 +82,8 @@ test('envelope shift lifts a synthetic vowel resonance while keeping harmonic po
     }
     return weighted / total;
   }
-  const before = centroid(input), after = centroid(shiftFormants(input, sr, 1.8));
-  assert.ok(after > before + 40, `${before} -> ${after}`);
+  const before = centroid(input), after = centroid(shiftFormants(input, sr, VOCALOID_DEFAULTS.formantSemitones));
+  assert.ok(after > before + 200, `${before} -> ${after}`);
 });
 test('headroom safety, finite outputs and time alignment for an impulse', () => {
   const input = new Float32Array(8192); input[4096] = 4;
@@ -92,4 +92,37 @@ test('headroom safety, finite outputs and time alignment for an impulse', () => 
   assert.ok(Math.max(...out.map(Math.abs)) <= 0.940001);
   const peak = out.reduce((best, x, i) => Math.abs(x) > Math.abs(out[best]) ? i : best, 0);
   assert.equal(peak, 4096);
+});
+
+
+test('harmonic gate removes noise, not just quiet passages (independent sinusoid projection)', () => {
+  let seed = 123456789;
+  const f0 = 200, input = Float32Array.from({ length: sr * 0.6 }, (_, i) => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    let value = 0.04 * (2 * seed / 2 ** 32 - 1);
+    for (let h = 1; h <= 25; h++) value += 0.1 / h * Math.sin(2 * Math.PI * f0 * h * i / sr);
+    return value;
+  });
+  function projectedHnr(data) {
+    const begin = sr / 5, length = sr / 5;
+    let harmonicPower = 0, totalPower = 0;
+    for (let i = begin; i < begin + length; i++) totalPower += data[i] ** 2 / length;
+    // Orthogonal least-squares sinusoid projection, not the DSP's spectral mask.
+    for (let h = 1; h <= 25; h++) {
+      let real = 0, imag = 0;
+      for (let j = 0; j < length; j++) {
+        const phase = 2 * Math.PI * f0 * h * (begin + j) / sr;
+        real += data[begin + j] * Math.cos(phase) / length;
+        imag += data[begin + j] * Math.sin(phase) / length;
+      }
+      harmonicPower += 2 * (real ** 2 + imag ** 2);
+    }
+    return 10 * Math.log10(harmonicPower / Math.max(1e-15, totalPower - harmonicPower));
+  }
+  const bypass = suppressAperiodicity(input, sr, 0);
+  assert.ok(rms(bypass.map((x, i) => x - input[i])) < 1e-7);
+  const output = suppressAperiodicity(input, sr, 1);
+  const improvement = projectedHnr(output) - projectedHnr(input);
+  assert.ok(improvement > 6, `HNR improvement=${improvement.toFixed(2)}dB`);
+  assert.ok(rms(output) > rms(input) * 0.5, 'harmonics must survive');
 });

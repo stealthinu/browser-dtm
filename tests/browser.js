@@ -37,7 +37,7 @@ try {
       for (let i = 0; i < bytes.length; i += 8192) binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
       return { pcm: btoa(binary), rms: Math.sqrt(power / data.length), peak, maxBypassDifference: difference, length: data.length, sampleRate: demo.output.sampleRate };
     });
-    await writeFile(`out/browser-${amount}.f32`, Buffer.from(raw.pcm, 'base64')); delete raw.pcm;
+    await writeFile(`out/v2-browser-${amount}.f32`, Buffer.from(raw.pcm, 'base64')); delete raw.pcm;
     assert.ok(raw.rms > 1e-4); assert.ok(raw.peak < 1);
     if (amount === 0) assert.equal(raw.maxBypassDifference, 0);
     await page.click('#play');
@@ -54,7 +54,7 @@ try {
     assert.equal(playback.state, 'running'); assert.ok(playback.elapsed > 2, JSON.stringify(playback)); assert.ok(playback.maxRms > 1e-4);
     await page.click('#stop'); await page.click('#export');
     await page.waitForFunction(() => !window.vocaloidDemo.busy, { timeout: 60000 });
-    const output = `out/browser-vocaloid-${amount}.mp3`;
+    const output = `out/browser-vocaloid-v2-${amount}.mp3`;
     let bytes = 0;
     for (let i = 0; i < 100; i++) { try { bytes = (await stat(output)).size; if (bytes > 1000) break; } catch {} await delay(100); }
     assert.ok(bytes > 1000, `missing MP3 download: ${output}`);
@@ -70,9 +70,9 @@ try {
     return { difference, length: result.length };
   });
   assert.equal(adapter.difference, 0);
-  await page.screenshot({ path: 'out/vocaloid-demo.png' });
+  await page.screenshot({ path: 'out/v2-vocaloid-demo.png' });
   assert.deepEqual(errors, []);
-  await writeFile('out/browser-results.json', JSON.stringify({ results, adapter, errors }, null, 2));
+  await writeFile('out/v2-browser-results.json', JSON.stringify({ results, adapter, errors }, null, 2));
   console.log(JSON.stringify({ results, adapter, errors }, null, 2));
 } finally {
   if (browser) await browser.close();

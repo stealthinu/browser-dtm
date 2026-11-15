@@ -69,7 +69,7 @@ async function exportMp3() {
     const channels = Array.from({ length: output.numberOfChannels }, (_, c) => output.getChannelData(c));
     const { blob } = await runWorker('encoder-worker.js', { channels, sampleRate: output.sampleRate }, 'classic');
     const url = URL.createObjectURL(blob), link = document.createElement('a');
-    link.href = url; link.download = `browser-vocaloid-${outputAmount}.mp3`; link.click();
+    link.href = url; link.download = `browser-vocaloid-v2-${outputAmount}.mp3`; link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     status(`強度 ${outputAmount.toFixed(2)} の MP3 を保存しました。`);
   } catch (error) { status(`書き出しエラー: ${error.message}`); throw error; }

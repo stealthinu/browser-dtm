@@ -1,3 +1,5 @@
+> vocaloid v2: 原音F0に沿う倍音間の雑音抑制、4.5半音の包絡シフト、強い音量平坦化。強度0は厳密な素通し。[現行DSP・測定の説明](docs/vocaloid-filter.md)。
+
 # browser-dtm（非公開）
 
 ブラウザで「歌＋楽器」の曲を作る DTM アプリの最小版。歌は VocaTab の歌声合成エンジン、楽器は onjmin/dtm を使い、曲や歌詞は LLM から操作できるようにする。

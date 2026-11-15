@@ -10,7 +10,7 @@ from scipy import signal
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'out'
 SOURCE = Path(os.environ.get('VOCALOID_SAMPLE', '/workspace/vocaloid-filter-demo/source/vocatab-codex-vocal.wav'))
-DEMO = Path(os.environ.get('VOCALOID_DEMO_DIR', '/workspace/vocaloid-filter-demo'))
+DEMO = Path(os.environ.get('VOCALOID_DEMO_DIR', '/workspace/vocaloid-filter-demo/v2'))
 SR = 44100
 
 
@@ -41,12 +41,12 @@ def window_rms(samples):
 def pitch_track(samples):
     # YIN-style difference / cumulative mean normalized difference, 70..700Hz.
     # Absolute frame times are shared by original and all aligned outputs.
-    rate = 11025
+    rate = 22050
     # Common preprocessing isolates F0 from the effect's moving upper formants.
     # Fixed for every input; changes no processing output and uses no reference pitch.
     filtered = signal.sosfiltfilt(signal.butter(4, 1200, fs=SR, output='sos'), samples)
-    data = signal.resample_poly(filtered, 1, 4)
-    frame, hop = 1024, 220
+    data = signal.resample_poly(filtered, 1, 2)
+    frame, hop = 2048, 440
     lo, hi = int(rate / 700), int(rate / 70)
     f0, confidence = [], []
     for start in range(0, len(data) - frame + 1, hop):
@@ -76,6 +76,44 @@ original_rms_windows = window_rms(original)
 active_windows = original_rms_windows > 10 ** (-40 / 20)
 pitch_original, confidence_original = pitch_track(original)
 rows, checks = [], []
+
+# Independent analysis grid: source YIN F0, source-observed spectral peaks,
+# fixed masks reused for every output. No output-dependent window rejection.
+HNR_N, HNR_HOP = 4096, 512
+HNR_WINDOW = np.hanning(HNR_N)
+HNR_BINS = np.fft.rfftfreq(HNR_N, 1 / SR)
+HNR_FRAMES = []
+for start in range(0, len(original) - HNR_N, HNR_HOP):
+    center_s = (start + HNR_N / 2) / SR
+    pos = round((center_s - 1024 / 22050) / (440 / 22050))
+    if pos < 1 or pos >= len(pitch_original) - 1:
+        continue
+    region = pitch_original[pos - 1:pos + 2]
+    if not np.all(np.isfinite(region)) or np.ptp(1200 * np.log2(region)) > 40:
+        continue
+    f0 = pitch_original[pos]
+    spectrum = np.abs(np.fft.rfft(original[start:start + HNR_N] * HNR_WINDOW)) ** 2
+    harmonic = np.zeros(len(HNR_BINS), dtype=bool)
+    noise = (HNR_BINS > 500) & (HNR_BINS < 8000)
+    for hz in np.arange(f0, 8000, f0):
+        candidates = np.flatnonzero(np.abs(HNR_BINS - hz) < 0.15 * f0)
+        if not len(candidates):
+            continue
+        peak_hz = HNR_BINS[candidates[np.argmax(spectrum[candidates])]]
+        harmonic |= np.abs(HNR_BINS - peak_hz) < max(2 * SR / HNR_N, hz * 0.006)
+        noise &= np.abs(HNR_BINS - peak_hz) > 0.30 * f0
+    harmonic &= (HNR_BINS > 500) & (HNR_BINS < 8000)
+    if np.any(noise) and np.sum(spectrum[harmonic]) > 1e-8:
+        HNR_FRAMES.append((start, harmonic, noise))
+
+
+def spectral_hnr(samples):
+    values = []
+    for start, harmonic, noise in HNR_FRAMES:
+        power = np.abs(np.fft.rfft(samples[start:start + HNR_N] * HNR_WINDOW)) ** 2
+        values.append(10 * np.log10(max(1e-20, np.mean(power[harmonic])) / max(1e-20, np.mean(power[noise]))))
+    return float(np.median(values))
+
 
 
 def check(name, passed, detail):
@@ -112,11 +150,17 @@ def metrics(name, samples, lag=0):
         'f0_delta_cent': cents, 'f0_paired_median_abs_cent': float(np.median(np.abs(paired))),
         'f0_paired_p95_abs_cent': float(np.percentile(np.abs(paired), 95)),
         'voiced_frames': int(np.sum(mask)), 'stable_reference_frames': int(np.sum(stable)),
-        'measured_delay_samples': lag,
+         'measured_delay_samples': lag,
+        'spectral_hnr_db': spectral_hnr(samples), 'hnr_frames': len(HNR_FRAMES),
+        'difference_rms': float(np.sqrt(np.mean((samples - original) ** 2))),
+        'rms_matched_difference': float(np.sqrt(np.mean((samples * np.sqrt(np.mean(original ** 2) / max(1e-20, np.mean(samples ** 2))) - original) ** 2))),
+        'dropout_windows': int(np.sum(windows[active_windows] < original_rms_windows[active_windows] * 0.1)),
+
     }
     rows.append(result)
-    check(f'{name}: finite/non-silent/no clipping', np.all(np.isfinite(samples)) and result['rms'] > 1e-4 and result['clip_samples'] == 0, f"RMS={result['rms']:.6f}, peak={result['peak']:.6f}")
+    check(f'{name}: finite/non-silent/no clipping', np.all(np.isfinite(samples)) and result['rms'] > 1e-4 and result['clip_samples'] == 0 and result['peak'] < 0.99, f"RMS={result['rms']:.6f}, peak={result['peak']:.6f}")
     check(f'{name}: F0 unchanged', np.sum(mask) >= 40 and abs(cents) < 20 and np.median(np.abs(paired)) < 20, f"median delta={cents:.3f} cent; paired abs median={np.median(np.abs(paired)):.3f} cent; frames={np.sum(mask)}")
+    check(f'{name}: no active dropout', result['dropout_windows'] == 0, f"{result['dropout_windows']} / {int(np.sum(active_windows))} active windows")
     return result
 
 
@@ -134,18 +178,18 @@ check('F0 estimator detects a real 50-cent change', 48 < known_shift < 52, f'mea
 metrics('source', original)
 for amount in [0, 0.5, 1]:
     for variant in ['cli', 'browser']:
-        raw = np.fromfile(OUT / f'{variant}-{amount}.f32', dtype='<f4').astype(np.float64)
+        raw = np.fromfile(OUT / f'v2-{variant}-{amount}.f32', dtype='<f4').astype(np.float64)
         check(f'{variant}-{amount}: exact PCM length', len(raw) == len(original), f'{len(raw)} / {len(original)}')
         metrics(f'{variant}-pcm-{amount}', raw)
         if amount == 0:
             error = float(np.max(np.abs(raw - original)))
             check(f'{variant}: exact bypass PCM', error == 0, f'max abs error={error}')
-        path = DEMO / f'vocaloid-{amount}.mp3' if variant == 'cli' else OUT / f'browser-vocaloid-{amount}.mp3'
+        path = DEMO / f'vocaloid-v2-{amount}.mp3' if variant == 'cli' else OUT / f'browser-vocaloid-v2-{amount}.mp3'
         decoded = decode(path)
         aligned, lag = align(original, decoded)
         metrics(f'{variant}-mp3-{amount}', aligned, lag)
-    a = np.fromfile(OUT / f'cli-{amount}.f32', dtype='<f4')
-    b = np.fromfile(OUT / f'browser-{amount}.f32', dtype='<f4')
+    a = np.fromfile(OUT / f'v2-cli-{amount}.f32', dtype='<f4')
+    b = np.fromfile(OUT / f'v2-browser-{amount}.f32', dtype='<f4')
     error = float(np.max(np.abs(a - b)))
     check(f'cross-platform PCM {amount}', error < 1e-5, f'max abs difference={error}')
     cli = next(row for row in rows if row['name'] == f'cli-mp3-{amount}')
@@ -156,21 +200,29 @@ for amount in [0, 0.5, 1]:
 
 base = next(row for row in rows if row['name'] == 'cli-pcm-0')
 for amount in [0.5, 1]:
-    wet = np.fromfile(OUT / f'cli-{amount}.f32', dtype='<f4')
+    wet = np.fromfile(OUT / f'v2-cli-{amount}.f32', dtype='<f4')
     difference_rms = float(np.sqrt(np.mean((wet - original) ** 2)))
     check(f'amount {amount}: audible signal change', difference_rms > 0.005, f'difference RMS={difference_rms:.6f}')
     row = next(row for row in rows if row['name'] == f'cli-pcm-{amount}')
     check(f'amount {amount}: active dynamics reduced', row['dr_active_db'] < base['dr_active_db'], f"{base['dr_active_db']:.3f} -> {row['dr_active_db']:.3f} dB")
 
+strong = next(row for row in rows if row['name'] == 'cli-pcm-1')
+check('v2: centroid rise', strong['centroid_hz'] - base['centroid_hz'] >= 800 or strong['centroid_hz'] / base['centroid_hz'] >= 1.3, f"{base['centroid_hz']:.2f} -> {strong['centroid_hz']:.2f} Hz")
+check('v2: spectral HNR rise >=6 dB', strong['spectral_hnr_db'] - base['spectral_hnr_db'] >= 6, f"{base['spectral_hnr_db']:.2f} -> {strong['spectral_hnr_db']:.2f} dB; {len(HNR_FRAMES)} fixed source frames")
+check('v2: active DR falls >=3 dB', base['dr_active_db'] - strong['dr_active_db'] >= 3, f"{base['dr_active_db']:.2f} -> {strong['dr_active_db']:.2f} dB")
+check('v2: large difference, beyond v1', strong['difference_rms'] > 0.10, f"RMS difference={strong['difference_rms']:.6f}; v1=0.052629")
+# A separate level-independent check prevents makeup gain from passing on its own.
+check('v2: level-matched difference beyond v1', strong['rms_matched_difference'] > 0.0299732012 * 1.3, f"matched difference={strong['rms_matched_difference']:.6f}; v1=0.029973")
+
 passed = all(item['pass'] for item in checks)
 result = {'pass': passed, 'sample_rate': SR, 'source_frames': len(original), 'source_duration_s': len(original) / SR, 'rows': rows, 'checks': checks}
-(OUT / 'analysis.json').write_text(json.dumps(result, indent=2, allow_nan=False) + '\n')
-lines = ['| 出力 | RMS dBFS | peak | 重心 Hz | DR 全体/有声 dB | F0 Hz | Δ cent | 対応窓絶対差 中央値/p95 cent | 有声窓 | 遅延 samples |', '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
+(OUT / 'v2-analysis.json').write_text(json.dumps(result, indent=2, allow_nan=False) + '\n')
+lines = ['| 出力 | RMS dBFS | peak | 重心 Hz | 発声DR dB | 調波/雑音 dB | 差分RMS | RMS整合差分 | F0 Hz | Δ cent | 対応差 median/p95 cent | dropout |', '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
 for row in rows:
-    lines.append(f"| {row['name']} | {row['rms_dbfs']:.2f} | {row['peak']:.4f} | {row['centroid_hz']:.1f} | {row['dr_all_db']:.2f}/{row['dr_active_db']:.2f} | {row['f0_median_hz']:.2f} | {row['f0_delta_cent']:+.2f} | {row['f0_paired_median_abs_cent']:.2f}/{row['f0_paired_p95_abs_cent']:.2f} | {row['voiced_frames']} | {row['measured_delay_samples']} |")
-lines += ['', f"判定: {'PASS' if passed else 'FAIL'} — {sum(item['pass'] for item in checks)}/{len(checks)} checks", '', 'F0: 全入力に同じ4次1200 Hzローパスを検査用にのみ適用して高域包絡の影響を抑え、11,025 Hzへ変換。1024 sample窓・220 sample hopのYIN型推定（70〜700 Hz）。原音の連続3窓が60 cent以内の安定区間を選び、各出力でも有声と判定した対応窓を比較。推定器の倍音誤認を隠すためのcent外れ値除外は行わない。DR有声は原音の20ms RMSが−40dBFSを超える固定窓。MP3は相互相関で符号化遅延を測って整列。', '']
+    lines.append(f"| {row['name']} | {row['rms_dbfs']:.2f} | {row['peak']:.4f} | {row['centroid_hz']:.1f} | {row['dr_active_db']:.2f} | {row['spectral_hnr_db']:.2f} | {row['difference_rms']:.6f} | {row['rms_matched_difference']:.6f} | {row['f0_median_hz']:.2f} | {row['f0_delta_cent']:+.2f} | {row['f0_paired_median_abs_cent']:.2f}/{row['f0_paired_p95_abs_cent']:.2f} | {row['dropout_windows']} |")
+lines += ['', f"判定: {'PASS' if passed else 'FAIL'} — {sum(item['pass'] for item in checks)}/{len(checks)} checks", '']
 for item in checks:
     lines.append(f"- {'PASS' if item['pass'] else 'FAIL'} {item['name']}: {item['detail']}")
-(OUT / 'analysis.md').write_text('\n'.join(lines) + '\n')
+(OUT / 'v2-analysis.md').write_text('\n'.join(lines) + '\n')
 print('\n'.join(lines))
 raise SystemExit(0 if passed else 1)

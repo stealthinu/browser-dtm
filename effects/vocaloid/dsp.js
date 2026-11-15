@@ -1,12 +1,9 @@
-/** Independent mono effect. No pitch detector, resampling, or frequency-bin remapping. */
+/** Pure-JS v2 mono effect: F0-guided harmonic mask, same-bin formant shift. */
 export const VOCALOID_DEFAULTS = Object.freeze({
-  gateDb: -48, gateRatio: 3, compressionDb: -24, compressionRatio: 8,
-  makeupDb: 8, formantSemitones: 1.8, highpassHz: 90,
-  presenceHz: 3200, presenceDb: 4, airHz: 9000, airDb: 3,
-  deessHz: 5500, deessMaxDb: 6, saturationDrive: 1.6, ceiling: 0.94,
+  formantSemitones: 4.5, noiseFloor: 0.008, highpassHz: 100,
+  presenceHz: 4200, presenceDb: 8, airHz: 7000, airDb: 9,
+  targetRms: 0.18, compressionExponent: 0.96, ceiling: 0.94,
 });
-const db = x => 20 * Math.log10(Math.max(x, 1e-12));
-const gain = x => 10 ** (x / 20);
 const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
 
 // In-place radix-2 FFT; inverse includes 1/N normalization.
@@ -36,50 +33,124 @@ function fft(re, im, inverse = false) {
   if (inverse) for (let i = 0; i < n; i++) { re[i] /= n; im[i] /= n; }
 }
 
-/** Shift only the smooth log spectral envelope, retaining each complex bin's phase/frequency. */
-export function shiftFormants(input, sampleRate, semitones) {
-  if (!input.length || semitones === 0) return input.slice();
-  const n = 2 ** Math.round(Math.log2(sampleRate * 0.04644));
-  const hop = n / 4, half = n / 2, ratio = 2 ** (semitones / 12);
+/** YIN-like analysis only: estimated F0 guides a mask, never a pitch oscillator.
+ * Anti-aliased decimation, fixed-length difference, first reliable minimum.
+ */
+function pitchFrames(input, sr, fftSize, hop) {
+  const step = Math.max(1, Math.floor(sr / 11025)), rate = sr / step;
+  const filtered = biquad(biquad(input, sr, 'lowpass', 1400), sr, 'lowpass', 1400);
+  const data = Float64Array.from({ length: Math.ceil(input.length / step) }, (_, i) => filtered[i * step]);
+  const lo = Math.max(2, Math.floor(rate / 1000)), hi = Math.ceil(rate / 65);
+  const span = Math.round(rate * 0.045), frame = span + hi;
+  const x = new Float64Array(frame), diff = new Float64Array(hi + 1), cmnd = new Float64Array(hi + 1);
+  const tracks = [];
+  for (let start = -fftSize + hop; start < input.length; start += hop) {
+    const center = (start + fftSize / 2) / step;
+    const begin = Math.round(center - frame / 2);
+    let energy = 0;
+    for (let i = 0; i < frame; i++) { x[i] = data[begin + i] ?? 0; energy += x[i] ** 2; }
+    if (energy / frame < 1e-8) { tracks.push({ f0: 0, voiced: 0 }); continue; }
+    let running = 0;
+    cmnd[0] = 1;
+    for (let lag = 1; lag <= hi; lag++) {
+      let value = 0;
+      for (let i = 0; i < span; i++) value += (x[i] - x[i + lag]) ** 2;
+      diff[lag] = value; running += value;
+      cmnd[lag] = value * lag / Math.max(running, 1e-20);
+    }
+    let best = lo;
+    for (let lag = lo + 1; lag < hi; lag++) {
+      if (cmnd[lag] < cmnd[best]) best = lag;
+      if (cmnd[lag] < 0.16 && cmnd[lag] <= cmnd[lag - 1] && cmnd[lag] < cmnd[lag + 1]) { best = lag; break; }
+    }
+    const denominator = diff[best - 1] - 2 * diff[best] + diff[best + 1];
+    const delta = best > lo && best < hi && denominator > 1e-20
+      ? clamp(0.5 * (diff[best - 1] - diff[best + 1]) / denominator, -0.5, 0.5) : 0;
+    const voiced = clamp((0.40 - cmnd[best]) / 0.24, 0, 1);
+    tracks.push({ f0: rate / (best + delta), voiced });
+  }
+  // Smooth confidence only. Do not quantize or smooth the actual pitch contour.
+  return tracks.map((track, i) => ({ ...track, voiced:
+    ((tracks[i - 1]?.voiced ?? track.voiced) + 2 * track.voiced + (tracks[i + 1]?.voiced ?? track.voiced)) / 4 }));
+}
+
+/** Same-bin envelope transformation and optional F0-guided interharmonic gate.
+ * No bins are moved, no phase/frequency replacement, no generated excitation.
+ */
+function spectralTransform(input, sampleRate, semitones, amount = 0, guide = null) {
+  if (!input.length) return input.slice();
+  const n = 2 ** Math.round(Math.log2(sampleRate * 0.09288));
+  const hop = n / 8, half = n / 2, ratio = 2 ** (semitones / 12), binHz = sampleRate / n;
+  const tracks = amount > 0 ? (guide ?? pitchFrames(input, sampleRate, n, hop)) : null;
   const window = Float64Array.from({ length: n }, (_, i) => 0.5 - 0.5 * Math.cos(2 * Math.PI * i / n));
   const out = new Float64Array(input.length), norm = new Float64Array(input.length);
   const re = new Float64Array(n), im = new Float64Array(n);
-  const env = new Float64Array(n), ei = new Float64Array(n);
-  const lifter = Math.max(2, Math.round(sampleRate * 0.001));
-  for (let start = -n + hop; start < input.length; start += hop) {
+  const env = new Float64Array(n), ei = new Float64Array(n), magnitudes = new Float64Array(half + 1);
+  const mask = new Float64Array(half + 1);
+  const lifter = Math.max(2, Math.round(sampleRate * 0.0015));
+  let frameIndex = 0;
+  for (let start = -n + hop; start < input.length; start += hop, frameIndex++) {
     re.fill(0); im.fill(0); ei.fill(0);
     for (let j = 0; j < n; j++) {
       const p = start + j;
       if (p >= 0 && p < input.length) re[j] = input[p] * window[j];
     }
     fft(re, im);
-    for (let k = 0; k < n; k++) env[k] = Math.log(Math.max(1e-7, Math.hypot(re[k], im[k])));
+    for (let k = 0; k <= half; k++) magnitudes[k] = Math.hypot(re[k], im[k]);
+    for (let k = 0; k < n; k++) env[k] = Math.log(Math.max(1e-7, magnitudes[k <= half ? k : n - k]));
     fft(env, ei, true);
-    // Raised cosine low-quefrency lifter removes the excitation's harmonic ripple.
     for (let q = 0; q < n; q++) {
       const distance = Math.min(q, n - q);
       env[q] *= distance < lifter ? 0.5 + 0.5 * Math.cos(Math.PI * distance / lifter) : 0;
       ei[q] = 0;
     }
     fft(env, ei);
+    if (tracks) {
+      const { f0, voiced } = tracks[frameIndex];
+      // Keep a quiet unvoiced consonant path; do not force noise onto a fake F0.
+      mask.fill(0.35 * (1 - voiced) + VOCALOID_DEFAULTS.noiseFloor * voiced);
+      if (f0 > 0 && voiced > 0) for (let hz = f0; hz < sampleRate / 2; hz += f0) {
+        const predicted = hz / binHz;
+        const radius = Math.max(1, Math.min(f0 * 0.18 / binHz, 2 + predicted * 0.008));
+        let peak = Math.round(predicted);
+        for (let k = Math.max(1, Math.floor(predicted - radius)); k <= Math.min(half - 1, Math.ceil(predicted + radius)); k++) {
+          if (magnitudes[k] > magnitudes[peak]) peak = k;
+        }
+        // Preserve the observed partial including vibrato spread; suppress gaps.
+        const width = Math.min(f0 * 0.30 / binHz, Math.max(1.5, predicted * 0.004));
+        for (let k = Math.max(1, Math.floor(peak - width * 1.7)); k <= Math.min(half, Math.ceil(peak + width * 1.7)); k++) {
+          const distance = Math.abs(k - peak) / Math.max(width, 0.5);
+          const keep = distance < 0.65 ? 1 : distance < 1.7 ? 0.5 + 0.5 * Math.cos(Math.PI * (distance - 0.65) / 1.05) : 0;
+          mask[k] = Math.max(mask[k], (0.35 + 0.65 * keep) * (1 - voiced) + (VOCALOID_DEFAULTS.noiseFloor + (1 - VOCALOID_DEFAULTS.noiseFloor) * keep) * voiced);
+        }
+      }
+    }
     for (let k = 0; k <= half; k++) {
       const index = k / ratio, left = Math.floor(index), fraction = index - left;
       const shifted = env[left] * (1 - fraction) + env[Math.min(half, left + 1)] * fraction;
-      // Keep the lowest region stable; bound envelope compensation to +/-9dB.
-      const lowBlend = clamp((k * sampleRate / n - 100) / 200, 0, 1);
-      const g = Math.exp(clamp(shifted - env[k], -1.03616, 1.03616) * lowBlend);
+      const lowBlend = clamp((k * binHz - 100) / 180, 0, 1);
+      // +/-30dB is a numerical guard, not v1's restrictive +/-9dB tone limit.
+      const envelopeGain = Math.exp(clamp(shifted - env[k], -3.45388, 3.45388) * lowBlend);
+      const g = envelopeGain * (tracks ? 1 + amount * (mask[k] - 1) : 1);
       re[k] *= g; im[k] *= g;
       if (k > 0 && k < half) { re[n - k] *= g; im[n - k] *= g; }
     }
     fft(re, im, true);
     for (let j = 0; j < n; j++) {
       const p = start + j;
-      if (p >= 0 && p < out.length) {
-        out[p] += re[j] * window[j]; norm[p] += window[j] ** 2;
-      }
+      if (p >= 0 && p < out.length) { out[p] += re[j] * window[j]; norm[p] += window[j] ** 2; }
     }
   }
   return Float32Array.from(out, (x, i) => x / Math.max(norm[i], 1e-12));
+}
+
+export function shiftFormants(input, sampleRate, semitones) {
+  return spectralTransform(input, sampleRate, semitones);
+}
+
+/** Exposed for independent noise-suppression tests; no EQ or makeup gain. */
+export function suppressAperiodicity(input, sampleRate, amount = 1) {
+  return spectralTransform(input, sampleRate, 0, clamp(amount, 0, 1));
 }
 
 // RBJ cookbook biquads. Frequencies are bounded for low sample rates.
@@ -89,6 +160,9 @@ function biquad(input, sr, type, hz, q = 0.707, decibels = 0) {
   let b0, b1, b2, a0, a1, a2;
   if (type === 'highpass') {
     b0 = (1 + c) / 2; b1 = -(1 + c); b2 = b0;
+    a0 = 1 + alpha; a1 = -2 * c; a2 = 1 - alpha;
+  } else if (type === 'lowpass') {
+    b0 = (1 - c) / 2; b1 = 1 - c; b2 = b0;
     a0 = 1 + alpha; a1 = -2 * c; a2 = 1 - alpha;
   } else if (type === 'peak') {
     b0 = 1 + alpha * A; b1 = -2 * c; b2 = 1 - alpha * A;
@@ -113,20 +187,32 @@ function biquad(input, sr, type, hz, q = 0.707, decibels = 0) {
   return out;
 }
 
-function dynamics(input, sr, amount) {
+// Centered 20ms RMS leveling. Bounded gain and a soft silence floor prevent
+// amplifying tails; the detector has no feedback from the output gain.
+function dynamics(input, sr, amount, smoothingSeconds = 0.004, guide = null) {
+  const radius = Math.max(1, Math.round(sr * 0.010));
+  const sums = new Float64Array(input.length + 1);
+  for (let i = 0; i < input.length; i++) sums[i + 1] = sums[i] + input[i] ** 2;
   const out = new Float32Array(input.length);
-  const attack = Math.exp(-1 / (0.004 * sr)), release = Math.exp(-1 / (0.080 * sr));
-  const gateRelease = Math.exp(-1 / (0.025 * sr));
-  let power = 0, gateGain = 1;
+  let smooth = 1;
+  const coefficient = smoothingSeconds > 0 ? Math.exp(-1 / (smoothingSeconds * sr)) : 0;
   for (let i = 0; i < input.length; i++) {
-    const square = input[i] ** 2;
-    const coefficient = square > power ? attack : release;
-    power = coefficient * power + (1 - coefficient) * square;
-    const level = db(Math.sqrt(power));
-    const targetGate = gain(Math.max(-36, Math.min(0, (level + 48) * 2 * amount)));
-    gateGain = gateRelease * gateGain + (1 - gateRelease) * targetGate;
-    const reduction = Math.max(0, level + 24) * (1 - 1 / (1 + 7 * amount));
-    out[i] = input[i] * gateGain * gain(8 * amount - reduction);
+    const lo = Math.max(0, i - radius), hi = Math.min(input.length, i + radius + 1);
+    const level = Math.sqrt(Math.max(0, sums[hi] - sums[lo]) / (hi - lo));
+    const leveling = Math.min(12, (VOCALOID_DEFAULTS.targetRms / Math.max(level, 0.001)) ** (VOCALOID_DEFAULTS.compressionExponent * amount));
+    const gate = Math.min(1, (level / 0.003) ** amount);
+    let voiced = 1;
+    if (guide) {
+      const n = 2 ** Math.round(Math.log2(sr * 0.09288)), hop = n / 8;
+      const position = (i + n / 2 - hop) / hop;
+      const left = Math.max(0, Math.min(guide.length - 1, Math.floor(position)));
+      const right = Math.min(guide.length - 1, left + 1), fraction = position - Math.floor(position);
+      voiced = guide[left].voiced * (1 - fraction) + guide[right].voiced * fraction;
+    }
+    // Do not normalize suppressed breaths back up to the voiced RMS target.
+    const target = (1 + voiced * (leveling - 1)) * gate;
+    smooth = coefficient * smooth + (1 - coefficient) * target;
+    out[i] = input[i] * smooth;
   }
   return out;
 }
@@ -139,25 +225,26 @@ export function applyVocaloid(input, sampleRate, amount) {
   for (const x of input) if (!Number.isFinite(x)) throw new TypeError('input must contain finite samples');
   amount = clamp(amount, 0, 1);
   if (amount === 0 || input.length === 0) return input;
-  let out = dynamics(input, sampleRate, amount);
-  out = shiftFormants(out, sampleRate, VOCALOID_DEFAULTS.formantSemitones * amount);
-  const hp = biquad(out, sampleRate, 'highpass', 90);
+  const n = 2 ** Math.round(Math.log2(sampleRate * 0.09288));
+  const guide = pitchFrames(input, sampleRate, n, n / 8);
+  let out = spectralTransform(input, sampleRate, VOCALOID_DEFAULTS.formantSemitones * amount);
+  const hp = biquad(out, sampleRate, 'highpass', VOCALOID_DEFAULTS.highpassHz);
   for (let i = 0; i < out.length; i++) out[i] += amount * (hp[i] - out[i]);
-  out = biquad(out, sampleRate, 'peak', 3200, 0.8, 4 * amount);
-  out = biquad(out, sampleRate, 'shelf', 9000, 0.707, 3 * amount);
-  const high = biquad(out, sampleRate, 'highpass', 5500);
-  const attack = Math.exp(-1 / (0.002 * sampleRate)), release = Math.exp(-1 / (0.040 * sampleRate));
-  let power = 0, peak = 0;
-  const drive = 1 + 0.6 * amount;
+  out = biquad(out, sampleRate, 'peak', VOCALOID_DEFAULTS.presenceHz, 0.8, VOCALOID_DEFAULTS.presenceDb * amount);
+  out = biquad(out, sampleRate, 'shelf', VOCALOID_DEFAULTS.airHz, 0.707, VOCALOID_DEFAULTS.airDb * amount);
+  out = dynamics(out, sampleRate, amount, 0.004, guide);
+  let peak = 0;
   for (let i = 0; i < out.length; i++) {
-    const square = high[i] ** 2, c = square > power ? attack : release;
-    power = c * power + (1 - c) * square;
-    const reduction = clamp((db(Math.sqrt(power)) + 30) * 0.65, 0, 6) * amount;
-    const deessed = out[i] - high[i] * (1 - gain(-reduction));
-    out[i] = deessed + amount * (Math.tanh(drive * deessed) / drive - deessed);
-    peak = Math.max(peak, Math.abs(out[i]));
+    // Very mild saturation after leveling; no phase oscillator or pitch correction.
+    out[i] += amount * (Math.tanh(1.3 * out[i]) / 1.3 - out[i]);
+
   }
-  // A constant safety gain, not a time/pitch operation. Bypass never enters this path.
-  if (peak > 0.94) for (let i = 0; i < out.length; i++) out[i] *= 0.94 / peak;
+  // Remove interharmonic residuals after rapid leveling. A final centered-RMS
+  // pass flattens mask-induced level changes without delayed gain overshoot.
+  // Analyze the original voice, not the shifted spectral envelope.
+  out = spectralTransform(out, sampleRate, 0, amount, guide);
+  out = dynamics(out, sampleRate, amount, 0, guide);
+  for (const sample of out) peak = Math.max(peak, Math.abs(sample));
+  if (peak > VOCALOID_DEFAULTS.ceiling) for (let i = 0; i < out.length; i++) out[i] *= VOCALOID_DEFAULTS.ceiling / peak;
   return out;
 }
