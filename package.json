@@ -13,7 +13,8 @@
     "mcp": "tsx mcp/server.ts",
     "mcp:smoke": "node scripts/mcp-smoke.mjs",
     "e2e:llm": "node scripts/e2e-llm.mjs",
-    "e2e:soundfont": "node scripts/e2e-soundfont.mjs"
+    "e2e:soundfont": "node scripts/e2e-soundfont.mjs",
+    "e2e:pianoroll": "node scripts/e2e-pianoroll.mjs"
   },
   "dependencies": {
     "@onjmin/dtm": "^2.1.38"

@@ -19,13 +19,13 @@ SPEC の推奨どおり「C（自前の薄いホストアプリ）、中は B（
 ```
 LLM の返答 → src/core/prompt.ts（候補選択・軽い修復・検査）→ SongDoc
 歌: VocaTab Worker → 合成済み PCM → 歌エフェクト
-伴奏: dtm playMML → 同期時計アダプタで全イベントを先に予約
+伴奏: FluidR3 GMを実行時ロード → dtm playMMLの発音フック → 全イベントを先に予約
 歌＋伴奏: OfflineAudioContext でミックスと stem を描画
   → 同じ PCM を AudioContext で実再生 / lamejs で MP3 化 / WAV
 ```
 
 - 歌は `$VOCATAB_DIR/ui/src/engine-web/worker.ts` を import してビルドする。モデル・ボコーダはローカルの上流 clone から読むだけで、同梱しない。onnxruntime-web は上流どおり jsDelivr から読む。CPU / WASM のみ。
-- dtm は npm の `@onjmin/dtm` を import/wrap する。内蔵シンセ・楽器指定・ドラム・ミキサーを使用し、上流は変更しない。オフライン予約中の時計・タイマー・乱数は同期区間だけ差し替え、`finally` で戻す。
+- dtm は npm の `@onjmin/dtm` を import/wrap する。楽器・ドラムはFluidR3 GM SoundFont（失敗時は警告して内蔵シンセ）。内部のSoundFontローダーだけは同版の上流cloneからimportする。上流は変更しない。オフライン予約中の時計・タイマー・乱数は同期区間だけ差し替え、`finally` で戻す。
 - 書き出し用 PCM は実時間録音に依存しない。再生と書き出しは同じ処理を通り、繰り返し書き出しの歌・ミックス・MP3 の相関を検査する。ブラウザ内部の演算微差で MP3 のバイト列が完全一致しない場合がある。MP3 の符号化遅延は約25 ms。
 
 ## SongDoc（曲データの正本）
@@ -38,7 +38,7 @@ LLM の返答 → src/core/prompt.ts（候補選択・軽い修復・検査）�
     { "id": "vo", "kind": "vocal", "singer": "ritsu",
       "effects": [ { "type": "kero", "amount": 0.8 } ],
       "notes": [ { "bar": 1, "beat": 1, "len": "4", "pitch": "E4", "lyric": "ゆ" } ] },
-    { "id": "pf", "kind": "inst", "program": "acoustic_grand_piano", "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg'" },
+    { "id": "pf", "kind": "inst", "instrument": "Acoustic Grand Piano", "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg'" },
     { "id": "ba", "kind": "inst", "program": "electric_bass_finger", "mml": "o2 l8 c c c c c c c c" },
     { "id": "dr", "kind": "drums", "pattern": "8beat" }
   ]
@@ -51,6 +51,33 @@ LLM の返答 → src/core/prompt.ts（候補選択・軽い修復・検査）�
 - **歌詞**: 1モーラ = 1音符。拗音（`きゃ`）は1、`ー`（`〜`）は伸ばし（前の母音を続ける）、`っ`・`ん` も1モーラ。カタカナはひらがなに揃える（VocaTab ではカタカナの母音は無声化を表すため）。`set_lyrics` は時刻順に配り、余ったモーラ（`surplus`）と歌詞の無い音符の数（`missing`）を返す。
 - **伴奏 `mml`**: dtm の MML 記法（パートの中身だけ。`;` `@` や `#t0inst=...` の宣言は書かない（音符の `c#` は可）。アプリが `#t<n>inst=`・`#drum=`・`@<n>`・`t<bpm>` を付けて1本の MML に組み立てる）。
 - **エフェクト `effects`**（歌トラック、複数可、`amount` 0〜1）: `kero`（ケロケロボイス: 最後の F0 を音符の音高の階段へ寄せて合成し直す）、`vocoder`（20 帯域のチャンネルボコーダー。キャリアは音符の音高のノコギリ波）、`bitcrusher`（16→3 bit、間引き 1→10）、`doubling`（揺らした遅延の写し2本を左右へ、ステレオになる）。`vocaloid`（ボカロ風 v2: F0 に基づく倍音マスク・フォルマント移動・高域調整。有声 RMS を入力へ合わせ、無声子音は原音へクロスフェード）。再生と書き出しの両方に掛かる。
+
+## SoundFont の楽器・ドラム
+
+伴奏は既定で **FluidR3 GM**。必要な音色だけ https://surikov.github.io/webaudiofontdata/sound/ から実行時に読みます。データは同梱しません。ドラムも同じSoundFontの標準キットです。再生・MP3・WAVは同じ音源を通ります。「伴奏: FluidR3 GM SoundFont」のチェックを外すと内蔵シンセと聴き比べられます。読み込み失敗や15秒の時間切れでは警告を表示して内蔵シンセで鳴らします。歌のエンジン初回読み込みには別途ネット接続が必要です。
+
+伴奏トラックは `instrument` にGM名または **0始まりのGM番号（0〜127）** を指定できます。旧 `program` も使えます（両方あると `instrument` 優先）。MML本体の中に宣言を書かず、アプリが `#t<n>inst=` と `#t<n>font=FluidR3` を付けます。
+
+| 番号 | instrument の例 |
+|---:|---|
+| 0 | Acoustic Grand Piano |
+| 4 | Electric Piano 1 |
+| 24 | Acoustic Guitar (nylon) |
+| 33 | Electric Bass (finger) |
+| 48 | String Ensemble 1 |
+| 73 | Flute |
+
+`{"id":"ba","kind":"inst","instrument":33,"mml":"o2 l4 c c g c"}` のように指定します。`program: "electric_bass_finger"` も互換です。FluidR3と配信リポジトリのMITライセンス・一次資料・著作権は[NOTICE.md](NOTICE.md)に記載しています。GeneralUser GSは今回の選択肢に含めません。
+
+## ピアノロールで歌を編集
+
+- 空白をクリックすると「あ」の音符を追加。スナップは1/4・1/8・1/16から選べます。
+- 歌の音符をドラッグすると時刻と音高を移動。右端の印をドラッグすると長さが変わります。
+- 音符を選んでDelete / Backspace、または音符を右クリックすると削除。
+- ダブルクリックで小さなかな入力欄。1モーラを入力してEnterまたは欄外クリックで確定、Escapeで取消。カタカナはひらがなに揃えます。
+- ピアノロールにフォーカスがある状態でCtrl+Z（Macは⌘Z）で元に戻す、Ctrl+Shift+Zでやり直す。ボタンでも操作できます（直近100操作）。
+
+歌は単音なので、他の歌音符に重なる追加・移動・長さ変更は拒否して状態欄に理由を表示します。曲の範囲とC3〜C6を保ちます。伴奏は表示のみです。歌の編集を確定するとSongDocの `bar/beat/len/pitch/lyric` と「今の曲を土台にする」プロンプトに即反映し、再生中なら停止します。次の再生・書き出しで編集後の歌を合成します。曲を読み直すと編集履歴はリセットします。
 
 ## 準備
 
@@ -67,12 +94,20 @@ export VOCATAB_DIR=/workspace/dtm-research/vocatab
 
 # 3) dtm は npm の @onjmin/dtm（2.1.38, AGPL-3.0-or-later）を使う（手順 1 で入る）
 
-# 4) ビルド（dist/ は .gitignore）
+# 4) 同版のdtm上流ソース（SoundFontクラスだけを読取専用import）
+export DTM_DIR=/workspace/dtm-research/dtm
+# 別環境ではdtmリポジトリをcloneし、確認済みcommitをcheckout:
+# git clone https://github.com/onjmin/dtm /path/to/dtm
+# git -C /path/to/dtm checkout 3a89f4f1bc12a6c4e9562bcc551b6abf5132892a
+# export DTM_DIR=/path/to/dtm
+# npmのdtmとDTM_DIRのpackage.jsonのversionが一致しないとbuildは停止する。
+
+# 5) ビルド（dist/ は .gitignore）
 npm run build
 ```
 
 確認した版: VocaTab `2d2a48b`（2026-11-08）、`@onjmin/dtm@2.1.38`、Node 24、Chrome（`/usr/bin/google-chrome`）。
-ネットワーク: onnxruntime-web 1.20.1 を jsDelivr から読む（初回のみ）。
+ネットワーク: onnxruntime-web 1.20.1 を jsDelivr、FluidR3 GMの楽器・ドラムをsurikovのGitHub Pagesから実行時に読む。内部SoundFont APIを使う理由・制限はREPORT M2を参照。
 
 ## 使う
 
@@ -99,10 +134,12 @@ npm test             # A5: SongDoc 変換・歌詞割り当て・検査・道具
 npm run e2e          # A1〜A3: headless Chrome で見本返答を貼り戻し→鳴らし→MP3 を out/song.mp3 に。数値は out/e2e.json
 npm run e2e:fx       # A4: 4種の効果、対照相関、vocaloid 0/0.5/1 の有声RMS・子音・音色を比べる。数値は out/e2e-fx.json
 npm run e2e:llm      # 購読 LLM の未編集返答2件を UI に貼付→自動再生→MP3 ボタン、数値は out/e2e-llm.json
+npm run e2e:soundfont # 内蔵/SFの実再生・MP3・stemスペクトル比較、遮断時の警告とfallback
+npm run e2e:pianoroll # マウス/キーボード編集→SongDoc/現在曲プロンプト→再合成・実再生・MP3・画面
 npm run mcp:smoke    # A6: MCP サーバーを起動し tools/list → new_song → … → export(mp3)
 ```
 
-e2e はポート 5500、LLM e2e は 5502、MCP の書き出しは 5501 を使い、終わったらサーバーと Chrome を閉じる。音声ファイルは `out/`（commit しない）。受け渡し用 MP3 と画面は `/workspace/browser-dtm-final/` に保存する。
+e2e はポート 5500、LLM e2e は 5502、MCP の書き出しは 5501、SoundFont は 5503、ピアノロールは 5504 を使い、終わったらサーバーと Chrome を閉じる。音声ファイルは `out/`（commit しない）。受け渡し用 MP3 と画面は `/workspace/browser-dtm-final/` に保存する。
 
 ## MCP サーバー
 
@@ -128,6 +165,8 @@ Claude Code / Claude Desktop などの設定例（パスは手元に合わせる
 | `src/core/prompt.ts` | プロンプト・返答の取り出し・修正依頼文 |
 | `src/core/fx.ts` / `encode.ts` | エフェクト（ボコーダー・ビットクラッシャー・ダブリング）/ MP3・WAV・数値 |
 | `src/web/vocal.ts` | VocaTab engine-web を画面なしで呼ぶ（＋ケロケロの F0） |
+| `src/core/pianoroll.ts` / `src/web/pianoroll.ts` | 音符編集・スナップ・履歴とcanvas操作 |
+| `src/web/soundfont.ts` | FluidR3 GMの先読み・発音（dtm内部SoundFontクラスの薄いラッパー） |
 | `src/web/player.ts` | dtm と歌をオフラインで描画し、同じ PCM を再生 |
 | `src/web/main.ts`, `web/index.html` | 画面 |
 | `mcp/server.ts` | MCP サーバー |
@@ -149,4 +188,4 @@ JEV_AUTH_FALLBACK=0 JEV_AUTH_NOTIFY=0 JEV_NO_PREAMBLE=1 jev-route run creative-s
 JEV_AUTH_FALLBACK=0 JEV_AUTH_NOTIFY=0 JEV_NO_PREAMBLE=1 jev-route run exec-sol - < out/llm/prompt-2.txt --caller ブラウザDTM --title "browser-dtm LLM answer 2" --no-quota
 ```
 
-`~/jev-starter/status/<id>.json` の `result_text` を未編集でテキスト保存する。従量 API への fallback は無効にする。通常の e2e は commit 済みの返答を再利用し、LLM を再呼び出ししない。今回のM1では SoundFont・ピアノロール編集（M2）、サンプル集や SPEC の更新（M3）は扱わない。
+`~/jev-starter/status/<id>.json` の `result_text` を未編集でテキスト保存する。従量 API への fallback は無効にする。通常の e2e は commit 済みの返答を再利用し、LLM を再呼び出ししない。SoundFont・ピアノロール編集はM2で実装済み。サンプル集やSPECの更新（M3）は今回扱わない。

@@ -258,3 +258,11 @@ M1の実装を維持し、実行時ロードのFluidR3 GMによる旋律楽器�
 - FluidR3の元README/COPYING（MuseScore保存版）とWebAudioFont dataのMIT LICENSEを一次情報で確認し、NOTICEとLICENSE-POLICYに配信元・原作者・非同梱方針を記録。GeneralUser GSは追加しない。
 - 最初のSF試験はgetDrumPatternKeysの必須辞書引数不足でFAIL。修復1で楽器・ドラムのロード、相関−0.069、MP3 clip0を確認。遮断試験でキャッシュ済み音源を使ってしまったため、修復2で別ページ・遷移前遮断・cache無効化へ。結果は最終表に記録する。
 - `npm test`は追加5件を含め37 PASS / 0 FAIL。tick往復、snap、境界、重なり、各編集、history、GM指定を検査。編集UIはSongDocへ書き戻し、再生中なら停止して歌のcacheを無効化する。
+
+### M2 編集操作・回帰（11:13 JST）
+- `e2e:soundfont`は修復2後に6/6 PASS。楽器2音色・ドラム4キーを実URLからロード。内蔵/SF伴奏相関−0.069、重心3440.13→3255.25Hz（差184.88Hz）。MP3 RMS−15.29 / peak−1.28dBFS、clip0。外部6リクエストを意図的に遮断する別ページでも警告・内蔵伴奏・実再生が成立（実際の接続障害ではない）。
+- ピアノロール初回はPuppeteerの`clickCount`が`Mouse.click`内部の`count=1`で上書きされ、ダブルクリックが送られていなかった。ローカルのPuppeteer実装を確認し、`count:2`へ修復1。アプリのdblclick経路は変更せず、実マウスとUnicodeキー入力でかな編集まで検証した。
+- `e2e:pianoroll`は14/14 PASS。追加・時刻/音高移動・右端長さ・かな「きゃ」・Ctrl+Z/Shift+Z・Delete/Backspace/右クリック・重なり拒否・プロンプト反映。歌stem編集前後相関0.803、編集後MP3 RMS−18.47 / peak−1.29dBFS、clip0。Chrome実再生5.5196秒、最大RMS0.2938。
+- 三連音符を曲端へ移動するときも開始をグリッドに揃える境界処理と単体1件を追加（受入失敗に対する修復ではない）。単体38/38 PASS。
+- `e2e` 8チェック / `e2e:llm` 17チェック / `mcp:smoke` PASS。`e2e:fx`の最終確認中。
+- dtm上流読取専用clone: commit `3a89f4f1bc12a6c4e9562bcc551b6abf5132892a`、package version2.1.38。再現用にDTM_DIRの準備とこのcommitをREADMEへ記載。

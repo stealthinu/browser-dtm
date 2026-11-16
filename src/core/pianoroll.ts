@@ -43,7 +43,7 @@ export function editNotes(doc: SongDoc, edit: NoteEdit, snap: Snap): VocalNote[]
     if (!notes[index]) throw new Error("音符を選択してください");
     candidate = { ...notes[index] };
     if (edit.type === "move") {
-      const start = Math.max(0, Math.min(max - lenToTicks(candidate.len)!, snapTicks(edit.tick, snap)));
+      const start = Math.max(0, Math.min(Math.floor((max - lenToTicks(candidate.len)!) / grid) * grid, snapTicks(edit.tick, snap)));
       candidate = { ...candidate, ...ticksToPosition(start, doc.beatsPerBar), pitch: midiToName(Math.max(48, Math.min(84, Math.round(edit.midi)))) };
     } else if (edit.type === "resize") {
       const available = max - noteOnsetTicks(candidate, doc.beatsPerBar);

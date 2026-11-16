@@ -27,6 +27,9 @@ test("曲境界・音域・history undo redo・編集でredo消去",()=>{
  v.notes=h.undo(v.notes)!;assert.equal(v.notes.length,0);v.notes=h.redo(v.notes)!;assert.equal(v.notes.length,1);
  h.push(v.notes);v.notes=editNotes(d,{type:"delete",index:0},16);assert.equal(h.canRedo,false);
 });
+test("三連音符を右端へ動かしても開始位置はグリッド上",()=>{
+ const d=newSong({bars:1}),v=vocalTrack(d)!;v.notes=[{bar:1,beat:1,len:"8t",pitch:"C4",lyric:"あ"}];v.notes=editNotes(d,{type:"move",index:0,tick:9999,midi:60},16);assert.equal(noteOnsetTicks(v.notes[0],4)%120,0);assert.equal(validateSong(d).length,0);
+});
 test("GM名/番号と旧programはMMLへ、範囲外番号は検査", async()=>{
  const {toDtmMML}=await import("../src/core/songdoc");const d=newSong();d.tracks.push({id:"pf",kind:"inst",instrument:"Acoustic Grand Piano",mml:"c1"},{id:"ba",kind:"inst",instrument:33,mml:"c1"});
  assert.match(toDtmMML(d),/#t0inst=acoustic_grand_piano/);assert.match(toDtmMML(d),/#t1inst=33/);assert.equal(validateSong(d).length,0);
