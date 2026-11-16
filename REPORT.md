@@ -233,3 +233,22 @@ M1の必須条件は完了。次の別ジョブは予定どおりM2（SoundFont�
 - 終了記録（最終commit直前）: 2026-11-16 10:57:57 JST
 - 所要: 19分40秒。110分の切上げ期限12:28 JSTより前に完了。
 - 使用ポート5500 / 5501 / 5502。すべて試験のfinallyで終了し、5500–5599のlistenerがないことを確認。CPUのみ。他worktreeは操作していない。音声・モデル・SoundFont・秘密情報のcommit無し。接続障害無し。
+
+## main-v1 M2
+
+開始: 2026-11-16 10:59:16 JST。110分で切り上げ（12:49:16 JST）、全体120分以内。
+
+### GOAL
+M1の実装を維持し、実行時ロードのFluidR3 GMによる旋律楽器・ドラムを再生とMP3へ統合する。ロード失敗時は警告と内蔵シンセへフォールバックする。
+歌のcanvasピアノロールに追加・移動・長さ・削除・かな・undo/redoを実装し、SongDocと現在曲プロンプトへ即時反映する。上流はimport/wrapのみ、音声・SoundFont・モデルはcommitしない。M3は対象外。
+
+### ACCEPTANCE TESTS
+| ID | コマンド | PASS条件 |
+|---|---|---|
+| M2-unit | `npm test` | M1全件＋tick/小節/拍/音価往復、snap、重なり、編集操作、GM楽器指定が通る |
+| M2-sf | `npm run e2e:soundfont` | Chrome実再生・MP3、内蔵/SF伴奏stemの相関とスペクトル重心が明確に異なる、歌/伴奏有音、clip0。ロード失敗時も警告＋有音。最終soundfont-song.mp3 |
+| M2-roll | `npm run e2e:pianoroll` | Chromeマウスで追加/移動/長さ/削除/かな/undo/redoを確認、SongDocとプロンプト反映、編集後実再生・MP3、歌詞可視スクリーンショット |
+| M2-regression | `npm run e2e` / `npm run e2e:fx` / `npm run e2e:llm` / `npm run mcp:smoke` | M1受入検査をすべて維持 |
+| M2-doc | README / NOTICE / LICENSE-POLICY | 日本語の楽器・編集操作、一次情報のSoundFont/配信元ライセンス、非同梱方針 |
+
+失敗の修復は各テスト2回まで。各作業段階でprojectファイルのみcheckpoint commit/push。終了時に結果・証拠・commit・NEXT STEPS・BLOCKED APPROVALSと手書き使用量ログを記録する。
