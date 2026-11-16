@@ -1,4 +1,6 @@
-# REPORT — impl/claude-code
+# REPORT
+
+## impl/claude-code（旧）
 
 ## GOAL
 SPEC.md の最小版: プロンプトコピペ方式で LLM（実装中は見本返答フィクスチャ）から SongDoc＋MML を貼り戻すと、
@@ -107,3 +109,26 @@ npm run serve   # http://127.0.0.1:5100/
 - 音声ファイルは `out/`（.gitignore）にだけ置き、commit していない。歌声モデル・ボコーダ・SoundFont は commit していない（モデルは開発サーバーが VOCATAB_DIR から読むだけ）。
 - GPU は使っていない（onnxruntime-web は WASM、Chrome は `--disable-gpu`）。ポートは 5100（e2e）・5101（MCP の書き出し）・5102（再現の確認）だけを使い、終わったら閉じた。
 - ネットワークの不調は無かった（JEV_NEEDS_MUGI は出していない）。秘密の値はどこにも書いていない。
+
+
+## main-v1 M1
+
+開始: 2026-11-16 10:38 JST。110 分で実装を切り上げ、最終記録する（期限 12:28 JST）。
+
+### GOAL
+プロンプト生成→本物の購読 LLM の未編集返答→自動修復・検査→歌＋伴奏の再生・MP3 の往復を完成する。
+ボカロ風 v2 を統合し、有声 RMS の補正・無声子音の保存を検証する。
+旧 A4 対照の録音傷をまず再現・測定し、同設定の書き出し相関 > 0.999 を目指す。
+M2/M3、公開、上流改変、音声・モデルの commit は対象外。
+
+### ACCEPTANCE TESTS
+| ID | コマンド | PASS 条件 |
+|---|---|---|
+| M1-unit | `npm test` | 既存＋壊れた LLM 返答 10 種以上の単体テストが全通過、場所つきエラー・修復警告 |
+| M1-base | `npm run e2e` | headless Chrome 実再生＋MP3、歌/伴奏が有音、clip 0 |
+| M1-fx | `npm run e2e:fx` | 既存4効果、同設定2回の相関 > 0.999、vocaloid 0/0.5/1 の MP3・有声差 ≤1 dB・無声2–8kHz ≥−6dB・音色差・clip 0 |
+| M1-llm | `npm run e2e:llm` | 購読 LLM 2要望の未編集返答を UI へ貼付→即再生→MP3、両 stem 有音・clip 0、最終配置と画面証拠 |
+| M1-mcp | `npm run mcp:smoke` | 道具と vocaloid 指定・MP3 が通る |
+| M1-doc | README / NOTICE / LICENSE-POLICY の確認 | 日本語の往復手順・正しいライセンス・制約 |
+
+各失敗の修復はテストごと最大2回、購読CLI切替は最大1回。結果・数値・証拠・commit・NEXT STEPS・BLOCKED APPROVALS は終了時に追記。
