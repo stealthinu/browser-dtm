@@ -42,6 +42,7 @@ export interface VocalTrack {
 export interface InstTrack {
   id: string;
   kind: "inst";
+  instrument?: string | number; // GM名、または0始まりのGM番号（0〜127）
   program?: string; // GM 楽器名（dtm の #t<n>inst=）例 "acoustic_grand_piano"
   mml: string; // dtm の MML（このパートだけ。; や @n は書かない）
   volume?: number;
@@ -260,6 +261,7 @@ export function validateSong(doc: unknown): Problem[] {
         }
       }
     } else if (t.kind === "inst") {
+      if (t.instrument !== undefined && !(typeof t.instrument === "number" ? Number.isInteger(t.instrument) && t.instrument >= 0 && t.instrument <= 127 : typeof t.instrument === "string" && /^[A-Za-z0-9 _()-]+$/.test(t.instrument))) ps.push({ path: `${P}.instrument`, message: "instrument はGM名または0〜127の番号" });
       if (typeof t.mml !== "string" || !t.mml.trim()) ps.push({ path: `${P}.mml`, message: "mml（文字列）が要ります" });
       else if (/[;@]|(?<![a-gA-G])#/.test(t.mml)) ps.push({ path: `${P}.mml`, message: "mml にはこのパートの音符だけを書く（; @ # は使わない）" });
     } else if (t.kind === "drums") {
@@ -313,7 +315,9 @@ export function toDtmMML(doc: SongDoc): string {
   for (const t of doc.tracks) {
     if (t.kind !== "inst") continue;
     const n = idx.get(t.id)!;
-    if (t.program) decl.push(`#t${n}inst=${t.program}`);
+    const instrument = t.instrument ?? t.program;
+    if (instrument !== undefined) decl.push(`#t${n}inst=${String(instrument).trim().toLowerCase().replace(/[ -]+/g, "_")}`);
+    decl.push(`#t${n}font=FluidR3`);
     const vol = t.volume === undefined ? "" : ` v${Math.round(Math.max(0, Math.min(1, t.volume)) * 127)}`;
     bodies.push(`@${n}${n === 0 ? ` t${doc.bpm}` : ""}${vol} ${t.mml.trim().replace(/\s+/g, " ")}`);
   }

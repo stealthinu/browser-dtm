@@ -17,3 +17,14 @@
 ## main-v1 M1 のボカロ風 DSP
 - `src/core/vocaloid-v2.js` は本リポジトリの `feat/vocaloid-filter`、commit `ae8a772` の `effects/vocaloid/dsp.js` を移植。既存のヘッダを保存し、解析用 pitchFrames の export のみ追加。
 - `src/core/vocaloid.ts` は有声 RMS 補正と無声子音の原音クロスフェード。VocaTab / dtm の上流コードは変更しない。歌声モデル・ボコーダは含まない。
+
+## main-v1 M2: 実行時 SoundFont
+
+- **Fluid (R3) General MIDI SoundFont / FluidR3_GM.sf2** — MIT License。Copyright (c) 2000–2002, 2008 Frank Wen。
+  配信元: https://surikov.github.io/webaudiofontdata/sound/ （旋律 `0000_FluidR3_GM_sf2_file.js` 等、ドラム `12836_0_FluidR3_GM_sf2_file.js` 等）。
+  一次資料: [配信元READMEのライセンス参照](https://github.com/surikov/webaudiofontdata/blob/master/README.md)、[MuseScoreが保存する元FluidR3 README/COPYING](https://github.com/musescore/MuseScore/blob/v3.6.2/share/sound/FluidR3Mono_License.md)。後者には元作者のMITでの公開宣言と元のCOPYINGが保存されている。Mono版やMS_Generalのデータは使わない。
+  原作者の謝辞: Suren M. Seron, Scott Hanan, Steve Aupperle, Chris Gillman, Alex Taubr, Chris Prola, Andrew Klenk, Winfried Hubbe, Dylan, Tim, Gort, Uros Katic, Ethan Winer。
+- **WebAudioFont data** — MIT License。Copyright (c) 2017 Srgy Surkv。
+  配信リポジトリ: https://github.com/surikov/webaudiofontdata 。[LICENSE](https://github.com/surikov/webaudiofontdata/blob/master/LICENSE) を確認。
+- 音源のJS（サンプルデータ）・sf2・sf3はリポジトリに同梱せず、ブラウザが必要な音色だけ実行時に外部URLから読む。GeneralUser GSなど他のバンクは今回は選択肢に追加しない。
+- 読み込み・発音は dtm の `src/instruments/sf/SoundFont.ts` を上流ソースから改変せずimportする（内部API。理由・版・制限はREPORT M2）。同ファイルのrpgen3由来MITクレジットを保持する。https://rpgen3.github.io/soundfont/mjs/surikov/SoundFont.mjs 。上流ソース自体や音源データを本repoへコピーしない。

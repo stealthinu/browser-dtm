@@ -43,6 +43,7 @@ ${image}
   - MML は dtm（onjmin/dtm）の記法: o<n> オクターブ（o4 の c = 中央のド）、l<n> 既定の音価、c d e f g a b、
     # / + でシャープ、- でフラット、数字で音価（c8 c4. c2）、r 休符、> < でオクターブ上下、'ceg' で和音（和音の中で > < は使わない）
   - ; @ # は書かない（パートの区切りと宣言はアプリが付ける）。各パートの長さを bars 小節ぴったりにする
+  - instrument にGM名（例 "Acoustic Grand Piano"）または0始まりのGM番号（0〜127。0=ピアノ、4=Electric Piano 1、24=Acoustic Guitar (nylon)、33=Electric Bass (finger)、48=String Ensemble 1、73=Flute）を指定可。既定はFluidR3 GM SoundFont。従来のprogramも可。
   - program の例: acoustic_grand_piano, electric_piano_1, electric_bass_finger, acoustic_guitar_nylon, string_ensemble_1
 - ドラム（任意）: {"id":"dr","kind":"drums","pattern":"8beat"}（4beat, 8beat, 16beat, shuffle, dance, bossa, disco など）
 

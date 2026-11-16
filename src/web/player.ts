@@ -2,19 +2,21 @@
 // 全イベントをオフライン時計で先に予約し、再生と書き出しに同じ PCM を使う。
 // Copyright (c) 2026 browser-dtm authors. AGPL-3.0-or-later.
 import { playMML, SEQUENCER_START_DELAY } from "@onjmin/dtm";
+import { prepareSoundfont, type PreparedSoundfont } from "./soundfont";
 export const SR = 44100;
 export interface Recording {
   mix: [Float32Array, Float32Array];
   acc: Float32Array;
   vox: Float32Array;
   scheduled: { accStart: number; vocalSongZero: number };
+  soundfont?: { mode: "soundfont" | "synth"; files: string[]; warning?: string };
   playback?: { elapsedSeconds: number; maxRms: number; observations: number };
 }
 
 /** dtm の setInterval シーケンサを同期的に前進させる薄い時計アダプタ。
  * グローバル差し替えはこの同期区間だけ。await 前に必ず復元し、上流ソースは変更しない。
  */
-function scheduleDtm(ctx: OfflineAudioContext, destination: AudioNode, mml: string, seconds: number, songZero: number) {
+function scheduleDtm(ctx: OfflineAudioContext, destination: AudioNode, mml: string, seconds: number, songZero: number, sf?: PreparedSoundfont) {
   const original = { setInterval: window.setInterval, clearInterval: window.clearInterval,
     requestAnimationFrame: window.requestAnimationFrame, cancelAnimationFrame: window.cancelAnimationFrame, random: Math.random };
   const ticks = new Map<number, () => void>();
@@ -32,7 +34,9 @@ function scheduleDtm(ctx: OfflineAudioContext, destination: AudioNode, mml: stri
     window.cancelAnimationFrame = () => {};
     // dtm のドラムノイズ・リバーブにも固定 seed を使い、再書き出しを再現可能にする。
     Math.random = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
-    const playback = playMML(mml, { audioContext: proxy as unknown as AudioContext, destination, pauseWhenHidden: false });
+    const playback = playMML(mml, { audioContext: proxy as unknown as AudioContext, destination, pauseWhenHidden: false,
+      ...(sf ? { synth: false, onPlayNote: (e) => sf.note(proxy as unknown as AudioContext, destination, e),
+        onPlayDrum: (e) => sf.drum(proxy as unknown as AudioContext, destination, e) } : {}) });
     for (; now <= songZero + seconds; now += 0.02) for (const f of ticks.values()) f();
     // 予約済みノードはレンダー完了まで生かす。終了時に dispose する。
     return playback;
@@ -43,7 +47,7 @@ function scheduleDtm(ctx: OfflineAudioContext, destination: AudioNode, mml: stri
   }
 }
 
-export async function renderSong(mml: string, vocal: [Float32Array, Float32Array], lead: number, seconds: number, vocalGain = 1): Promise<Recording> {
+export async function renderSong(mml: string, vocal: [Float32Array, Float32Array], lead: number, seconds: number, vocalGain = 1, useSoundfont = true): Promise<Recording> {
   const zero = Math.ceil((lead / SR + 0.2) * SR) / SR;
   const length = Math.ceil((zero + seconds) * SR);
   const ctx = new OfflineAudioContext(4, length, SR);
@@ -63,12 +67,18 @@ export async function renderSong(mml: string, vocal: [Float32Array, Float32Array
   const buffer = ctx.createBuffer(2, vocal[0].length, SR);
   buffer.copyToChannel(vocal[0], 0); buffer.copyToChannel(vocal[1], 1);
   const source = ctx.createBufferSource(); source.buffer = buffer; source.connect(vox); source.start(zero - lead / SR);
-  const dtm = scheduleDtm(ctx, acc, mml, seconds, zero);
+  let sf: PreparedSoundfont | undefined;
+  let warning: string | undefined;
+  if (useSoundfont) {
+    try { sf = await prepareSoundfont(ctx, mml); }
+    catch (e) { warning = `SoundFontを読めないため内蔵シンセで再生します: ${e}`; }
+  }
+  const dtm = scheduleDtm(ctx, acc, mml, seconds, zero, sf);
   try {
     const rendered = await ctx.startRendering();
     const from = Math.round(zero * SR), len = Math.ceil(seconds * SR);
     const ch = (c: number) => rendered.getChannelData(c).slice(from, from + len);
-    return { mix: [ch(0), ch(1)], acc: ch(2), vox: ch(3), scheduled: { accStart: zero, vocalSongZero: zero } };
+    return { mix: [ch(0), ch(1)], acc: ch(2), vox: ch(3), scheduled: { accStart: zero, vocalSongZero: zero }, soundfont: { mode: sf ? "soundfont" : "synth", files: sf?.files ?? [], warning } };
   } finally { dtm.destroy(); }
 }
 
@@ -78,15 +88,17 @@ export class Player {
   private resolvePlayback: (() => void) | null = null;
   private generation = 0;
   private analyser = this.ctx.createAnalyser();
+  onWarning: (text: string) => void = () => {};
   onStart: () => void = () => {};
   songZero = 0;
   onEnd: () => void = () => {};
   constructor() { this.analyser.fftSize = 2048; this.analyser.connect(this.ctx.destination); }
-  async play(mml: string, vocal: [Float32Array, Float32Array], lead: number, seconds: number, vocalGain = 1, record = false): Promise<Recording | null> {
+  async play(mml: string, vocal: [Float32Array, Float32Array], lead: number, seconds: number, vocalGain = 1, record = false, useSoundfont = true): Promise<Recording | null> {
     this.stop();
     const generation = this.generation;
     if (this.ctx.state !== "running") await this.ctx.resume();
-    const rec = await renderSong(mml, vocal, lead, seconds, vocalGain);
+    const rec = await renderSong(mml, vocal, lead, seconds, vocalGain, useSoundfont);
+    this.onWarning(rec.soundfont?.warning ?? "");
     if (generation !== this.generation) throw new Error("再生は停止されました");
     const b = this.ctx.createBuffer(2, rec.mix[0].length, SR);
     b.copyToChannel(rec.mix[0], 0); b.copyToChannel(rec.mix[1], 1);

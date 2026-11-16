@@ -10,3 +10,7 @@
 ## main-v1 M1
 
 ボカロ風 v2 DSP は本リポジトリ内ブランチ `feat/vocaloid-filter` のコードを移植する。外部の歌声モデル・ボコーダ・音声素材を追加しない。dtm / VocaTab は import とラッパーのみで、上流ソースは変更しない。購読 LLM の返答は SongDoc / MML のテキストのみを保存する。
+
+## main-v1 M2
+
+使用する音源はMITのFluidR3 GMのみ。WebAudioFont dataの配信リポジトリもMIT（詳細・一次資料はNOTICE）。音源データの同梱・再ホスト・commitは行わず、実行時に必要な楽器/ドラムのJSを元URLから読む。GeneralUser GSは未採用。dtmの内部SoundFontクラスは同版の上流cloneから読取専用importし、AGPLと元のMITクレジットを保持する。

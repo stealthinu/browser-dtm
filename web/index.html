@@ -18,7 +18,7 @@
   .fx { display: grid; grid-template-columns: 20px 1fr 120px 36px; align-items: center; gap: 4px; }
   #status { font-size: 12px; color: #aaa; }
   #problems { color: #ff9b9b; font-size: 12px; white-space: pre-wrap; }
-  #roll { width: 100%; height: 380px; background: #111318; border-radius: 4px; display: block; }
+  #roll { width: 100%; height: 600px; touch-action: none; outline-color: #59c2ff; background: #111318; border-radius: 4px; display: block; }
   #legend span { margin-right: 12px; font-size: 12px; }
   #log { font-size: 11px; color: #9a9a9a; white-space: pre-wrap; max-height: 160px; overflow: auto; }
   footer { font-size: 11px; color: #888; padding: 0 14px 10px; }
@@ -57,8 +57,13 @@
   <div>
     <section>
       <h2>ピアノロール</h2>
+      <label><input id="soundfont" type="checkbox" checked>伴奏: FluidR3 GM SoundFont（外部読込）</label>
+      <div id="soundfontWarning" role="status" style="color:#ffb454;white-space:pre-wrap"></div>
       <div id="legend"></div>
-      <canvas id="roll" width="1400" height="380"></canvas>
+      <div><label>スナップ <select id="snap"><option value="4">1/4</option><option value="8" selected>1/8</option><option value="16">1/16</option></select></label>
+      <button id="undo" class="sub" disabled>元に戻す</button><button id="redo" class="sub" disabled>やり直す</button></div>
+      <p style="font-size:12px;color:#aaa">歌を編集: 空白クリックで「あ」を追加 ／ ドラッグで移動 ／ 右端で長さ ／ Delete・Backspace・右クリックで削除 ／ ダブルクリックでかな ／ Ctrl+Z・Ctrl+Shift+Z</p>
+      <canvas id="roll" width="1400" height="600"></canvas>
     </section>
     <section>
       <h2>ログ</h2>
@@ -69,7 +74,7 @@
 <footer>
   歌声: VocaTab（MIT, Copyright (c) 2026 wavtechyukky）の歌声合成エンジン。歌声モデル・ボコーダは個人・非商用・再配布禁止（同梱しない）。
   歌い手: 波音リツ（波音リツ・カノン）/ 夏目悠李（歌声DB制作: アマノケイ／音声提供者: 霧野蒼太）/ 御丹宮くるみ。
-  伴奏: onjmin/dtm（AGPL-3.0-or-later, (c) onjmin）。onnxruntime-web（MIT）。本アプリは AGPL-3.0-or-later・非公開。
+  伴奏: onjmin/dtm（AGPL-3.0-or-later, (c) onjmin）。SoundFont: FluidR3 GM © 2000–2002, 2008 Frank Wen（MIT）/ WebAudioFont data © 2017 Srgy Surkv（MIT、実行時のみ読込、非同梱）。onnxruntime-web（MIT）。本アプリは AGPL-3.0-or-later・非公開。
 </footer>
 <script type="module" src="/dist/app.js"></script>
 </body>

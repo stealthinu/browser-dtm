@@ -1,6 +1,6 @@
 // 画面（プロンプトコピー欄・貼り戻し欄・エフェクト・ピアノロール・再生/停止・書き出し）と、自動操作用の window.app。
 // Copyright (c) 2026 browser-dtm authors. AGPL-3.0-or-later.
-import { parseMML } from "@onjmin/dtm";
+import { PianoRoll } from "./pianoroll";
 import { encodeMp3, encodeWav, levels } from "../core/encode";
 import { applyWaveEffects, type CarrierNote } from "../core/fx";
 import { buildPrompt, type ImportResult, importResponse } from "../core/prompt";
@@ -71,9 +71,10 @@ async function play(record = false): Promise<Recording | null> {
   const v = vocalTrack(doc)!;
   const seconds = songSeconds(doc) + TAIL;
   status(record ? "書き出し用の音を描画・再生中…" : "再生用の音を描画中…");
-  const promise = player.play(toDtmMML(doc), vc.stereo, vc.lead, seconds, v.volume ?? 1.0, record);
+  const promise = player.play(toDtmMML(doc), vc.stereo, vc.lead, seconds, v.volume ?? 1.0, record, ($("soundfont") as HTMLInputElement).checked);
   return await promise;
 }
+player.onWarning = (s) => { $("soundfontWarning").textContent = s; if (s) log(s); };
 player.onStart = () => { status("再生中"); animate(); };
 player.onEnd = () => status("停止");
 
@@ -106,7 +107,7 @@ async function exportAudio(o: ExportOpts = {}) {
   const stats = {
     file, bytes: bytes.length, seconds: rec.mix[0].length / SR,
     mixL: levels(rec.mix[0], SR), mixR: levels(rec.mix[1], SR), acc: levels(rec.acc, SR), vox: levels(rec.vox, SR),
-    scheduled: rec.scheduled, playback: rec.playback,
+    scheduled: rec.scheduled, playback: rec.playback, soundfont: rec.soundfont,
   };
   const saved: string[] = [];
   if (o.toServer) {
@@ -129,88 +130,16 @@ async function exportAudio(o: ExportOpts = {}) {
 
 // ---------------------------------------------------------------- ピアノロール
 
-const COLORS = ["#ffb454", "#59c2ff", "#95e6cb", "#d2a6ff", "#f07178", "#c2d94c"];
-
-let instCache: { mml: string; inst: Array<{ t: number; dur: number; midi: number; tr: number }> } | null = null;
-
-function drawRoll(playSec = -1) {
-  const cv = $<HTMLCanvasElement>("roll");
-  const g = cv.getContext("2d")!;
-  g.clearRect(0, 0, cv.width, cv.height);
+const roll = new PianoRoll($("roll") as HTMLCanvasElement, () => doc, (notes) => {
   if (!doc) return;
-  const d = doc;
-  const totalTicks = d.bars * d.beatsPerBar * TPQ;
-  const v = vocalTrack(d)!;
-  const vt = toVocaTabNotes(d, v);
-  const mml = toDtmMML(d);
-  if (instCache?.mml !== mml) {
-    const inst: Array<{ t: number; dur: number; midi: number; tr: number }> = [];
-    try {
-      for (const p of parseMML(mml).placements) {
-        inst.push({ t: p.startStep * 10, dur: p.durationSteps * 10, midi: p.pitchUnits / 31, tr: p.trackIndex });
-      }
-    } catch (e) {
-      log(`MML parse error: ${e}`);
-    }
-    instCache = { mml, inst };
-  }
-  const inst = instCache.inst;
-  const all = [...vt.map((n) => n.pitch), ...inst.map((n) => n.midi)];
-  const lo = Math.min(...all) - 2;
-  const hi = Math.max(...all) + 2;
-  const L = 40, W = cv.width - L - 4, H = cv.height - 22;
-  const x = (t: number) => L + (t / totalTicks) * W;
-  const y = (m: number) => 4 + ((hi - m) / (hi - lo + 1)) * H;
-  const rowH = H / (hi - lo + 1);
-  for (let m = lo; m <= hi; m++) {
-    const black = [1, 3, 6, 8, 10].includes(((m % 12) + 12) % 12);
-    g.fillStyle = black ? "#15171c" : "#1b1e24";
-    g.fillRect(L, y(m), W, rowH);
-    if (m % 12 === 0) {
-      g.fillStyle = "#888";
-      g.font = "10px sans-serif";
-      g.fillText(`C${m / 12 - 1}`, 4, y(m) + rowH - 1);
-    }
-  }
-  for (let b = 0; b <= d.bars * d.beatsPerBar; b++) {
-    g.strokeStyle = b % d.beatsPerBar === 0 ? "#555" : "#2a2d35";
-    g.beginPath();
-    g.moveTo(x(b * TPQ), 4);
-    g.lineTo(x(b * TPQ), 4 + H);
-    g.stroke();
-    if (b % d.beatsPerBar === 0 && b < d.bars * d.beatsPerBar) {
-      g.fillStyle = "#aaa";
-      g.fillText(String(b / d.beatsPerBar + 1), x(b * TPQ) + 3, cv.height - 6);
-    }
-  }
-  const instTracks = d.tracks.filter((t) => t.kind === "inst");
-  for (const n of inst) {
-    g.fillStyle = COLORS[(n.tr + 1) % COLORS.length] + "aa";
-    g.fillRect(x(n.t), y(n.midi) + 1, Math.max(2, x(n.t + n.dur) - x(n.t) - 1), rowH - 2);
-  }
-  g.font = "bold 12px sans-serif";
-  for (const n of vt) {
-    g.fillStyle = COLORS[0];
-    g.fillRect(x(n.onset), y(n.pitch), Math.max(2, x(n.onset + n.dur) - x(n.onset) - 1), rowH);
-    g.fillStyle = "#111";
-    g.fillText(n.lyric, x(n.onset) + 2, y(n.pitch) + rowH - 2);
-  }
-  if (playSec >= 0) {
-    const t = (playSec * d.bpm * TPQ) / 60;
-    g.strokeStyle = "#fff";
-    g.beginPath();
-    g.moveTo(x(t), 0);
-    g.lineTo(x(t), cv.height);
-    g.stroke();
-  }
-  const drums = d.tracks.find((t) => t.kind === "drums");
-  const legend = $("legend"); legend.replaceChildren();
-  const item = (text: string, color?: string) => { const span = document.createElement("span"); span.textContent = text; if (color) span.style.color = color; legend.append(span); };
-  item(`■ 歌 ${v.id}（${v.singer ?? "ritsu"}）`, COLORS[0]);
-  instTracks.forEach((t, i) => item(`■ ${t.id}（${(t as any).program ?? "-"}）`, COLORS[(i + 1) % COLORS.length]));
-  if (drums) item(`ドラム: ${(drums as any).pattern}`);
-  item(`BPM ${d.bpm} / ${d.bars} 小節 / ${d.chords ?? ""}`);
-}
+  action++; player.stop();
+  // 新しい参照で合成中の古い曲も無効化する。
+  doc = structuredClone(doc);
+  vocalTrack(doc)!.notes = notes;
+  vocalCache = null;
+  updatePrompt();
+}, status);
+function drawRoll(playSec = -1) { roll.draw(playSec); }
 
 function animate() {
   const tick = () => {
@@ -265,6 +194,8 @@ function loadDoc(d: SongDoc): { problems: unknown[] } {
   doc = d;
   vocalCache = null;
   writeFxUi();
+  roll.reset();
+  updatePrompt();
   drawRoll();
   refreshButtons();
   return { problems: validateSong(d) };
@@ -335,6 +266,7 @@ $("expJson").onclick = () => doc && download(new TextEncoder().encode(JSON.strin
 (window as any).app = {
   ready, importText, loadDoc, play, exportAudio, renderVocal,
   getDoc: () => doc,
+  rollLayout: () => roll.layout(),
   setEffects: (fx: Array<{ type: EffectType; amount: number }>) => {
     if (doc) vocalTrack(doc)!.effects = fx;
     writeFxUi();

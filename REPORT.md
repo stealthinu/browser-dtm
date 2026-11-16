@@ -252,3 +252,9 @@ M1の実装を維持し、実行時ロードのFluidR3 GMによる旋律楽器�
 | M2-doc | README / NOTICE / LICENSE-POLICY | 日本語の楽器・編集操作、一次情報のSoundFont/配信元ライセンス、非同梱方針 |
 
 失敗の修復は各テスト2回まで。各作業段階でprojectファイルのみcheckpoint commit/push。終了時に結果・証拠・commit・NEXT STEPS・BLOCKED APPROVALSと手書き使用量ログを記録する。
+
+### M2 実装・確認（11:08 JST）
+- 問題を確認: M1の`playMML`は内蔵シンセで、旧未解決2は現状でも成立。公開`createDtmStudio.play`は非同期で先読みし、内部`loadInstrument`は失敗をcatchして無音にする。公開`playNoteEvent`は既定プリセット専用で、任意のトラック楽器を指定できない。このため、ロード失敗を捕捉して確実にオフライン予約する最小の方法として、**SoundFontクラス1つだけ**を同版の上流`DTM_DIR/src/instruments/sf/SoundFont.ts`からread-only importする。npm側の公開`playMML`/GM一覧/ドラム辞書/units変換を使い、発音フックへ接続。上流のfork/patch/コピーは無し。build時にnpmとcloneのversion一致を確認する。内部APIなので上流更新時は再確認が必要。
+- FluidR3の元README/COPYING（MuseScore保存版）とWebAudioFont dataのMIT LICENSEを一次情報で確認し、NOTICEとLICENSE-POLICYに配信元・原作者・非同梱方針を記録。GeneralUser GSは追加しない。
+- 最初のSF試験はgetDrumPatternKeysの必須辞書引数不足でFAIL。修復1で楽器・ドラムのロード、相関−0.069、MP3 clip0を確認。遮断試験でキャッシュ済み音源を使ってしまったため、修復2で別ページ・遷移前遮断・cache無効化へ。結果は最終表に記録する。
+- `npm test`は追加5件を含め37 PASS / 0 FAIL。tick往復、snap、境界、重なり、各編集、history、GM指定を検査。編集UIはSongDocへ書き戻し、再生中なら停止して歌のcacheを無効化する。
