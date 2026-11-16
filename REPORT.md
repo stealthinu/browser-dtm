@@ -345,3 +345,9 @@ M2の必須条件は完了。M3（サンプル集ページ・MCP整合・SPEC更
 - MCP: `load_song_json` / `get_prompt`追加、`set_track_mml.instrument`対応。`get_song`既定/fullは同じSongDoc全体、旧summaryは明示指定で保持。
 - npm 2.1.38同梱物を確認: distに内部SoundFontは存在するがexportされず、同梱ソース・source mapも無い。npmを改変して内部exportを足す方法は上流patch禁止に反するため採用しない。DTM_DIRの同版cloneを維持し手順を明記する。
 - 参考: https://designbookmark.com/motion のカテゴリ付きカード一覧・その場で試す・用途別コピーの導線を参照。外部のUIコードや素材は取り込まない。
+
+### M3 実装ステップ2
+- 購読CLI実返答: gallery `20261116-112030-creative-sonnet-1a3b`（Claude、11.3秒）とlong `20261116-112056-exec-sol-2a27`（Codex、54.9秒）。status.result_textを未編集で保存。SHA-256・依頼はfixtures/llm-real/m3-*。CLI障害/切替0、従量APIへのfallback無し。
+- 単体48/48 PASS。gallery e2eは12/12 PASS（分類3、両コピー/表示、PCM両stem有音、SoundFont、実再生、メインへの読込）。MCPは14道具・instrument番号/名称・vocaloid・JSON往復一致・prompt・MP3実再生がPASS。
+- 長尺返答は16小節・48モーラ、Aメロ8小節/サビ8小節、ピアノ0/ベース33/弦48＋8beat。全MMLをパースし各16.000小節、over/under 0。画面貼付時の自動修正0。
+- README/SPECへ往復とサンプル集を追記、NOTICE/LICENSE-POLICY更新。句別合成時間をexport統計に追加（音声には変更無し）。

@@ -45,3 +45,15 @@ test("MCP: 貼付JSONとget_song一致、instrument=0と名称、vocaloid・prom
   assert.deepEqual(session.call("get_song"), doc);
   assert.ok(TOOL_DEFS.find(t => t.name === "set_track_mml")!.inputSchema);
 });
+test("M3 実LLM未編集返答は歌詞一致・全パーサ検査を通る", () => {
+  const requests = JSON.parse(readFileSync("fixtures/llm-real/m3-requests.json", "utf8"));
+  for (const request of requests) {
+    const result = importResponse(readFileSync(`fixtures/llm-real/${request.answer}`, "utf8"), request.lyrics);
+    assert.deepEqual(result.problems, [], request.answer);
+    assert.ok(result.doc);
+    if (request.answer.startsWith("long")) {
+      assert.ok(result.doc.bars >= 16);
+      assert.ok(result.doc.tracks.filter(t => t.kind === "inst").length >= 3);
+    }
+  }
+});

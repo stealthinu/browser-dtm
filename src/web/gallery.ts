@@ -24,7 +24,13 @@ function previewHost(): Promise<any> {
     frame.title = "サンプル試聴エンジン";
     frame.src = "/";
     frame.onload = async () => {
-      try { const app = (frame.contentWindow as any).app; await app.ready; resolve(app); }
+      try {
+        const app = (frame.contentWindow as any).app;
+        await app.ready;
+        const warning = frame.contentDocument!.getElementById("soundfontWarning")!;
+        new MutationObserver(() => { if (warning.textContent) status.textContent = warning.textContent; }).observe(warning, { childList: true, characterData: true, subtree: true });
+        resolve(app);
+      }
       catch (e) { host = undefined; frame.remove(); reject(e); }
     };
     frame.onerror = () => { host = undefined; frame.remove(); reject(new Error("試聴エンジンを読み込めませんでした")); };
@@ -50,7 +56,7 @@ async function preview(id: string) {
   status.textContent = `${doc.title} — 合成・再生中…`;
   try {
     const rec = await app.play(true);
-    if (token === generation) status.textContent = `${doc.title} — 試聴しました。アプリで開いて編集できます。`;
+    if (token === generation) status.textContent = `${doc.title} — 試聴しました。アプリで開いて編集できます。${rec?.soundfont?.warning ? " " + rec.soundfont.warning : ""}`;
     return rec;
   } finally { if (token === generation) clearActive(); }
 }

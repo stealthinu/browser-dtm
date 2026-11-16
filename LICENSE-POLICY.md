@@ -14,3 +14,7 @@
 ## main-v1 M2
 
 使用する音源はMITのFluidR3 GMのみ。WebAudioFont dataの配信リポジトリもMIT（詳細・一次資料はNOTICE）。音源データの同梱・再ホスト・commitは行わず、実行時に必要な楽器/ドラムのJSを元URLから読む。GeneralUser GSは未採用。dtmの内部SoundFontクラスは同版の上流cloneから読取専用importし、AGPLと元のMITクレジットを保持する。
+
+## main-v1 M3
+
+ギャラリーのサンプルはオリジナルのSongDoc/MMLデータだけを置く。試聴も既存のVocaTab/dtmラッパーを共用し、モデル・ボコーダ・音声・SoundFontをコピー/同梱しない。実LLM往復は購読CLIのみ（従量APIへのfallback無し）、返答は未編集のテキストと出所ハッシュを保存する。ギャラリーを含む本アプリは非公開を継続する。今回、公開・配布・上流への変更依頼は行わない。

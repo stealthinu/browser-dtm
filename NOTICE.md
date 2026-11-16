@@ -28,3 +28,9 @@
   配信リポジトリ: https://github.com/surikov/webaudiofontdata 。[LICENSE](https://github.com/surikov/webaudiofontdata/blob/master/LICENSE) を確認。
 - 音源のJS（サンプルデータ）・sf2・sf3はリポジトリに同梱せず、ブラウザが必要な音色だけ実行時に外部URLから読む。GeneralUser GSなど他のバンクは今回は選択肢に追加しない。
 - 読み込み・発音は dtm の `src/instruments/sf/SoundFont.ts` を上流ソースから改変せずimportする（内部API。理由・版・制限はREPORT M2）。同ファイルのrpgen3由来MITクレジットを保持する。https://rpgen3.github.io/soundfont/mjs/surikov/SoundFont.mjs 。上流ソース自体や音源データを本repoへコピーしない。
+
+## main-v1 M3: サンプルと実LLM往復
+
+- `fixtures/gallery/*.json` は本アプリ用に作成したオリジナルの短い音符データ（browser-dtm authors、アプリと同じAGPL-3.0-or-later）。録音素材・既存楽曲・モデル・SoundFontバイナリは含まない。
+- `fixtures/llm-real/{gallery-answer-1,long-answer-1}.txt` は購読CLIの実返答を未編集で保存したSongDoc/MMLテキスト。出所・SHA-256は `m3-provenance.json`。
+- ギャラリーの導線は [DesignBookmark Motion](https://designbookmark.com/motion) のカード・分類・用途別コピーを参考にした。コード・画像・アニメーション素材は取り込まない。試聴の第三者エンジンと実行時音源はM1/M2と同じ、表示条件も維持する。

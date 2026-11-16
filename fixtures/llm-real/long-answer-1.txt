@@ -1,0 +1,110 @@
+```json
+{
+  "version": 1,
+  "title": "あさのひかり、みらいのみち",
+  "bpm": 120,
+  "beatsPerBar": 4,
+  "key": "C",
+  "bars": 16,
+  "chords": "| C | G | Am | Em | F | C | Dm | G | C | G | Am | Em | F | G | C | C |",
+  "tracks": [
+    {
+      "id": "vo",
+      "kind": "vocal",
+      "engine": "vocatab",
+      "singer": "ritsu",
+      "volume": 0.6,
+      "effects": [
+        {
+          "type": "vocaloid",
+          "amount": 0.8
+        }
+      ],
+      "notes": [
+        {"bar": 1, "beat": 1, "len": "4", "pitch": "E4", "lyric": "あ"},
+        {"bar": 1, "beat": 2, "len": "4", "pitch": "G4", "lyric": "さ"},
+        {"bar": 1, "beat": 3, "len": "2", "pitch": "A4", "lyric": "の"},
+        {"bar": 2, "beat": 1, "len": "4", "pitch": "G4", "lyric": "ひ"},
+        {"bar": 2, "beat": 2, "len": "4", "pitch": "D4", "lyric": "か"},
+        {"bar": 2, "beat": 3, "len": "4", "pitch": "G4", "lyric": "り"},
+
+        {"bar": 3, "beat": 1, "len": "4", "pitch": "E4", "lyric": "ま"},
+        {"bar": 3, "beat": 2, "len": "4", "pitch": "A4", "lyric": "ど"},
+        {"bar": 3, "beat": 3, "len": "2", "pitch": "G4", "lyric": "を"},
+        {"bar": 4, "beat": 1, "len": "4", "pitch": "E4", "lyric": "あ"},
+        {"bar": 4, "beat": 2, "len": "4", "pitch": "G4", "lyric": "け"},
+        {"bar": 4, "beat": 3, "len": "4", "pitch": "B4", "lyric": "て"},
+
+        {"bar": 5, "beat": 1, "len": "4", "pitch": "A4", "lyric": "か"},
+        {"bar": 5, "beat": 2, "len": "4", "pitch": "G4", "lyric": "ぜ"},
+        {"bar": 5, "beat": 3, "len": "2", "pitch": "F4", "lyric": "に"},
+        {"bar": 6, "beat": 1, "len": "4", "pitch": "E4", "lyric": "の"},
+        {"bar": 6, "beat": 2, "len": "4", "pitch": "G4", "lyric": "せ"},
+        {"bar": 6, "beat": 3, "len": "4", "pitch": "E4", "lyric": "て"},
+
+        {"bar": 7, "beat": 1, "len": "4", "pitch": "F4", "lyric": "ゆ"},
+        {"bar": 7, "beat": 2, "len": "4", "pitch": "A4", "lyric": "め"},
+        {"bar": 7, "beat": 3, "len": "2", "pitch": "F4", "lyric": "を"},
+        {"bar": 8, "beat": 1, "len": "4", "pitch": "G4", "lyric": "う"},
+        {"bar": 8, "beat": 2, "len": "8", "pitch": "A4", "lyric": "た"},
+        {"bar": 8, "beat": 2.5, "len": "8", "pitch": "B4", "lyric": "う"},
+
+        {"bar": 9, "beat": 1, "len": "4", "pitch": "C5", "lyric": "き"},
+        {"bar": 9, "beat": 2, "len": "4", "pitch": "D5", "lyric": "み"},
+        {"bar": 9, "beat": 3, "len": "2", "pitch": "E5", "lyric": "と"},
+        {"bar": 10, "beat": 1, "len": "4", "pitch": "D5", "lyric": "あ"},
+        {"bar": 10, "beat": 2, "len": "4", "pitch": "B4", "lyric": "る"},
+        {"bar": 10, "beat": 3, "len": "4", "pitch": "D5", "lyric": "く"},
+
+        {"bar": 11, "beat": 1, "len": "4", "pitch": "C5", "lyric": "み"},
+        {"bar": 11, "beat": 2, "len": "4", "pitch": "E5", "lyric": "ら"},
+        {"bar": 11, "beat": 3, "len": "2", "pitch": "C5", "lyric": "い"},
+        {"bar": 12, "beat": 1, "len": "4", "pitch": "B4", "lyric": "の"},
+        {"bar": 12, "beat": 2, "len": "4", "pitch": "D5", "lyric": "み"},
+        {"bar": 12, "beat": 3, "len": "4", "pitch": "E5", "lyric": "ち"},
+
+        {"bar": 13, "beat": 1, "len": "4", "pitch": "C5", "lyric": "そ"},
+        {"bar": 13, "beat": 2, "len": "4", "pitch": "D5", "lyric": "ら"},
+        {"bar": 13, "beat": 3, "len": "2", "pitch": "C5", "lyric": "の"},
+        {"bar": 14, "beat": 1, "len": "4", "pitch": "B4", "lyric": "む"},
+        {"bar": 14, "beat": 2, "len": "4", "pitch": "D5", "lyric": "こ"},
+        {"bar": 14, "beat": 3, "len": "4", "pitch": "G4", "lyric": "う"},
+
+        {"bar": 15, "beat": 1, "len": "4", "pitch": "C5", "lyric": "ひ"},
+        {"bar": 15, "beat": 2, "len": "4", "pitch": "D5", "lyric": "び"},
+        {"bar": 15, "beat": 3, "len": "2", "pitch": "E5", "lyric": "く"},
+        {"bar": 16, "beat": 1, "len": "8", "pitch": "D5", "lyric": "こ"},
+        {"bar": 16, "beat": 1.5, "len": "8", "pitch": "B4", "lyric": "え"},
+        {"bar": 16, "beat": 2, "len": "2", "pitch": "C5", "lyric": "よ"}
+      ]
+    },
+    {
+      "id": "pf",
+      "kind": "inst",
+      "instrument": 0,
+      "volume": 0.6,
+      "mml": "o4 l8 c e g e c e g e d g b g d g b g c e a e c e a e e g b g e g b g c f a f c f a f c e g e c e g e d f a f d f a f d g b g d g b g o5 l4 'ceg' 'ceg' 'ceg' 'ceg' 'dgb' 'dgb' 'dgb' 'dgb' 'cea' 'cea' 'cea' 'cea' 'egb' 'egb' 'egb' 'egb' 'cfa' 'cfa' 'cfa' 'cfa' 'dgb' 'dgb' 'dgb' 'dgb' 'ceg' 'ceg' 'ceg' 'ceg' 'ceg'2 'ceg'2"
+    },
+    {
+      "id": "ba",
+      "kind": "inst",
+      "instrument": 33,
+      "volume": 0.6,
+      "mml": "o2 l4 c g c g g d g d a e a e e b e b f c f c c g c g d a d a g d g b c g c e g d g b a e a c e b e g f c f a g d g b c g c g c2 c2"
+    },
+    {
+      "id": "st",
+      "kind": "inst",
+      "instrument": 48,
+      "volume": 0.55,
+      "mml": "o3 l1 'ceg' 'dgb' 'cea' 'egb' 'cfa' 'ceg' 'dfa' 'dgb' o4 'ceg' 'dgb' 'cea' 'egb' 'cfa' 'dgb' 'ceg' 'ceg'"
+    },
+    {
+      "id": "dr",
+      "kind": "drums",
+      "volume": 0.5,
+      "pattern": "8beat"
+    }
+  ]
+}
+```

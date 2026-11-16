@@ -127,6 +127,17 @@ npm run serve            # http://127.0.0.1:5500/ （PORT=5500〜5599）
 
 見本返答は `fixtures/sample-response.txt`。本物の購読 LLM の未編集返答2件は `fixtures/llm-real/`、生成元と SHA-256 は同ディレクトリの `provenance.json` に保存。
 
+## サンプル集から作る
+
+`http://127.0.0.1:5500/gallery.html`（上部の「サンプル集」リンク）に、曲3枚・伴奏2枚・歌の効果2枚を用意しました。「曲／伴奏／エフェクト」で絞り込めます。
+
+- 「▶ 試聴」はページ内で歌声合成とFluidR3 GMの伴奏を実再生します。「■ 試聴を停止」で止められます。初回は読み込みに時間がかかります。
+- 「アプリで開く」は作曲画面へSongDoc全体を読み込みます。再生・ピアノロール編集・MP3/WAV/JSON書き出しができます。
+- 「Claude 用にコピー」「ChatGPT 用にコピー」は、サンプルのSongDoc全体・M1共通の書式仕様・変更のお願いをまとめてコピーし、「コピーしました」と表示します。ClaudeにはArtifactを付けない、ChatGPTにはリンクやコードではなくJSON本文を返すよう依頼します。
+- コピー文の「イメージ」を好みに変えてLLMへ渡し、返答を作曲画面の「LLM の返答を貼る」へそのまま貼ります。サンプルの歌詞を使う場合は「アプリで開く」で歌詞欄も揃います。
+
+サンプルは `fixtures/gallery/*.json` にある音符データです。音声素材や第三者の曲は使っていません。伴奏カードにも音合わせ用の短い歌を含め、エフェクトカードは歌＋伴奏で変化を試せます。
+
 ## テスト
 
 ```bash
@@ -136,10 +147,13 @@ npm run e2e:fx       # A4: 4種の効果、対照相関、vocaloid 0/0.5/1 の�
 npm run e2e:llm      # 購読 LLM の未編集返答2件を UI に貼付→自動再生→MP3 ボタン、数値は out/e2e-llm.json
 npm run e2e:soundfont # 内蔵/SFの実再生・MP3・stemスペクトル比較、遮断時の警告とfallback
 npm run e2e:pianoroll # マウス/キーボード編集→SongDoc/現在曲プロンプト→再合成・実再生・MP3・画面
-npm run mcp:smoke    # A6: MCP サーバーを起動し tools/list → new_song → … → export(mp3)
+npm run e2e:gallery  # 7カード・分類・両コピー・ページ内歌/SoundFont試聴・アプリで開く・画面
+npm run e2e:real     # M3実返答2件: gallery/16小節をUI貼付→実再生→MP3、句別時間・同期
+npm run mcp:smoke    # A6: 14道具、instrument/vocaloid・JSON往復・prompt・MP3
+# 最終検証は npm ci → npm run build → npm test の後、上記すべてを実行
 ```
 
-e2e はポート 5500、LLM e2e は 5502、MCP の書き出しは 5501、SoundFont は 5503、ピアノロールは 5504 を使い、終わったらサーバーと Chrome を閉じる。音声ファイルは `out/`（commit しない）。受け渡し用 MP3 と画面は `/workspace/browser-dtm-final/` に保存する。
+e2e はポート 5500、LLM e2e は 5502、MCP の書き出しは 5501、SoundFont は 5503、ピアノロールは 5504、ギャラリーは5505、M3実返答は5506を使い、終わったらサーバーと Chrome を閉じる。音声ファイルは `out/`（commit しない）。受け渡し用 MP3 と画面は `/workspace/browser-dtm-final/` に保存する。
 
 ## MCP サーバー
 
@@ -154,7 +168,9 @@ Claude Code / Claude Desktop などの設定例（パスは手元に合わせる
   "cwd": "/path/to/browser-dtm", "env": { "VOCATAB_DIR": "/workspace/dtm-research/vocatab" } } } }
 ```
 
-道具: `get_song` `new_song` `set_chords` `set_track_notes` `set_lyrics` `set_track_mml` `set_drums` `set_effects` `set_mix` `check` `export`（mp3 既定 / wav / json / mml）`finish`。道具は事実（過不足・音域・はみ出し・エラーの場所）だけを返し、点数は返さない。`export` の mp3/wav は headless Chrome でアプリを開いて鳴らし、`out/<name>.mp3` に書き出す。`set_effects` は `{ "effects": [{ "type": "vocaloid", "amount": 0.5 }] }` に対応する。定義はブラウザと共有（`src/core/tools.ts`）。
+道具: `load_song_json` `get_prompt` `get_song` `new_song` `set_chords` `set_track_notes` `set_lyrics` `set_track_mml` `set_drums` `set_effects` `set_mix` `check` `export`（mp3 既定 / wav / json / mml）`finish`。道具は事実（過不足・音域・はみ出し・エラーの場所）だけを返し、点数は返さない。`export` の mp3/wav は headless Chrome でアプリを開いて鳴らし、`out/<name>.mp3` に書き出す。`set_effects` は `{ "effects": [{ "type": "vocaloid", "amount": 0.5 }] }` に対応する。定義はブラウザと共有（`src/core/tools.ts`）。
+
+`get_song` は既定と `part: "full"` で貼付用JSONと同じSongDoc全体、`part: "summary"` で要約を返します。`set_track_mml` の `instrument` はGM名または0始まり番号、旧 `program` も引き続き使えます。`load_song_json: {"text":"返答全文またはJSON"}` は画面と同じ取り出し・修復・検査を通し、失敗時は現在曲を保って `problems` / `fixRequest` を返します。`get_prompt: {"image":"サビを高くする"}` は現在曲・仕様・歌詞・要望を含むコピー文を返します（`lyrics` の上書きも可）。
 
 ## ファイル
 
@@ -162,6 +178,7 @@ Claude Code / Claude Desktop などの設定例（パスは手元に合わせる
 |---|---|
 | `src/core/songdoc.ts` | SongDoc の型・検査・変換（VocaTab Note / dtm MML）・歌詞の割り当て |
 | `src/core/tools.ts` | LLM 向けの道具（ブラウザ・MCP 共通） |
+| `src/core/gallery.ts`, `src/web/gallery.ts`, `web/gallery.html` | サンプル一覧・用途別コピー・作曲画面を共用する試聴 |
 | `src/core/prompt.ts` | プロンプト・返答の取り出し・修正依頼文 |
 | `src/core/fx.ts` / `encode.ts` | エフェクト（ボコーダー・ビットクラッシャー・ダブリング）/ MP3・WAV・数値 |
 | `src/web/vocal.ts` | VocaTab engine-web を画面なしで呼ぶ（＋ケロケロの F0） |
@@ -188,4 +205,16 @@ JEV_AUTH_FALLBACK=0 JEV_AUTH_NOTIFY=0 JEV_NO_PREAMBLE=1 jev-route run creative-s
 JEV_AUTH_FALLBACK=0 JEV_AUTH_NOTIFY=0 JEV_NO_PREAMBLE=1 jev-route run exec-sol - < out/llm/prompt-2.txt --caller ブラウザDTM --title "browser-dtm LLM answer 2" --no-quota
 ```
 
-`~/jev-starter/status/<id>.json` の `result_text` を未編集でテキスト保存する。従量 API への fallback は無効にする。通常の e2e は commit 済みの返答を再利用し、LLM を再呼び出ししない。SoundFont・ピアノロール編集はM2で実装済み。サンプル集やSPECの更新（M3）は今回扱わない。
+`~/jev-starter/status/<id>.json` の `result_text` を未編集でテキスト保存する。従量 API への fallback は無効にする。通常の e2e は commit 済みの返答を再利用し、LLM を再呼び出ししない。SoundFont・ピアノロール編集はM2で実装済み。M3ではサンプル集・MCP整合・SPEC更新・16小節の実LLM往復も実装・検証済み。
+
+### M3 の実返答を再取得する場合
+
+```bash
+node scripts/make-m3-prompts.mjs
+JEV_AUTH_FALLBACK=0 JEV_AUTH_NOTIFY=0 JEV_NO_PREAMBLE=1 jev-route run creative-sonnet - < out/llm/gallery-prompt.txt --caller ブラウザDTM --no-quota --title "browser-dtm gallery LLM answer"
+JEV_AUTH_FALLBACK=0 JEV_AUTH_NOTIFY=0 JEV_NO_PREAMBLE=1 jev-route run exec-sol - < out/llm/long-prompt.txt --caller ブラウザDTM --no-quota --title "browser-dtm long song LLM answer"
+```
+
+今回のジョブIDとハッシュは `fixtures/llm-real/m3-provenance.json`、未編集返答は `gallery-answer-1.txt` / `long-answer-1.txt`。`scripts/capture-m3-answer.mjs` は今回のジョブ専用です。新規取得時は新しいstatusを参照し、既存返答を上書きせず保存してください。通常のテストは保存済み返答を使い、LLMを呼びません。
+
+dtmのnpm配布物は `dist/index.mjs` に内部SoundFontを含みますが、そのクラスをexportせず元ソース/source mapも含みません。上流改変や抽出コピーはせず、DTM_DIRは上の固定commit（package version 2.1.38）を引き続き使います。環境変数未設定の既定値は `/workspace/dtm-research/dtm`。VocaTabソースも別途必要です。
