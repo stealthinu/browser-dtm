@@ -145,3 +145,21 @@ M2/M3、公開、上流改変、音声・モデルの commit は対象外。
 - `npm run e2e`: PASS、MP3 RMS −14.60 dBFS / peak −1.87 dBFS / clip 0、歌 −19.34 dBFS、伴奏 −17.46 dBFS、頭 12.09 ms、参照との傷 0 ブロック。`out/offline-e2e.log`。
 - `npm run e2e:fx`（既存4効果＋対照）: 全通過。対照歌相関 1.0000（変更前 0.9869）。録音問題の修復1回。`out/offline-fx.log`。
 - 実 LLM の初回 UI 検証は2返答とも読み込み・自動再生・MP3・両 stem 有音・clip0。独自追加の MP3 バイト完全一致は FAIL。デコード相関は各1.0000、差分 −51.64 / −48.17 dB で微小。必須条件の相関 >0.999 に合う比較へ検査を修正（1回）。返答や音声を手編集していない。
+
+### M1 ボカロ風 v2 統合と実 LLM（10:54 JST）
+- `ae8a772:effects/vocaloid/dsp.js` を `src/core/vocaloid-v2.js` へ移植。元の applyVocaloid は維持し、解析用 pitchFrames の export だけを追加。`src/core/vocaloid.ts` でラッパー処理。UI と共通 EFFECT_TYPES / MCP set_effects へ vocaloid を追加。
+- 有声確信度を窓中心間で補間し、確信度 ≥0.75 の同一サンプル集合で入力と wet の RMS を合わせる。0.2〜0.7 の間で dry→wet を滑らかに切り替え、無声は原音経路を残す。音高を新たに生成・補正しない。
+- 今回の原音に対する v2 単体の有声 RMS 差は **+4.054 dB**。背景の約+8.5dBという固定値はこの入力では再現しない（元 DSP のレベリングは入力依存）。入力に依存しない固定減衰ではなく実測 RMS 比で補正した。
+
+| 強度 | 有声 RMS 差 dB | 無声2–8kHz エネルギー差 dB | 有声重心 Hz | MP3 RMS / peak dBFS | clip |
+|---|---:|---:|---:|---|---:|
+| 0 | 0.0000 | 0.000 | 3044.49 | −14.60 / −1.87 | 0 |
+| 0.5 | −0.00194 | +0.481 | 3805.11 | −14.53 / −2.97 | 0 |
+| 1 | −0.00673 | +0.518 | 4111.28 | −14.53 / −2.52 | 0 |
+
+測定は同じ原音基準。YIN 型有声検出で有声312,236 samples、STFT 有声602窓、非無音かつ無声14窓。STFT=2048 / hop512、Hann、重心は振幅重み。子音は確信度平均<0.25・原音窓平均パワー>1e−7の同一窓の2–8kHz積算エネルギー比。入力の有声重心3044.49→元v2 4120.67（+1076.18Hz）、統合版4111.28（+1066.79Hz）、上昇量 **99.13%** を維持。強度0の歌stemは差分0。全曲の歌・伴奏は有音。
+
+- `npm run e2e:fx`: 25チェック PASS。歌・mix・MP3の繰り返し相関は各1.0000、すべての強度の実再生も Analyser で確認。`out/e2e-fx-verified.log`, `out/e2e-fx.json`。
+- Sonnet / Codex の実返答は `fixtures/llm-real/answer-{1,2}.txt`。status の result_text を未編集保存し、SHA-256と生成元を `provenance.json` に記録。2要望で歌詞・テンポ・雰囲気が異なる。LLM呼出2回とも購読CLIで成功、従量fallback無し。
+- MP3ボタンの実ダウンロードと自動操作用exportを両方確認。比較はデコード相関>0.999。再試験で過去ダウンロードを拾わないよう、実行ごとに固有の out/llm-downloads-<時刻>/ を使用（テスト修復2回目）。
+- Clipboard追加検査で Chrome の write permission denied を実測。Puppeteer のローカル実装で `clipboard-sanitized-write` が別 permission と確認し、試験に明示。アプリも失敗時は選択＋コピーの fallback と日本語メッセージを追加（Clipboard検査の修復1回目）。

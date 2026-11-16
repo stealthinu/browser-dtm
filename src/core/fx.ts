@@ -3,6 +3,8 @@
 // ケロケロボイス（kero）は波形ではなく F0 で掛ける（src/web/vocal.ts の flattenF0。合成し直す）。
 // Copyright (c) 2026 browser-dtm authors. AGPL-3.0-or-later.
 
+import { applyVocaloidMatched } from "./vocaloid";
+
 export interface CarrierNote {
   startSec: number;
   endSec: number;
@@ -120,9 +122,10 @@ export function doubling(x: Float32Array, sr: number, amount: number): [Float32A
 }
 
 /** kero 以外の 3 つを決まった順（ボコーダー → ビットクラッシャー → ダブリング）で掛け、ステレオにする。 */
-export function applyWaveEffects(x: Float32Array, sr: number, fx: { vocoder: number; bitcrusher: number; doubling: number },
+export function applyWaveEffects(x: Float32Array, sr: number, fx: { vocoder: number; bitcrusher: number; doubling: number; vocaloid?: number },
                                  notes: CarrierNote[], offsetSec: number): [Float32Array, Float32Array] {
   let y = vocoder(x, sr, notes, fx.vocoder, offsetSec);
   y = bitcrusher(y, fx.bitcrusher);
+  y = applyVocaloidMatched(y, sr, fx.vocaloid ?? 0);
   return doubling(y, sr, fx.doubling);
 }

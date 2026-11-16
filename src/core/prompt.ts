@@ -155,11 +155,13 @@ function normalize(doc: any, text: string, repairs: string[]) {
   for (const k of ["bpm", "beatsPerBar", "bars"]) {
     if (typeof doc[k] === "string" && doc[k].trim() && Number.isFinite(Number(doc[k]))) fix(doc, k, Number(doc[k]), `${k} を数値へ変換`);
   }
+  for (const k of ["title", "key", "chords"]) if (doc[k] === "" || doc[k] === null) { delete doc[k]; repairs.push(`${k}: 空の任意フィールドを省略`); }
   for (const t of doc.tracks) {
     if (!t || typeof t !== "object") continue;
     for (const k of ["effects", "singer", "engine", "program", "volume"]) {
       if (t[k] === "" || t[k] === null) { delete t[k]; repairs.push(`${t.id}.${k}: 空の任意フィールドを省略`); }
     }
+    if (t.kind === "inst" && typeof t.mml === "string") fix(t, "mml", t.mml.replace(/[‘’]/g, "'"), `${t.id}.mml の和音引用符を正規化`);
     if (t.kind !== "vocal") continue;
     if (Array.isArray(t.notes)) for (const [i, n] of t.notes.entries()) {
       if (!n || typeof n !== "object") continue;

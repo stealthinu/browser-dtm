@@ -28,12 +28,14 @@ try {
   const ba = await call("set_track_mml", { trackId: "ba", mml: "o2 l2 c c g g", program: "electric_bass_finger" });
   ok &&= pf.overBars === 0 && pf.underBars === 0 && ba.overBars === 0;
   await call("set_drums", { pattern: "8beat" });
+  const fx = await call("set_effects", {effects:[{type:"vocaloid",amount:0.5}]});
+  ok &&= fx.problems.length === 0 && fx.effects[0].type === "vocaloid";
   const chk = await call("check", {});
   ok &&= chk.problems.length === 0;
   await call("export", { format: "json", name: "mcp-smoke" });
   const ex = await call("export", { format: "mp3", name: "mcp-smoke" });
   const f = resolve(ROOT, "out/mcp-smoke.mp3");
-  ok &&= existsSync(f) && statSync(f).size > 10000 && ex.vox.rmsDb > -40 && ex.acc.rmsDb > -40;
+  ok &&= existsSync(f) && statSync(f).size > 10000 && ex.vox.rmsDb > -40 && ex.acc.rmsDb > -40 && ex.playback?.maxRms > 0.001 && ex.mixL.clipped === 0;
   console.log(`mp3: ${existsSync(f) ? statSync(f).size : 0} bytes, vox ${ex.vox?.rmsDb} dB, acc ${ex.acc?.rmsDb} dB, mix ${ex.mixL?.rmsDb} dB`);
 } catch (e) {
   ok = false;

@@ -1,18 +1,20 @@
 // 受入テスト A1〜A4（SPEC §3）: headless Chrome でアプリを開き、見本返答を貼り戻して鳴らし、録った音を MP3 に書き出して測る。
 //   node scripts/e2e.mjs        A1/A2/A3（out/song.mp3 と stem、docs/evidence/pianoroll.png、out/e2e.json）
 //   node scripts/e2e.mjs --fx   A4（エフェクト4種 × 強度 0/1、out/fx-*.mp3、out/e2e-fx.json）
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { corr, decodeMp3, diffDb, lagMs, levels, onsetMs, readWav, SR } from "./analyze.mjs";
 import { openApp } from "./browser.mjs";
 import { ROOT } from "./paths.mjs";
+import { build } from "esbuild";
+import { spectralMetrics } from "./vocaloid-metrics.mjs";
 
 const FX = process.argv.includes("--fx");
 const out = (f) => resolve(ROOT, "out", f);
 mkdirSync(resolve(ROOT, "out"), { recursive: true });
 const sample = readFileSync(resolve(ROOT, "fixtures/sample-response.txt"), "utf8");
 const t0 = Date.now();
-const { page, close } = await openApp({ port: Number(process.env.PORT ?? 5100), log: () => {} });
+const { page, close } = await openApp({ port: Number(process.env.PORT ?? 5500), log: () => {} });
 const results = { checks: {} };
 const check = (k, ok, detail) => {
   results.checks[k] = { ok, ...detail };
@@ -24,6 +26,7 @@ try {
   await page.click("#sample");
   await page.waitForFunction(() => document.getElementById("answer").value.length > 100);
   await page.click("#load");
+  await page.waitForFunction(() => !document.getElementById("load").disabled && window.app.isPlaying(), { timeout: 120000 });
   const problems = await page.$eval("#problems", (e) => e.textContent);
   const doc = await page.evaluate(() => window.app.getDoc());
   check("A1.import", problems === "問題なし" && !!doc, { problems, tracks: doc?.tracks.map((t) => `${t.id}:${t.kind}`) });
@@ -33,6 +36,7 @@ try {
     const s = await page.evaluate(() => window.app.exportAudio({ format: "mp3", name: "song", toServer: true, stems: true }));
     await page.screenshot({ path: resolve(ROOT, "docs/evidence/pianoroll.png") });
     results.browser = s;
+    check("A2.actual-playback", s.playback?.maxRms > 0.001 && s.playback.elapsedSeconds >= s.seconds - 0.05 && s.playback.observations > 0, {playback:s.playback});
     const [L, R] = decodeMp3(out("song.mp3"));
     const [acc] = readWav(out("song.acc.wav"));
     const [vox] = readWav(out("song.vox.wav"));
@@ -73,7 +77,7 @@ try {
     console.log(JSON.stringify({ mp3, sections, head }, null, 1));
     console.table(perBar);
     check("A2.mp3-not-silent", mp3.L.rmsDb > -40 && mp3.L.peakDb > -20, { rmsDb: mp3.L.rmsDb, peakDb: mp3.L.peakDb });
-    check("A2.mp3-not-clipping", mp3.L.clipped + mp3.R.clipped < 10 && mp3.L.rmsDb < -6, { clipped: mp3.L.clipped + mp3.R.clipped });
+    check("A2.mp3-not-clipping", mp3.L.clipped + mp3.R.clipped === 0 && mp3.L.rmsDb < -6, { clipped: mp3.L.clipped + mp3.R.clipped });
     check("A2.vocal-section", sections.vocalSection.vox.rmsDb > -40, { voxRmsDb: sections.vocalSection.vox.rmsDb });
     check("A2.acc-section", sections.accSection.acc.rmsDb > -40, { accRmsDb: sections.accSection.acc.rmsDb });
     check("A2.each-bar", perBar.slice(0, bars).every((p) => p.acc > -45 && p.mix > -40), { bars });
@@ -88,6 +92,7 @@ try {
         await page.evaluate((fx) => window.app.setEffects(fx), [{ type, amount }]);
         const name = `fx-${type}-${amount}`;
         const s = await page.evaluate((n) => window.app.exportAudio({ format: "mp3", name: n, toServer: true, stems: true }), name);
+        check(`A4.${type}.${amount}.playback`,s.playback?.maxRms>0.001 && s.playback.elapsedSeconds>=s.seconds-0.05,{playback:s.playback});
         fxRes[`${type}@${amount}`] = { name, vox: s.vox, mixL: s.mixL, mixR: s.mixR };
         if (amount === 0) base = name;
       }
@@ -99,9 +104,12 @@ try {
     await page.evaluate(() => window.app.setEffects([]));
     await page.evaluate(() => window.app.exportAudio({ format: "mp3", name: "fx-none-repeat", toServer: true, stems: true }));
     const [rep] = readWav(out("fx-none-repeat.vox.wav"));
-    const ctl = { corrVox: corr(b0, rep), diffVoxDb: +diffDb(b0, rep).toFixed(2) };
+    const [baseMix] = readWav(out(`${base}.mix.wav`));
+    const [repeatMix] = readWav(out("fx-none-repeat.mix.wav"));
+    const [repeatMp3] = decodeMp3(out("fx-none-repeat.mp3"));
+    const ctl = { corrVox: corr(b0, rep), corrMix: corr(baseMix, repeatMix), corrMp3: corr(m0L, repeatMp3), identicalMp3: readFileSync(out(`${base}.mp3`)).equals(readFileSync(out("fx-none-repeat.mp3"))), diffVoxDb: +diffDb(b0, rep).toFixed(2) };
     fxRes.control = ctl;
-    check("A4.control(no-fx twice)", ctl.corrVox > 0.999, ctl);
+    check("A4.control(no-fx twice)", ctl.corrVox > 0.999 && ctl.corrMix > 0.999 && ctl.corrMp3 > 0.999, ctl);
     for (const type of types) {
       const n = `fx-${type}-1`;
       const [v1] = readWav(out(`${n}.vox.wav`));
@@ -112,6 +120,34 @@ try {
       check(`A4.${type}`, r.corrVox < 0.98 && r.diffVoxDb > -30, r);
     }
     results.fx = fxRes;
+    await build({entryPoints:[resolve(ROOT,"src/core/vocaloid.ts")],bundle:true,platform:"node",format:"esm",outfile:out("vocaloid-node.mjs")});
+    const { voicedConfidence } = await import(out("vocaloid-node.mjs"));
+    const { applyVocaloid } = await import("../src/core/vocaloid-v2.js");
+    const confidence = voicedConfidence(b0, SR);
+    const dryMetrics = spectralMetrics(b0,b0,confidence);
+    const originalV2 = spectralMetrics(b0,applyVocaloid(b0,SR,1),confidence);
+    const vocaloid = { dry: dryMetrics, originalV2, amounts: {} };
+    mkdirSync("/workspace/browser-dtm-final",{recursive:true});
+    for(const amount of [0,0.5,1]) {
+      await page.evaluate(fx=>window.app.setEffects(fx),[{type:"vocaloid",amount}]);
+      const name=`vocaloid-${amount}`;
+      const s=await page.evaluate(n=>window.app.exportAudio({format:"mp3",name:n,toServer:true,stems:true}),name);
+      check(`vocaloid.${amount}.playback`,s.playback?.maxRms>0.001 && s.playback.elapsedSeconds>=s.seconds-0.05,{playback:s.playback});
+      const [v]=readWav(out(`${name}.vox.wav`)),[l,r]=decodeMp3(out(`${name}.mp3`));
+      const metrics=spectralMetrics(b0,v,confidence);
+      const mp3={L:levels(l),R:levels(r)};
+      vocaloid.amounts[amount]={...metrics,mp3,browser:s};
+      check(`vocaloid.${amount}.loudness`,Math.abs(metrics.voicedRmsDeltaDb)<=1,metrics);
+      check(`vocaloid.${amount}.consonants`,metrics.unvoicedFrames>0&&metrics.consonantBandDeltaDb>=-6,metrics);
+      check(`vocaloid.${amount}.audio`,mp3.L.clipped+mp3.R.clipped===0&&s.vox.rmsDb>-40&&s.acc.rmsDb>-40,{mp3,vox:s.vox,acc:s.acc});
+      if(amount===0) check("vocaloid.zero-identical",corr(b0,v)===1&&diffDb(b0,v)<-100,{corr:corr(b0,v),diffDb:diffDb(b0,v)});
+      if(amount===1) {
+        const lift=metrics.centroidHz-dryMetrics.centroidHz,originalLift=originalV2.centroidHz-dryMetrics.centroidHz;
+        check("vocaloid.timbre",lift>0&&lift>=originalLift*0.7,{liftHz:lift,originalLiftHz:originalLift,retained:lift/originalLift});
+      }
+      copyFileSync(out(`${name}.mp3`),`/workspace/browser-dtm-final/${name}.mp3`);
+    }
+    results.vocaloid=vocaloid;
   }
 } finally {
   results.elapsedSec = (Date.now() - t0) / 1000;

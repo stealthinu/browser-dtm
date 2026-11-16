@@ -44,7 +44,7 @@ export const TOOL_DEFS: ToolDef[] = [
       program: str("GM 楽器名（例 acoustic_grand_piano, electric_bass_finger）") } } },
   { name: "set_drums", description: "ドラムパターンを決める（dtm の #drum= 名。例 8beat, 16beat, 4beat, shuffle, dance, bossa, disco, none）。",
     inputSchema: { type: "object", required: ["pattern"], properties: { pattern: str("パターン名") } } },
-  { name: "set_effects", description: "歌のエフェクト（kero=ケロケロボイス, vocoder=ボコーダー, bitcrusher=ビットクラッシャー, doubling=ダブリング）と強度 0〜1。",
+  { name: "set_effects", description: "歌のエフェクト（kero=ケロケロボイス, vocoder=ボコーダー, bitcrusher=ビットクラッシャー, doubling=ダブリング, vocaloid=ボカロ風v2）と強度 0〜1。",
     inputSchema: { type: "object", required: ["effects"], properties: { trackId: str("歌トラックの id（既定 vo）"),
       effects: { type: "array", items: { type: "object", required: ["type", "amount"], properties: {
         type: { type: "string", enum: EFFECT_TYPES }, amount: num("0〜1") } } } } } },

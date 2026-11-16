@@ -13,3 +13,7 @@
 - `@breezystack/lamejs` — LGPL-3.0（MP3 エンコーダ。LAME の JS 移植）。配布するときは LGPL の条件（差し替え可能な形・ソースの提供）に従う。
 - 開発用: `esbuild`（MIT）、`puppeteer-core`（Apache-2.0）、`@modelcontextprotocol/sdk`（MIT）、`tsx`（MIT）。
 - VocaTab の `ui/src/engine-web/*`・`engine.ts`・`model.ts`・`params.ts` などを esbuild で import して束ねる（上流のファイルは書き換えない。束ねた dist/ にも上流の MIT 表示が必要: 配布するときは上流の LICENSE を添える）。
+
+## main-v1 M1 のボカロ風 DSP
+- `src/core/vocaloid-v2.js` は本リポジトリの `feat/vocaloid-filter`、commit `ae8a772` の `effects/vocaloid/dsp.js` を移植。既存のヘッダを保存し、解析用 pitchFrames の export のみ追加。
+- `src/core/vocaloid.ts` は有声 RMS 補正と無声子音の原音クロスフェード。VocaTab / dtm の上流コードは変更しない。歌声モデル・ボコーダは含まない。

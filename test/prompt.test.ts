@@ -53,3 +53,14 @@ test("null 音符・track・effects にも例外を投げない", () => {
 test("プロンプトは要望・仕様・現在曲を含む", () => {
  const p=buildPrompt("さくら","BPM100 の静かな曲",doc()); for(const s of ["さくら","BPM100","今の曲を土台","vocaloid","MML も JSON"]) assert.ok(p.includes(s));
 });
+
+test("購読 LLM の実返答2種を未編集で取り込める", async () => {
+ const { readFileSync }=await import("node:fs");
+ const requests=JSON.parse(readFileSync(new URL("../fixtures/llm-real/requests.json",import.meta.url),"utf8"));
+ for(let i=1;i<=2;i++){const r=importResponse(readFileSync(new URL(`../fixtures/llm-real/answer-${i}.txt`,import.meta.url),"utf8"),requests[i-1].lyrics);assert.deepEqual(r.problems,[]);}
+});
+
+test("スマート和音引用符・空の曲 optional フィールド", () => {
+ const d=doc();d.key="";d.chords=null;d.tracks[1].mml="o4 l1 ‘ceg’ ‘dgb’";
+ const r=good(JSON.stringify(d));assert.equal((r.doc!.tracks[1] as any).mml,"o4 l1 'ceg' 'dgb'");assert.equal(r.doc!.key,undefined);
+});

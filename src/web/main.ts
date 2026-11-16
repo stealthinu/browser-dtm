@@ -24,6 +24,7 @@ const player = new Player();
 let doc: SongDoc | null = null;
 let vocalCache: { key: string; stereo: [Float32Array, Float32Array]; lead: number; mono: Float32Array } | null = null;
 let engineReady = false;
+let action = 0;
 
 engine.onProgress = (l, t) => status(`モデルを読み込み中… ${Math.round((l / t) * 100)}%`);
 const ready = engine.init(new URL("/vocatab/", location.href).href).then((idx) => {
@@ -64,14 +65,16 @@ const TAIL = 1.5;
 
 async function play(record = false): Promise<Recording | null> {
   if (!doc) throw new Error("曲がありません");
+  const token = ++action, snapshot = doc;
   const vc = await renderVocal();
+  if (token !== action || snapshot !== doc) throw new Error("再生は停止されました");
   const v = vocalTrack(doc)!;
   const seconds = songSeconds(doc) + TAIL;
   status(record ? "書き出し用の音を描画・再生中…" : "再生用の音を描画中…");
   const promise = player.play(toDtmMML(doc), vc.stereo, vc.lead, seconds, v.volume ?? 1.0, record);
-  const timer = window.setInterval(() => { if (player.isPlaying) { animate(); clearInterval(timer); } }, 30);
-  try { return await promise; } finally { clearInterval(timer); if (player.isPlaying) animate(); }
+  return await promise;
 }
+player.onStart = () => { status("再生中"); animate(); };
 player.onEnd = () => status("停止");
 
 // ---------------------------------------------------------------- 書き出し
@@ -103,7 +106,7 @@ async function exportAudio(o: ExportOpts = {}) {
   const stats = {
     file, bytes: bytes.length, seconds: rec.mix[0].length / SR,
     mixL: levels(rec.mix[0], SR), mixR: levels(rec.mix[1], SR), acc: levels(rec.acc, SR), vox: levels(rec.vox, SR),
-    scheduled: rec.scheduled,
+    scheduled: rec.scheduled, playback: rec.playback,
   };
   const saved: string[] = [];
   if (o.toServer) {
@@ -201,9 +204,12 @@ function drawRoll(playSec = -1) {
     g.stroke();
   }
   const drums = d.tracks.find((t) => t.kind === "drums");
-  $("legend").innerHTML = [`<span style="color:${COLORS[0]}">■ 歌 ${v.id}（${v.singer ?? "ritsu"}）</span>`,
-    ...instTracks.map((t, i) => `<span style="color:${COLORS[(i + 1) % COLORS.length]}">■ ${t.id}（${(t as any).program ?? "-"}）</span>`),
-    drums ? `<span>ドラム: ${(drums as any).pattern}</span>` : "", `<span>BPM ${d.bpm} / ${d.bars} 小節 / ${d.chords ?? ""}</span>`].join("");
+  const legend = $("legend"); legend.replaceChildren();
+  const item = (text: string, color?: string) => { const span = document.createElement("span"); span.textContent = text; if (color) span.style.color = color; legend.append(span); };
+  item(`■ 歌 ${v.id}（${v.singer ?? "ritsu"}）`, COLORS[0]);
+  instTracks.forEach((t, i) => item(`■ ${t.id}（${(t as any).program ?? "-"}）`, COLORS[(i + 1) % COLORS.length]));
+  if (drums) item(`ドラム: ${(drums as any).pattern}`);
+  item(`BPM ${d.bpm} / ${d.bars} 小節 / ${d.chords ?? ""}`);
 }
 
 function animate() {
@@ -254,6 +260,7 @@ function writeFxUi() {
 function loadDoc(d: SongDoc): { problems: unknown[] } {
   const problems = validateSong(d);
   if (problems.length) return { problems };
+  action++;
   player.stop();
   doc = d;
   vocalCache = null;
@@ -283,8 +290,20 @@ function updatePrompt() {
   return text;
 }
 $("mkPrompt").onclick = updatePrompt;
-$("copyPrompt").onclick = () => navigator.clipboard?.writeText(updatePrompt());
-$("copyFix").onclick = () => navigator.clipboard?.writeText(($("fix") as HTMLTextAreaElement).value);
+for (const id of ["lyrics", "image", "baseSong"]) $(id).addEventListener("input", updatePrompt);
+async function copyText(text: string, field: HTMLTextAreaElement) {
+  try {
+    if (!navigator.clipboard) throw new Error("clipboard unavailable");
+    await navigator.clipboard.writeText(text);
+    status("コピーしました");
+  } catch {
+    field.focus(); field.select();
+    const copied = document.execCommand("copy");
+    status(copied ? "コピーしました" : "文章を選択しました。手動でコピーしてください");
+  }
+}
+$("copyPrompt").onclick = () => copyText(updatePrompt(), $("prompt") as HTMLTextAreaElement);
+$("copyFix").onclick = () => copyText(($("fix") as HTMLTextAreaElement).value, $("fix") as HTMLTextAreaElement);
 $("sample").onclick = async () => {
   ($("answer") as HTMLTextAreaElement).value = await (await fetch("/fixtures/sample-response.txt")).text();
 };
@@ -303,6 +322,7 @@ $("load").onclick = async () => {
 };
 $("play").onclick = () => play(false).catch((e) => status(`再生に失敗: ${e}`));
 $("stop").onclick = () => {
+  action++;
   player.stop();
   status("停止");
 };

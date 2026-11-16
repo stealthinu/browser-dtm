@@ -4,33 +4,29 @@
 
 - 指示書: [SPEC.md](SPEC.md)（3手法共通） / 設計メモ: [docs/design-memo.md](docs/design-memo.md)
 - ライセンス方針: [LICENSE-POLICY.md](LICENSE-POLICY.md) / 著作権表示: [NOTICE.md](NOTICE.md)
-- 3手法の比較: ブランチ `impl/claude-code`（Claude Code, jev）、`impl/codex`（Codex, jev）、`impl/cursor`（Cursor クラウドエージェント）。品質は Kiyoshiさんが評価する。
+- 正本は `main-v1`。過去の3手法の比較結果は旧ブランチと REPORT の履歴に残す。
 - 使用量ログ: `logs/usage-<手法>.md`（集計は `tools/collect-usage.py`）
-- このブランチ（`impl/claude-code`）の結果: [REPORT.md](REPORT.md)
+- 正本ブランチ（`main-v1`）の結果: [REPORT.md](REPORT.md)
 
 **このリポジトリは公開しない。** 歌声モデル・ボコーダ・SoundFont は commit しない（SPEC §4）。
 
 ---
 
-## 仕組み（impl/claude-code）
+## 仕組み（main-v1）
 
 SPEC の推奨どおり「C（自前の薄いホストアプリ）、中は B（別々に描画して同じ時計で混ぜる）」。上流は改造しない。
 
 ```
-LLM の返答（SongDoc JSON）──貼り戻し──▶ src/core/prompt.ts（取り出し・検査・修正依頼文）
-                                         │
-                       src/core/songdoc.ts（SongDoc → VocaTab Note / dtm MML、歌詞の割り当て）
-                ┌────────────────────────┴──────────────────────────┐
-  src/web/vocal.ts: VocaTab の engine-web Worker を画面なしで       src/web/player.ts: dtm の playMML（伴奏）
-  analyze → composeF0（上流を import）→ synthesize → 句を並べる      同じ AudioContext。曲の頭の時刻を固定して
-  ＋ src/core/fx.ts（エフェクト）→ AudioBuffer                      歌の AudioBuffer を同じ時刻に start
-                └────────────────────────┬──────────────────────────┘
-                     AudioWorklet で実際に鳴った音を録る → MP3（lamejs、既定）/ WAV
+LLM の返答 → src/core/prompt.ts（候補選択・軽い修復・検査）→ SongDoc
+歌: VocaTab Worker → 合成済み PCM → 歌エフェクト
+伴奏: dtm playMML → 同期時計アダプタで全イベントを先に予約
+歌＋伴奏: OfflineAudioContext でミックスと stem を描画
+  → 同じ PCM を AudioContext で実再生 / lamejs で MP3 化 / WAV
 ```
 
-- 歌: `$VOCATAB_DIR/ui/src/engine-web/worker.ts` を esbuild で `dist/engine-worker.js` に包む（上流のファイルは読むだけ）。モデルは開発サーバーが `$VOCATAB_DIR` の `web_index.json`・`voicebanks/`・`vocoders/` をそのまま配る（コピー・同梱しない）。onnxruntime-web は上流どおり jsDelivr から読む。GPU は使わない（WASM、CPU）。
-- 伴奏: npm の `@onjmin/dtm`（2.1.38、AGPL）の `playMML` に AudioContext と出力先を渡して鳴らす。音色は dtm の内蔵シンセ（`#t<n>inst=` の GM 楽器名で音色が変わる）。ドラムは `#drum=`。
-- 頭あわせ: dtm のシーケンサは「`playMML` を呼んだ時の `ctx.currentTime` + `SEQUENCER_START_DELAY`」を曲の頭にする。その `currentTime` を Proxy で決めた値に固定して呼び、同じ値（サンプルの境目に丸めた時刻）から歌のバッファの開始時刻を決める。
+- 歌は `$VOCATAB_DIR/ui/src/engine-web/worker.ts` を import してビルドする。モデル・ボコーダはローカルの上流 clone から読むだけで、同梱しない。onnxruntime-web は上流どおり jsDelivr から読む。CPU / WASM のみ。
+- dtm は npm の `@onjmin/dtm` を import/wrap する。内蔵シンセ・楽器指定・ドラム・ミキサーを使用し、上流は変更しない。オフライン予約中の時計・タイマー・乱数は同期区間だけ差し替え、`finally` で戻す。
+- 書き出し用 PCM は実時間録音に依存しない。再生と書き出しは同じ処理を通り、繰り返し書き出しの歌・ミックス・MP3 の相関を検査する。ブラウザ内部の演算微差で MP3 のバイト列が完全一致しない場合がある。MP3 の符号化遅延は約25 ms。
 
 ## SongDoc（曲データの正本）
 
@@ -53,8 +49,8 @@ LLM の返答（SongDoc JSON）──貼り戻し──▶ src/core/prompt.ts（
 - **音価 `len` の表記**: `"1"` 全、`"2"` 2分、`"4"` 4分、`"8"` 8分、`"16"` 16分、`"32"`、`"64"`。付点は後ろに `.`（`"4."`、`"4.."` 複付点）、3連は `t`（`"8t"` = 3連8分）、タイは `+`（`"2+8"`）。4分 = 480 刻み（VocaTab の TPQ）。
 - **音名 `pitch`**: `C4` = 中央のド = MIDI 60。`#`（`♯`）・`b`（`♭`）。
 - **歌詞**: 1モーラ = 1音符。拗音（`きゃ`）は1、`ー`（`〜`）は伸ばし（前の母音を続ける）、`っ`・`ん` も1モーラ。カタカナはひらがなに揃える（VocaTab ではカタカナの母音は無声化を表すため）。`set_lyrics` は時刻順に配り、余ったモーラ（`surplus`）と歌詞の無い音符の数（`missing`）を返す。
-- **伴奏 `mml`**: dtm の MML 記法（パートの中身だけ。`;` `@` `#` は書かない。アプリが `#t<n>inst=`・`#drum=`・`@<n>`・`t<bpm>` を付けて1本の MML に組み立てる）。
-- **エフェクト `effects`**（歌トラック、複数可、`amount` 0〜1）: `kero`（ケロケロボイス: 最後の F0 を音符の音高の階段へ寄せて合成し直す）、`vocoder`（20 帯域のチャンネルボコーダー。キャリアは音符の音高のノコギリ波）、`bitcrusher`（16→3 bit、間引き 1→10）、`doubling`（揺らした遅延の写し2本を左右へ、ステレオになる）。再生と書き出しの両方に掛かる。
+- **伴奏 `mml`**: dtm の MML 記法（パートの中身だけ。`;` `@` や `#t0inst=...` の宣言は書かない（音符の `c#` は可）。アプリが `#t<n>inst=`・`#drum=`・`@<n>`・`t<bpm>` を付けて1本の MML に組み立てる）。
+- **エフェクト `effects`**（歌トラック、複数可、`amount` 0〜1）: `kero`（ケロケロボイス: 最後の F0 を音符の音高の階段へ寄せて合成し直す）、`vocoder`（20 帯域のチャンネルボコーダー。キャリアは音符の音高のノコギリ波）、`bitcrusher`（16→3 bit、間引き 1→10）、`doubling`（揺らした遅延の写し2本を左右へ、ステレオになる）。`vocaloid`（ボカロ風 v2: F0 に基づく倍音マスク・フォルマント移動・高域調整。有声 RMS を入力へ合わせ、無声子音は原音へクロスフェード）。再生と書き出しの両方に掛かる。
 
 ## 準備
 
@@ -81,24 +77,32 @@ npm run build
 ## 使う
 
 ```bash
-npm run serve            # http://127.0.0.1:5100/ （PORT=5100〜5199）
+npm run serve            # http://127.0.0.1:5500/ （PORT=5500〜5599）
 ```
 
-1. 「プロンプトを作る」→「コピー」で LLM に貼る（歌詞・イメージ・SongDoc の書式・例が入る）。
-2. LLM の返答をそのまま「貼り戻す」欄に貼って「読み込む」（説明文つきでよい。```json の中を取り出す）。問題があれば一覧と「修正依頼文」（LLM に返す文）が出る。見本は「見本返答を入れる」（`fixtures/sample-response.txt`）。
-3. エフェクトを選んで強度を決め、「▶ 再生」。ピアノロールに歌（歌詞つき）と伴奏の音符、再生位置が出る。
-4. 「MP3 書き出し」（既定）/「WAV」/「SongDoc JSON」。MP3・WAV は実際に鳴らしながら録る（曲の長さ＋1.5 秒かかる）。
+### プロンプト往復の使い方
+
+1. 「歌詞」にかなの歌詞、「イメージ」に雰囲気・テンポ・小節数・楽器などを書く。既存曲を変えるときは「今の曲を土台にする」を選ぶ。
+2. 「プロンプトをコピー」を押して、契約している ChatGPT / Claude などへ貼る。役割、SongDoc 仕様、短い完全例、要望、任意の現在曲が含まれる。API キーは不要。
+3. 返答を全文そのまま「LLM の返答を貼る」欄へ貼り、「読み込んで鳴らす」。歌の合成後に伴奏と自動再生する。正規の返答は **json フェンス1つの SongDoc 全体**で、伴奏 MML も JSON の `mml` 文字列に入れる。
+4. 軽い崩れは自動修復して「自動修正した点」に表示する。JSON / 無印フェンス、説明文、裸 JSON、複数候補（最大の SongDoc）、末尾カンマ、コメント、スマートクォート、全角、数値の文字列、カタカナ歌詞、音名の表記ゆれに対応する。未知 effect は警告して省略し、amount は 0〜1 に補正する。
+5. 別の mml フェンスでも、トラック名・`#t0` / `#t1`（dtm と同じ0始まり）・フェンス順で空の伴奏へ割り当てる。既に JSON にある MML は優先する。
+6. 修復不能なら「歌 3小節目 2拍目」などの場所つきエラーを確認し、「修正依頼文をコピー」で LLM に返す。返答全体を貼り直す。
+7. エフェクトを選び、強度を調整して再生。「MP3 書き出し」/「WAV」/「SongDoc JSON」で保存する。MP3・WAV はオフライン描画した音をブラウザで実再生してから保存する（実時間の再生時間はかかるが、録音の取りこぼしには依存しない）。
+
+見本返答は `fixtures/sample-response.txt`。本物の購読 LLM の未編集返答2件は `fixtures/llm-real/`、生成元と SHA-256 は同ディレクトリの `provenance.json` に保存。
 
 ## テスト
 
 ```bash
 npm test             # A5: SongDoc 変換・歌詞割り当て・検査・道具の単体テスト（node:test + tsx）
 npm run e2e          # A1〜A3: headless Chrome で見本返答を貼り戻し→鳴らし→MP3 を out/song.mp3 に。数値は out/e2e.json
-npm run e2e:fx       # A4: 4種のエフェクト × 強度 0/1 を書き出して比べる。数値は out/e2e-fx.json
+npm run e2e:fx       # A4: 4種の効果、対照相関、vocaloid 0/0.5/1 の有声RMS・子音・音色を比べる。数値は out/e2e-fx.json
+npm run e2e:llm      # 購読 LLM の未編集返答2件を UI に貼付→自動再生→MP3 ボタン、数値は out/e2e-llm.json
 npm run mcp:smoke    # A6: MCP サーバーを起動し tools/list → new_song → … → export(mp3)
 ```
 
-e2e はポート 5100、MCP の書き出しは 5101 を使い、終わったらサーバーと Chrome を閉じる。音声ファイルは `out/`（commit しない）。
+e2e はポート 5500、LLM e2e は 5502、MCP の書き出しは 5501 を使い、終わったらサーバーと Chrome を閉じる。音声ファイルは `out/`（commit しない）。受け渡し用 MP3 と画面は `/workspace/browser-dtm-final/` に保存する。
 
 ## MCP サーバー
 
@@ -113,7 +117,7 @@ Claude Code / Claude Desktop などの設定例（パスは手元に合わせる
   "cwd": "/path/to/browser-dtm", "env": { "VOCATAB_DIR": "/workspace/dtm-research/vocatab" } } } }
 ```
 
-道具: `get_song` `new_song` `set_chords` `set_track_notes` `set_lyrics` `set_track_mml` `set_drums` `set_effects` `set_mix` `check` `export`（mp3 既定 / wav / json / mml）`finish`。道具は事実（過不足・音域・はみ出し・エラーの場所）だけを返し、点数は返さない。`export` の mp3/wav は headless Chrome でアプリを開いて鳴らし、`out/<name>.mp3` に書き出す。定義はブラウザと共有（`src/core/tools.ts`）。
+道具: `get_song` `new_song` `set_chords` `set_track_notes` `set_lyrics` `set_track_mml` `set_drums` `set_effects` `set_mix` `check` `export`（mp3 既定 / wav / json / mml）`finish`。道具は事実（過不足・音域・はみ出し・エラーの場所）だけを返し、点数は返さない。`export` の mp3/wav は headless Chrome でアプリを開いて鳴らし、`out/<name>.mp3` に書き出す。`set_effects` は `{ "effects": [{ "type": "vocaloid", "amount": 0.5 }] }` に対応する。定義はブラウザと共有（`src/core/tools.ts`）。
 
 ## ファイル
 
@@ -124,7 +128,7 @@ Claude Code / Claude Desktop などの設定例（パスは手元に合わせる
 | `src/core/prompt.ts` | プロンプト・返答の取り出し・修正依頼文 |
 | `src/core/fx.ts` / `encode.ts` | エフェクト（ボコーダー・ビットクラッシャー・ダブリング）/ MP3・WAV・数値 |
 | `src/web/vocal.ts` | VocaTab engine-web を画面なしで呼ぶ（＋ケロケロの F0） |
-| `src/web/player.ts` | dtm と歌を同じ時計で鳴らし、録る |
+| `src/web/player.ts` | dtm と歌をオフラインで描画し、同じ PCM を再生 |
 | `src/web/main.ts`, `web/index.html` | 画面 |
 | `mcp/server.ts` | MCP サーバー |
 | `scripts/` | ビルド・e2e・数値・MCP のスモーク |
@@ -135,3 +139,14 @@ Claude Code / Claude Desktop などの設定例（パスは手元に合わせる
 - VocaTab — MIT License, Copyright (c) 2026 wavtechyukky（https://github.com/wavtechyukky/vocatab）。歌声モデル・ボコーダは個人・非商用・再配布禁止。歌い手のクレジット: 波音リツ（「波音リツ」「カノン」）、夏目悠李（歌声DB制作: アマノケイ／音声提供者: 霧野蒼太）、御丹宮くるみ。
 - dtm — AGPL-3.0-or-later, (c) onjmin（https://github.com/onjmin/dtm）。本アプリは AGPL を継承する前提（LICENSE-POLICY.md）。
 - 詳細は [NOTICE.md](NOTICE.md)。
+
+
+## 本物の LLM 返答の再取得（購読 CLI のみ）
+
+```bash
+node scripts/make-prompt.mjs  # out/llm/prompt-{1,2}.txt。画面と同じ buildPrompt
+JEV_AUTH_FALLBACK=0 JEV_AUTH_NOTIFY=0 JEV_NO_PREAMBLE=1 jev-route run creative-sonnet - < out/llm/prompt-1.txt --caller ブラウザDTM --title "browser-dtm LLM answer 1" --no-quota
+JEV_AUTH_FALLBACK=0 JEV_AUTH_NOTIFY=0 JEV_NO_PREAMBLE=1 jev-route run exec-sol - < out/llm/prompt-2.txt --caller ブラウザDTM --title "browser-dtm LLM answer 2" --no-quota
+```
+
+`~/jev-starter/status/<id>.json` の `result_text` を未編集でテキスト保存する。従量 API への fallback は無効にする。通常の e2e は commit 済みの返答を再利用し、LLM を再呼び出ししない。今回のM1では SoundFont・ピアノロール編集（M2）、サンプル集や SPEC の更新（M3）は扱わない。

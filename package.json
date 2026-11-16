@@ -11,7 +11,8 @@
     "e2e": "node scripts/e2e.mjs",
     "e2e:fx": "node scripts/e2e.mjs --fx",
     "mcp": "tsx mcp/server.ts",
-    "mcp:smoke": "node scripts/mcp-smoke.mjs"
+    "mcp:smoke": "node scripts/mcp-smoke.mjs",
+    "e2e:llm": "node scripts/e2e-llm.mjs"
   },
   "dependencies": {
     "@onjmin/dtm": "^2.1.38"

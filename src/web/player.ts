@@ -8,6 +8,7 @@ export interface Recording {
   acc: Float32Array;
   vox: Float32Array;
   scheduled: { accStart: number; vocalSongZero: number };
+  playback?: { elapsedSeconds: number; maxRms: number; observations: number };
 }
 
 /** dtm の setInterval シーケンサを同期的に前進させる薄い時計アダプタ。
@@ -76,8 +77,11 @@ export class Player {
   private source: AudioBufferSourceNode | null = null;
   private resolvePlayback: (() => void) | null = null;
   private generation = 0;
+  private analyser = this.ctx.createAnalyser();
+  onStart: () => void = () => {};
   songZero = 0;
   onEnd: () => void = () => {};
+  constructor() { this.analyser.fftSize = 2048; this.analyser.connect(this.ctx.destination); }
   async play(mml: string, vocal: [Float32Array, Float32Array], lead: number, seconds: number, vocalGain = 1, record = false): Promise<Recording | null> {
     this.stop();
     const generation = this.generation;
@@ -86,11 +90,26 @@ export class Player {
     if (generation !== this.generation) throw new Error("再生は停止されました");
     const b = this.ctx.createBuffer(2, rec.mix[0].length, SR);
     b.copyToChannel(rec.mix[0], 0); b.copyToChannel(rec.mix[1], 1);
-    const src = this.ctx.createBufferSource(); src.buffer = b; src.connect(this.ctx.destination);
+    const src = this.ctx.createBufferSource(); src.buffer = b; src.connect(this.analyser);
     const ended = new Promise<void>((ok) => { this.resolvePlayback = ok; });
     src.onended = () => { if (this.source === src) { this.source = null; this.resolvePlayback?.(); this.resolvePlayback = null; this.onEnd(); } src.disconnect(); };
     this.source = src; this.songZero = this.ctx.currentTime + 0.03; src.start(this.songZero);
-    if (record) { await ended; return rec; }
+    this.onStart();
+    if (record) {
+      let maxRms = 0, observations = 0;
+      const samples = new Float32Array(this.analyser.fftSize);
+      const timer = window.setInterval(() => {
+        this.analyser.getFloatTimeDomainData(samples);
+        let sum = 0; for (const x of samples) sum += x * x;
+        maxRms = Math.max(maxRms, Math.sqrt(sum / samples.length)); observations++;
+      }, 30);
+      try {
+        await ended;
+        if (generation !== this.generation) throw new Error("再生・書き出しは停止されました");
+        rec.playback = { elapsedSeconds: this.ctx.currentTime - this.songZero, maxRms, observations };
+        return rec;
+      } finally { clearInterval(timer); }
+    }
     return null;
   }
   stop() {

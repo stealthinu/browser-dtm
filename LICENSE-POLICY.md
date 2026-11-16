@@ -6,3 +6,7 @@
 - VocaTab の**歌声モデル（voicebanks/）とボコーダ（vocoders/）は個人・非商用・再配布禁止**。リポジトリに入れない、再ホストしない。出力音を公開するときは歌い手のクレジット（設計メモ (d)3）が必須。NHVSing は非商用。
 - SoundFont は同梱しない。最初は FluidR3 / GeneralUser GS のみ（実行時に CDN から）。Inc・Niji・Otenkiame は使わない。
 - 詳細: docs/design-memo.md (d)。法的な確認（弁護士）はしていない。
+
+## main-v1 M1
+
+ボカロ風 v2 DSP は本リポジトリ内ブランチ `feat/vocaloid-filter` のコードを移植する。外部の歌声モデル・ボコーダ・音声素材を追加しない。dtm / VocaTab は import とラッパーのみで、上流ソースは変更しない。購読 LLM の返答は SongDoc / MML のテキストのみを保存する。
