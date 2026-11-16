@@ -161,5 +161,75 @@ M2/M3、公開、上流改変、音声・モデルの commit は対象外。
 
 - `npm run e2e:fx`: 25チェック PASS。歌・mix・MP3の繰り返し相関は各1.0000、すべての強度の実再生も Analyser で確認。`out/e2e-fx-verified.log`, `out/e2e-fx.json`。
 - Sonnet / Codex の実返答は `fixtures/llm-real/answer-{1,2}.txt`。status の result_text を未編集保存し、SHA-256と生成元を `provenance.json` に記録。2要望で歌詞・テンポ・雰囲気が異なる。LLM呼出2回とも購読CLIで成功、従量fallback無し。
-- MP3ボタンの実ダウンロードと自動操作用exportを両方確認。比較はデコード相関>0.999。再試験で過去ダウンロードを拾わないよう、実行ごとに固有の out/llm-downloads-<時刻>/ を使用（テスト修復2回目）。
-- Clipboard追加検査で Chrome の write permission denied を実測。Puppeteer のローカル実装で `clipboard-sanitized-write` が別 permission と確認し、試験に明示。アプリも失敗時は選択＋コピーの fallback と日本語メッセージを追加（Clipboard検査の修復1回目）。
+- MP3ボタンの実ダウンロードと自動操作用exportを両方確認。比較はデコード相関>0.999。再試験で過去ダウンロードを拾わないよう、実行ごとに固有の out/llm-downloads-<時刻>/ を使用（検証経路の強化。失敗後の追加修復ではない）。
+- Clipboard追加検査で Chrome の write permission denied を実測。Puppeteer のローカル実装で `clipboard-sanitized-write` が別 permission と確認し、試験に明示。アプリも失敗時は選択＋コピーの fallback と日本語メッセージを追加（Clipboard検査では修復1回目、e2e:llm コマンドの失敗に対する修復は通算2回目）。
+
+### M1 最終結果
+
+| 受け入れ条件 | 結果 | 数値・証拠 |
+|---|---|---|
+| M1-unit `npm test` | **PASS** | 32件 / fail0。壊れた返答18種以上＋購読LLM2件。`docs/evidence/main-v1-unit.log` |
+| M1-base `npm run e2e` | **PASS** | 8チェック。MP3 RMS −14.60 / peak −1.87 dBFS / clip0。歌 −19.34、伴奏 −17.46 dBFS。頭12.09ms、傷0ブロック。実再生9.513秒・Analyser最大RMS0.324。`docs/evidence/main-v1-e2e.log` |
+| M1-fx `npm run e2e:fx` | **PASS** | 25チェック。既存4効果・対照・vocaloid強度3種。対照相関: 歌1.0000 / mix1.0000 / MP3 1.0000（>0.999）。有声差最大0.00674dB、子音差最小0dB、重心上昇99.13%維持、clip0。`docs/evidence/main-v1-fx.log` |
+| M1-llm `npm run e2e:llm` | **PASS** | 17チェック。未編集2返答→UI貼付→自動再生→実MP3ダウンロード。プロンプトコピー・現在曲同梱・場所つきエラー・修正依頼コピーも通過。`docs/evidence/main-v1-llm.log` |
+| M1-mcp `npm run mcp:smoke` | **PASS** | 12道具。set_effects(vocaloid,0.5)→check→MP3。141,688bytes、mix −15.44 / peak −3.03 dBFS、歌 −22.32、伴奏 −18.73、clip0。`docs/evidence/main-v1-mcp.log` |
+| M1-doc | **PASS** | 日本語READMEにプロンプト往復・修復・MML割当・再生と書き出し・購読CLI手順。NOTICE / LICENSE-POLICY更新。SPECはM3の対象として変更していない |
+
+#### 実 LLM の音声
+
+| 返答 | 購読LLM / 要望 | MP3 RMS / peak dBFS | 歌区間 / 伴奏区間 RMS dBFS | clip | 実再生の秒数 / 最大RMS |
+|---|---|---|---|---:|---|
+| 1 | Sonnet 5.5 / 春・120BPM | −14.28 / −1.87 | −18.96 / −17.48 | 0 | 9.513 / 0.372 |
+| 2 | Codex exec-sol / 夜・96BPM・vocaloid0.5 | −14.45 / −2.56 | −19.24 / −17.81 | 0 | 11.510 / 0.267 |
+
+実再生は headless `/usr/bin/google-chrome --disable-gpu` の AudioContext＋Analyser で316〜384回以上観測。歌/伴奏区間の数値は同一レンダーのstem、MP3の数値は実ダウンロードをffmpegでデコード。元返答のSHA-256は読み込み前に照合し、手修正していない。
+
+#### 変更と証拠
+
+- プロンプトは要望・書式・完全例・任意の現在曲を自己完結で含む。JSON内MMLを正規方式とし、別フェンスも補完可能。
+- パーサは候補選択・文字列を壊さないコメント/末尾カンマ修復・スマート引用符・全角・数値/歌詞/音名の正規化・効果の警告と補正。画面で修復一覧と場所つき修正依頼を表示。
+- 読み込みで歌を合成し自動再生。コピーのfallback、再生中断の反映、返答データを凡例のHTMLとして実行しない処理も追加。
+- オフラインの音声グラフを実再生と書き出しに共用。負荷依存のAudioWorklet録音傷を解消した。
+- v2の処理とラウドネス/子音保護の説明・測定値は上の節。元v2はそのまま保存し、ラッパーで補正。
+- 集約データ: `docs/evidence/main-v1-m1.json`（ベースライン失敗、最終数値、出力SHA-256）。画面: `docs/evidence/main-v1.png`、`docs/evidence/pianoroll.png`。
+- 生ログ・stem・プロンプトは `out/`。購読LLMの生成ID・未編集返答・hashは `fixtures/llm-real/`。上流ファイルやモデルのコピーはしていない。
+
+受け渡し（音声はcommitしない）:
+
+- `/workspace/browser-dtm-final/llm-answer-1.mp3`（228,832bytes）
+- `/workspace/browser-dtm-final/llm-answer-2.mp3`（277,106bytes）
+- `/workspace/browser-dtm-final/vocaloid-0.mp3`, `vocaloid-0.5.mp3`, `vocaloid-1.mp3`（各228,832bytes）
+- `/workspace/browser-dtm-final/screenshot-main.png`
+
+#### 失敗・修復回数と残る制限
+
+- `npm test`: 初回28/30（全角修復履歴・別MMLの名前区切り）。修復1回→30/30。その後追加した実LLM・空optional/和音引用符を含め最終32/32。
+- `e2e:fx`: 変更前の対照相関0.9869でFAIL。オフライン化の修復1回→相関1.0000、以降全PASS。
+- `e2e:llm`: 独自のバイト完全一致検査を、実測相関に基づき指定の>0.999へ修正（修復1）。その後追加したClipboard検査のpermission不足を、Chromeのローカル実装で確認して修復（修復2）。最終17/17。過去ダウンロード混入を避ける固有ディレクトリも導入。各返答は未編集。
+- 失敗に対する修復は合計4回（単体1・録音1・LLM e2e2）。各コマンドで上限2以内。購読呼出はSonnet→Codexの指定ロール切替1回、障害/枠不足によるCLI切替0回。Opus判断・従量APIは不使用。
+- MP3の約25ms符号化遅延は残る。Web Audio内部の微小差のため、MP3バイト完全一致は保証しない（必須の波形相関基準は通過）。4小節2曲での往復と、この歌でのv2測定であり、任意の長さ/歌声の音質を保証するものではない。
+
+#### commits（すべて origin/main-v1 へ通常 push）
+
+| commit | 内容 |
+|---|---|
+| `44105e1` | M1のGOAL / ACCEPTANCE TESTSを先に記録 |
+| `a5b5260` | パーサ・単体テスト・Sonnet実返答・ポート変更 |
+| `adc8369` | dtmのオフライン予約と歌の共通描画、自動再生UI |
+| `238bfd1` | vocaloid v2、音量/子音補正、実LLM2件のUI試験、README |
+| この最終記録commit（`git log -1`） | 証拠・結果・手書き使用量ログ |
+
+#### NEXT STEPS
+
+M1の必須条件は完了。次の別ジョブは予定どおりM2（SoundFont楽器・ピアノロール編集）、M3（サンプル集・MCP整合・SPEC更新）。今回は着手していない。残る符号化遅延・長い曲の負荷/音質検証は後続で扱う。
+
+#### BLOCKED APPROVALS
+
+なし。公開・PR・上流issue・外部メッセージ・購入・認証情報の変更・従量API・プロジェクト外の削除はしていない。依頼された購読LLMの往復と非公開origin/main-v1へのpushのみ実施。
+
+#### 作業終了・制約
+
+- 開始: 2026-11-16 10:38:17 JST
+- 終了記録（最終commit直前）: 2026-11-16 10:57:57 JST
+- 所要: 19分40秒。110分の切上げ期限12:28 JSTより前に完了。
+- 使用ポート5500 / 5501 / 5502。すべて試験のfinallyで終了し、5500–5599のlistenerがないことを確認。CPUのみ。他worktreeは操作していない。音声・モデル・SoundFont・秘密情報のcommit無し。接続障害無し。

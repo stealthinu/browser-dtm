@@ -1,0 +1,30 @@
+
+> browser-dtm@0.1.0 e2e:fx
+> node scripts/e2e.mjs --fx
+
+PASS A1.import {"problems":"問題なし","tracks":["vo:vocal","pf:inst","ba:inst","dr:drums"]}
+PASS A4.kero.0.playback {"playback":{"elapsedSeconds":9.513401360544218,"maxRms":0.32406776955612054,"observations":318}}
+PASS A4.kero.1.playback {"playback":{"elapsedSeconds":9.513401360544215,"maxRms":0.27703260916061734,"observations":317}}
+PASS A4.vocoder.1.playback {"playback":{"elapsedSeconds":9.513401360544218,"maxRms":0.3262147079453461,"observations":317}}
+PASS A4.bitcrusher.1.playback {"playback":{"elapsedSeconds":9.513401360544222,"maxRms":0.3232495083420354,"observations":317}}
+PASS A4.doubling.1.playback {"playback":{"elapsedSeconds":9.513401360544222,"maxRms":0.36986659677466616,"observations":317}}
+PASS A4.control(no-fx twice) {"corrVox":1,"corrMix":1,"corrMp3":1,"identicalMp3":false,"diffVoxDb":-978.64}
+PASS A4.kero {"corrVox":-0.0953,"diffVoxDb":3.37,"corrMp3L":0.5822,"lrDiffDb":-984.21,"vox0":{"rmsDb":-20.36,"peakDb":-5.62,"clipped":0},"vox1":{"rmsDb":-20.43,"peakDb":-7.58,"clipped":0}}
+PASS A4.vocoder {"corrVox":0.1909,"diffVoxDb":2.09,"corrMp3L":0.7128,"lrDiffDb":-984.76,"vox0":{"rmsDb":-20.36,"peakDb":-5.62,"clipped":0},"vox1":{"rmsDb":-20.35,"peakDb":-2.05,"clipped":0}}
+PASS A4.bitcrusher {"corrVox":0.6174,"diffVoxDb":-0.59,"corrMp3L":0.8439,"lrDiffDb":-984.72,"vox0":{"rmsDb":-20.36,"peakDb":-5.62,"clipped":0},"vox1":{"rmsDb":-19.37,"peakDb":-6.02,"clipped":0}}
+PASS A4.doubling {"corrVox":0.731,"diffVoxDb":-2.67,"corrMp3L":0.8726,"lrDiffDb":-5.73,"vox0":{"rmsDb":-20.36,"peakDb":-5.62,"clipped":0},"vox1":{"rmsDb":-20.31,"peakDb":-3.99,"clipped":0}}
+PASS vocaloid.0.playback {"playback":{"elapsedSeconds":9.513401360544222,"maxRms":0.32406776913750823,"observations":317}}
+PASS vocaloid.0.loudness {"voicedRmsDeltaDb":0,"voicedRmsDb":-19.089160286580913,"voicedSamples":312236,"voicedFrames":602,"unvoicedFrames":14,"consonantBandDeltaDb":0,"centroidHz":3044.4880404513174}
+PASS vocaloid.0.consonants {"voicedRmsDeltaDb":0,"voicedRmsDb":-19.089160286580913,"voicedSamples":312236,"voicedFrames":602,"unvoicedFrames":14,"consonantBandDeltaDb":0,"centroidHz":3044.4880404513174}
+PASS vocaloid.0.audio {"mp3":{"L":{"rmsDb":-14.6,"peakDb":-1.87,"clipped":0},"R":{"rmsDb":-14.6,"peakDb":-1.87,"clipped":0}},"vox":{"rmsDb":-20.36,"peakDb":-5.62,"clipped":0},"acc":{"rmsDb":-18.2,"peakDb":-10.74,"clipped":0}}
+PASS vocaloid.zero-identical {"corr":1,"diffDb":-978.64}
+PASS vocaloid.0.5.playback {"playback":{"elapsedSeconds":9.513401360544222,"maxRms":0.26882569520602023,"observations":317}}
+PASS vocaloid.0.5.loudness {"voicedRmsDeltaDb":-0.0019396000791483323,"voicedRmsDb":-19.091099886660064,"voicedSamples":312236,"voicedFrames":602,"unvoicedFrames":14,"consonantBandDeltaDb":0.48086413336820244,"centroidHz":3805.10678626306}
+PASS vocaloid.0.5.consonants {"voicedRmsDeltaDb":-0.0019396000791483323,"voicedRmsDb":-19.091099886660064,"voicedSamples":312236,"voicedFrames":602,"unvoicedFrames":14,"consonantBandDeltaDb":0.48086413336820244,"centroidHz":3805.10678626306}
+PASS vocaloid.0.5.audio {"mp3":{"L":{"rmsDb":-14.53,"peakDb":-2.97,"clipped":0},"R":{"rmsDb":-14.53,"peakDb":-2.97,"clipped":0}},"vox":{"rmsDb":-20.36,"peakDb":-9.19,"clipped":0},"acc":{"rmsDb":-18.2,"peakDb":-10.74,"clipped":0}}
+PASS vocaloid.1.playback {"playback":{"elapsedSeconds":9.513401360544222,"maxRms":0.275180160129097,"observations":317}}
+PASS vocaloid.1.loudness {"voicedRmsDeltaDb":-0.006733124047748033,"voicedRmsDb":-19.095893410628662,"voicedSamples":312236,"voicedFrames":602,"unvoicedFrames":14,"consonantBandDeltaDb":0.5184232432392437,"centroidHz":4111.275183987935}
+PASS vocaloid.1.consonants {"voicedRmsDeltaDb":-0.006733124047748033,"voicedRmsDb":-19.095893410628662,"voicedSamples":312236,"voicedFrames":602,"unvoicedFrames":14,"consonantBandDeltaDb":0.5184232432392437,"centroidHz":4111.275183987935}
+PASS vocaloid.1.audio {"mp3":{"L":{"rmsDb":-14.53,"peakDb":-2.52,"clipped":0},"R":{"rmsDb":-14.53,"peakDb":-2.52,"clipped":0}},"vox":{"rmsDb":-20.36,"peakDb":-8.49,"clipped":0},"acc":{"rmsDb":-18.2,"peakDb":-10.74,"clipped":0}}
+PASS vocaloid.timbre {"liftHz":1066.7871435366174,"originalLiftHz":1076.1836722045623,"retained":0.9912686570976345}
+ALL PASS (112.324s)
