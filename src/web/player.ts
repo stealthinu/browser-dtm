@@ -1,174 +1,102 @@
-// 歌（VocaTab で作った AudioBuffer）と伴奏（dtm の playMML）を同じ AudioContext の時計で鳴らし、鳴った音をそのまま録る。
-// dtm（@onjmin/dtm, AGPL-3.0-or-later, (c) onjmin）は改造せずライブラリとして呼ぶ。
+// dtm（AGPL-3.0-or-later, (c) onjmin）を import/wrap のみで使用する。
+// 全イベントをオフライン時計で先に予約し、再生と書き出しに同じ PCM を使う。
 // Copyright (c) 2026 browser-dtm authors. AGPL-3.0-or-later.
-import { type MmlPlayback, playMML, SEQUENCER_START_DELAY } from "@onjmin/dtm";
-
+import { playMML, SEQUENCER_START_DELAY } from "@onjmin/dtm";
 export const SR = 44100;
-
-/** 録音: 4 チャンネル（ミックス L・R、伴奏だけ、歌だけ）を、曲の頭のフレームからぴったり録る AudioWorklet。 */
-const RECORDER_JS = `
-class Rec extends AudioWorkletProcessor {
-  constructor() {
-    super();
-    this.from = -1; this.len = 0; this.got = 0; this.buf = null;
-    this.port.onmessage = (e) => {
-      this.from = e.data.from; this.len = e.data.len; this.got = 0;
-      this.buf = [0, 1, 2, 3].map(() => new Float32Array(e.data.len));
-    };
-  }
-  process(inputs) {
-    const inp = inputs[0];
-    if (this.buf && this.got < this.len) {
-      for (let i = 0; i < 128; i++) {
-        const f = currentFrame + i - this.from;
-        if (f < 0 || f >= this.len) continue;
-        for (let c = 0; c < 4; c++) this.buf[c][f] = inp[c] ? inp[c][i] : 0;
-        this.got = Math.max(this.got, f + 1);
-      }
-      if (this.got >= this.len) {
-        this.port.postMessage(this.buf, this.buf.map((b) => b.buffer));
-        this.buf = null;
-      }
-    }
-    return true;
-  }
-}
-registerProcessor("rec", Rec);
-`;
-
 export interface Recording {
   mix: [Float32Array, Float32Array];
   acc: Float32Array;
   vox: Float32Array;
-  /** 予定した開始時刻（AudioContext の時計）: 伴奏（dtm のシーケンサ）と歌（バッファの曲頭） */
   scheduled: { accStart: number; vocalSongZero: number };
 }
 
+/** dtm の setInterval シーケンサを同期的に前進させる薄い時計アダプタ。
+ * グローバル差し替えはこの同期区間だけ。await 前に必ず復元し、上流ソースは変更しない。
+ */
+function scheduleDtm(ctx: OfflineAudioContext, destination: AudioNode, mml: string, seconds: number, songZero: number) {
+  const original = { setInterval: window.setInterval, clearInterval: window.clearInterval,
+    requestAnimationFrame: window.requestAnimationFrame, cancelAnimationFrame: window.cancelAnimationFrame, random: Math.random };
+  const ticks = new Map<number, () => void>();
+  let id = -1, now = songZero - SEQUENCER_START_DELAY, seed = 123456789;
+  const proxy = new Proxy(ctx, { get(target, prop) {
+    if (prop === "currentTime") return now;
+    if (prop === "state") return "running";
+    const v = Reflect.get(target, prop, target);
+    return typeof v === "function" ? v.bind(target) : v;
+  }});
+  try {
+    window.setInterval = ((f: () => void) => { ticks.set(--id, f); return id; }) as typeof window.setInterval;
+    window.clearInterval = ((i: number) => { ticks.delete(i); }) as typeof window.clearInterval;
+    window.requestAnimationFrame = (() => --id) as typeof window.requestAnimationFrame;
+    window.cancelAnimationFrame = () => {};
+    // dtm のドラムノイズ・リバーブにも固定 seed を使い、再書き出しを再現可能にする。
+    Math.random = () => ((seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296);
+    const playback = playMML(mml, { audioContext: proxy as unknown as AudioContext, destination, pauseWhenHidden: false });
+    for (; now <= songZero + seconds; now += 0.02) for (const f of ticks.values()) f();
+    // 予約済みノードはレンダー完了まで生かす。終了時に dispose する。
+    return playback;
+  } finally {
+    Object.assign(window, { setInterval: original.setInterval, clearInterval: original.clearInterval,
+      requestAnimationFrame: original.requestAnimationFrame, cancelAnimationFrame: original.cancelAnimationFrame });
+    Math.random = original.random;
+  }
+}
+
+export async function renderSong(mml: string, vocal: [Float32Array, Float32Array], lead: number, seconds: number, vocalGain = 1): Promise<Recording> {
+  const zero = Math.ceil((lead / SR + 0.2) * SR) / SR;
+  const length = Math.ceil((zero + seconds) * SR);
+  const ctx = new OfflineAudioContext(4, length, SR);
+  const master = ctx.createGain(); master.gain.value = 0.9;
+  const lim = ctx.createDynamicsCompressor();
+  lim.threshold.value = -6; lim.knee.value = 3; lim.ratio.value = 12; lim.attack.value = 0.003; lim.release.value = 0.15;
+  master.connect(lim);
+  const acc = ctx.createGain(); acc.gain.value = 0.3; acc.connect(master);
+  const vox = ctx.createGain(); vox.gain.value = vocalGain; vox.connect(master);
+  const merger = ctx.createChannelMerger(4), splitter = ctx.createChannelSplitter(2);
+  lim.connect(splitter); splitter.connect(merger, 0, 0); splitter.connect(merger, 1, 1);
+  const mono = (bus: AudioNode, channel: number) => {
+    const g = ctx.createGain(); g.channelCount = 1; g.channelCountMode = "explicit";
+    bus.connect(g).connect(merger, 0, channel);
+  };
+  mono(acc, 2); mono(vox, 3); merger.connect(ctx.destination);
+  const buffer = ctx.createBuffer(2, vocal[0].length, SR);
+  buffer.copyToChannel(vocal[0], 0); buffer.copyToChannel(vocal[1], 1);
+  const source = ctx.createBufferSource(); source.buffer = buffer; source.connect(vox); source.start(zero - lead / SR);
+  const dtm = scheduleDtm(ctx, acc, mml, seconds, zero);
+  try {
+    const rendered = await ctx.startRendering();
+    const from = Math.round(zero * SR), len = Math.ceil(seconds * SR);
+    const ch = (c: number) => rendered.getChannelData(c).slice(from, from + len);
+    return { mix: [ch(0), ch(1)], acc: ch(2), vox: ch(3), scheduled: { accStart: zero, vocalSongZero: zero } };
+  } finally { dtm.destroy(); }
+}
+
 export class Player {
-  ctx: AudioContext;
-  private master: GainNode;
-  private limiter: DynamicsCompressorNode;
-  private accBus: GainNode;
-  private voxBus: GainNode;
-  private rec: AudioWorkletNode | null = null;
-  private playing: { mml: MmlPlayback; src: AudioBufferSourceNode; timer: number } | null = null;
-  onEnd: () => void = () => {};
-  /** 再生中の曲の頭（AudioContext の時計）。プレイヘッドの表示用 */
+  ctx = new AudioContext({ sampleRate: SR, latencyHint: "playback" });
+  private source: AudioBufferSourceNode | null = null;
+  private resolvePlayback: (() => void) | null = null;
+  private generation = 0;
   songZero = 0;
-
-  constructor() {
-    this.ctx = new AudioContext({ sampleRate: SR, latencyHint: "playback" });
-    this.master = this.ctx.createGain();
-    this.master.gain.value = 0.9;
-    // 最後に軽いリミッタ（ミックスがクリップしないように）
-    const lim = this.ctx.createDynamicsCompressor();
-    lim.threshold.value = -6;
-    lim.knee.value = 3;
-    lim.ratio.value = 12;
-    lim.attack.value = 0.003;
-    lim.release.value = 0.15;
-    this.master.connect(lim).connect(this.ctx.destination);
-    this.limiter = lim;
-    this.accBus = this.ctx.createGain();
-    this.accBus.gain.value = 0.3; // dtm の伴奏はそのままだと歌（VocaTab）より 10 dB ほど大きい
-    this.voxBus = this.ctx.createGain();
-    this.accBus.connect(this.master);
-    this.voxBus.connect(this.master);
-  }
-
-  private async recorder(): Promise<AudioWorkletNode> {
-    if (this.rec) return this.rec;
-    const url = URL.createObjectURL(new Blob([RECORDER_JS], { type: "text/javascript" }));
-    await this.ctx.audioWorklet.addModule(url);
-    const node = new AudioWorkletNode(this.ctx, "rec", { numberOfInputs: 1, numberOfOutputs: 0, channelCount: 4,
-                                                        channelCountMode: "explicit", channelInterpretation: "discrete" });
-    const merger = this.ctx.createChannelMerger(4);
-    const split = this.ctx.createChannelSplitter(2);
-    this.limiter.connect(split); // 録るのは実際に出る音（リミッタの後）
-    split.connect(merger, 0, 0);
-    split.connect(merger, 1, 1);
-    const accMono = this.ctx.createGain();
-    accMono.channelCount = 1;
-    accMono.channelCountMode = "explicit";
-    const voxMono = this.ctx.createGain();
-    voxMono.channelCount = 1;
-    voxMono.channelCountMode = "explicit";
-    this.accBus.connect(accMono).connect(merger, 0, 2);
-    this.voxBus.connect(voxMono).connect(merger, 0, 3);
-    merger.connect(node);
-    this.rec = node;
-    return node;
-  }
-
-  /**
-   * 再生する。vocal は曲の頭がサンプル lead の所にある波形（ステレオ）。
-   * 揃え方: dtm のシーケンサは「playMML を呼んだ時の ctx.currentTime + SEQUENCER_START_DELAY」を曲の頭にする。
-   * その currentTime を Proxy で決まった値（今 + 余白）に固定して呼び、同じ値から歌のバッファの開始時刻を決める。
-   * record=true なら曲の頭から seconds 秒を録って返す。
-   */
-  async play(mml: string, vocal: [Float32Array, Float32Array], lead: number, seconds: number, vocalGain = 0.9,
-             record = false): Promise<Recording | null> {
+  onEnd: () => void = () => {};
+  async play(mml: string, vocal: [Float32Array, Float32Array], lead: number, seconds: number, vocalGain = 1, record = false): Promise<Recording | null> {
     this.stop();
+    const generation = this.generation;
     if (this.ctx.state !== "running") await this.ctx.resume();
-    const recNode = record ? await this.recorder() : null;
-    const buf = this.ctx.createBuffer(2, vocal[0].length, SR);
-    buf.copyToChannel(vocal[0], 0);
-    buf.copyToChannel(vocal[1], 1);
-    const src = this.ctx.createBufferSource();
-    src.buffer = buf;
-    const g = this.ctx.createGain();
-    g.gain.value = vocalGain;
-    src.connect(g).connect(this.voxBus);
-
-    const leadSec = lead / SR;
-    // 曲の頭はサンプルの境目ちょうどに置く（歌のバッファの開始と録音の窓が 1 サンプルもずれないように）
-    const songZeroFrame = Math.ceil((this.ctx.currentTime + leadSec + 0.15 + SEQUENCER_START_DELAY) * SR);
-    const frozen = songZeroFrame / SR - SEQUENCER_START_DELAY; // 歌の頭の余白より先に曲の頭を置く
-    const real = this.ctx;
-    const proxy = new Proxy(real, {
-      get(target, prop) {
-        if (prop === "currentTime") return frozenNow ?? target.currentTime;
-        const v = Reflect.get(target, prop, target);
-        return typeof v === "function" ? v.bind(target) : v;
-      },
-    });
-    let frozenNow: number | null = frozen;
-    const songZero = songZeroFrame / SR;
-    const mmlPlay = playMML(mml, { audioContext: proxy as AudioContext, destination: this.accBus, pauseWhenHidden: false,
-                                   onStop: () => undefined });
-    frozenNow = null;
-    const vocalStartAt = (songZeroFrame - lead) / SR;
-    src.start(vocalStartAt);
-    this.songZero = songZero;
-
-    let result: Promise<Recording> | null = null;
-    if (recNode) {
-      const len = Math.ceil(seconds * SR);
-      result = new Promise((ok) => {
-        recNode.port.onmessage = (e: MessageEvent<Float32Array[]>) => {
-          const [l, r, acc, vox] = e.data;
-          ok({ mix: [l, r], acc, vox, scheduled: { accStart: songZero, vocalSongZero: vocalStartAt + lead / SR } });
-        };
-      });
-      recNode.port.postMessage({ from: songZeroFrame, len });
-    }
-    const timer = window.setTimeout(() => {
-      this.stop();
-      this.onEnd();
-    }, (songZero - this.ctx.currentTime + seconds) * 1000 + 100);
-    this.playing = { mml: mmlPlay, src, timer };
-    return result ? await result : null;
+    const rec = await renderSong(mml, vocal, lead, seconds, vocalGain);
+    if (generation !== this.generation) throw new Error("再生は停止されました");
+    const b = this.ctx.createBuffer(2, rec.mix[0].length, SR);
+    b.copyToChannel(rec.mix[0], 0); b.copyToChannel(rec.mix[1], 1);
+    const src = this.ctx.createBufferSource(); src.buffer = b; src.connect(this.ctx.destination);
+    const ended = new Promise<void>((ok) => { this.resolvePlayback = ok; });
+    src.onended = () => { if (this.source === src) { this.source = null; this.resolvePlayback?.(); this.resolvePlayback = null; this.onEnd(); } src.disconnect(); };
+    this.source = src; this.songZero = this.ctx.currentTime + 0.03; src.start(this.songZero);
+    if (record) { await ended; return rec; }
+    return null;
   }
-
-  stop(): void {
-    if (!this.playing) return;
-    clearTimeout(this.playing.timer);
-    try { this.playing.mml.stop(); this.playing.mml.destroy(); } catch { /* 止まっている */ }
-    try { this.playing.src.stop(); } catch { /* 止まっている */ }
-    this.playing = null;
+  stop() {
+    this.generation++;
+    if (this.source) { try { this.source.stop(); } catch {} this.source.disconnect(); this.source = null; }
+    this.resolvePlayback?.(); this.resolvePlayback = null;
   }
-
-  get isPlaying(): boolean {
-    return this.playing !== null;
-  }
+  get isPlaying() { return this.source !== null; }
 }

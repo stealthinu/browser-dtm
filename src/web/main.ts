@@ -67,10 +67,10 @@ async function play(record = false): Promise<Recording | null> {
   const vc = await renderVocal();
   const v = vocalTrack(doc)!;
   const seconds = songSeconds(doc) + TAIL;
-  status(record ? "鳴らしながら録音中…" : "再生中");
-  animate();
-  const rec = await player.play(toDtmMML(doc), vc.stereo, vc.lead, seconds, v.volume ?? 1.0, record);
-  return rec;
+  status(record ? "書き出し用の音を描画・再生中…" : "再生用の音を描画中…");
+  const promise = player.play(toDtmMML(doc), vc.stereo, vc.lead, seconds, v.volume ?? 1.0, record);
+  const timer = window.setInterval(() => { if (player.isPlaying) { animate(); clearInterval(timer); } }, 30);
+  try { return await promise; } finally { clearInterval(timer); if (player.isPlaying) animate(); }
 }
 player.onEnd = () => status("停止");
 
@@ -252,6 +252,9 @@ function writeFxUi() {
 // ---------------------------------------------------------------- 読み込み
 
 function loadDoc(d: SongDoc): { problems: unknown[] } {
+  const problems = validateSong(d);
+  if (problems.length) return { problems };
+  player.stop();
   doc = d;
   vocalCache = null;
   writeFxUi();
@@ -263,6 +266,7 @@ function loadDoc(d: SongDoc): { problems: unknown[] } {
 function importText(text: string): ImportResult {
   const r = importResponse(text, ($("lyrics") as HTMLInputElement).value);
   const show = r.problems.length > 0;
+  $("repairs").textContent = r.repairs.length ? `自動修正した点:\n${r.repairs.map((s) => `・${s}`).join("\n")}` : "";
   $("problems").textContent = show ? `問題 ${r.problems.length} 件:\n${r.problems.map((p) => `・${p.path}: ${p.message}`).join("\n")}` : "問題なし";
   $("fix").style.display = $("copyFix").style.display = r.fixRequest ? "" : "none";
   ($("fix") as HTMLTextAreaElement).value = r.fixRequest ?? "";
@@ -273,15 +277,30 @@ function importText(text: string): ImportResult {
 }
 
 buildFxUi();
-$("mkPrompt").onclick = () => {
-  ($("prompt") as HTMLTextAreaElement).value = buildPrompt(($("lyrics") as HTMLInputElement).value, ($("image") as HTMLInputElement).value);
-};
-$("copyPrompt").onclick = () => navigator.clipboard?.writeText(($("prompt") as HTMLTextAreaElement).value);
+function updatePrompt() {
+  const text = buildPrompt(($("lyrics") as HTMLInputElement).value, ($("image") as HTMLInputElement).value, ($("baseSong") as HTMLInputElement).checked ? doc : null);
+  ($("prompt") as HTMLTextAreaElement).value = text;
+  return text;
+}
+$("mkPrompt").onclick = updatePrompt;
+$("copyPrompt").onclick = () => navigator.clipboard?.writeText(updatePrompt());
 $("copyFix").onclick = () => navigator.clipboard?.writeText(($("fix") as HTMLTextAreaElement).value);
 $("sample").onclick = async () => {
   ($("answer") as HTMLTextAreaElement).value = await (await fetch("/fixtures/sample-response.txt")).text();
 };
-$("load").onclick = () => importText(($("answer") as HTMLTextAreaElement).value);
+let loading = false;
+$("load").onclick = async () => {
+  if (loading) return;
+  loading = true;
+  ($("load") as HTMLButtonElement).disabled = true;
+  try {
+    player.stop();
+    const r = importText(($("answer") as HTMLTextAreaElement).value);
+    if (r.doc && !r.problems.length) await play(false);
+    else status("問題を確認して修正依頼文を LLM に返してください");
+  } catch (e) { status(`読み込み・再生に失敗: ${e}`); }
+  finally { loading = false; ($("load") as HTMLButtonElement).disabled = false; }
+};
 $("play").onclick = () => play(false).catch((e) => status(`再生に失敗: ${e}`));
 $("stop").onclick = () => {
   player.stop();
