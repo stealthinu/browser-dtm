@@ -1,0 +1,26 @@
+
+> browser-dtm@0.1.0 e2e:gallery
+> node scripts/e2e-gallery.mjs
+
+[page] VocaTab engine ready: leapsinger_ja_3singer / vocoders nhvsing_v3_2_1
+PASS cards {}
+PASS filter-曲 {}
+PASS filter-伴奏 {}
+PASS filter-エフェクト {}
+PASS copy-claude {"chars":4467}
+PASS copy-feedback-claude {}
+PASS copy-chatgpt {"chars":4478}
+PASS copy-feedback-chatgpt {}
+[page] VocaTab engine ready: leapsinger_ja_3singer / vocoders nhvsing_v3_2_1
+[page] vocal: 4 phrases, 8.08 s, 4586 ms (kero=0)
+[page] load _drum_36_0_FluidR3_GM_sf2_file
+[page] load _drum_42_0_FluidR3_GM_sf2_file
+[page] load _drum_39_0_FluidR3_GM_sf2_file
+[page] load _drum_38_0_FluidR3_GM_sf2_file
+[page] load _tone_0330_FluidR3_GM_sf2_file
+[page] load _tone_0000_FluidR3_GM_sf2_file
+PASS preview-recorded-nonsilent {"mix":{"rmsDb":-14.97,"peakDb":-1.01,"clipped":0},"vox":{"rmsDb":-21.54,"peakDb":-5.35,"clipped":0},"acc":{"rmsDb":-18.24,"peakDb":-1.45,"clipped":0},"playback":{"elapsedSeconds":9.513401360544218,"maxRms":0.32713347341567717,"observations":318},"soundfont":{"mode":"soundfont","files":["0000_FluidR3_GM_sf2_file","0330_FluidR3_GM_sf2_file","12836_0_FluidR3_GM_sf2_file","12842_0_FluidR3_GM_sf2_file","12838_0_FluidR3_GM_sf2_file","12839_0_FluidR3_GM_sf2_file"]}}
+PASS preview-actual-playback {"elapsedSeconds":9.513401360544218,"maxRms":0.32713347341567717,"observations":318}
+PASS preview-soundfont {"mode":"soundfont","files":["0000_FluidR3_GM_sf2_file","0330_FluidR3_GM_sf2_file","12836_0_FluidR3_GM_sf2_file","12842_0_FluidR3_GM_sf2_file","12838_0_FluidR3_GM_sf2_file","12839_0_FluidR3_GM_sf2_file"]}
+[page] import: 0 problems
+PASS open-in-app {}

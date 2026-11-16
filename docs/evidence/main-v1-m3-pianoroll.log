@@ -1,0 +1,18 @@
+
+> browser-dtm@0.1.0 e2e:pianoroll
+> node scripts/e2e-pianoroll.mjs
+
+PASS 曲の読み込み {}
+PASS クリック追加・snap1/8 {"note":{"bar":1,"beat":2,"len":"8","pitch":"C4","lyric":"あ"}}
+PASS ドラッグ移動・時間と音高 {"note":{"bar":1,"beat":3,"len":"8","pitch":"G4","lyric":"あ"}}
+PASS 右端ドラッグで長さ {"note":{"bar":1,"beat":3,"len":"4","pitch":"G4","lyric":"あ"}}
+PASS かな編集 {"note":{"bar":1,"beat":3,"len":"4","pitch":"G4","lyric":"きゃ"}}
+PASS Ctrl+Z {}
+PASS Ctrl+Shift+Z {}
+PASS Delete削除 {}
+PASS Backspace削除 {}
+PASS 右クリック削除 {}
+PASS 重なる歌音符を拒否 {}
+PASS 現在曲プロンプトへ反映 {}
+PASS 変更後の歌を再合成 {"correlation":0.803,"voice":{"rmsDb":-26.35,"peakDb":-7.4,"clipped":0}}
+PASS 編集後Chrome実再生・MP3・clip0 {"mp3":{"L":{"rmsDb":-18.47,"peakDb":-1.29,"clipped":0},"R":{"rmsDb":-18.47,"peakDb":-1.29,"clipped":0}},"playback":{"elapsedSeconds":5.519569160997733,"maxRms":0.29380824642821846,"observations":185},"soundfont":{"mode":"soundfont","files":["0000_FluidR3_GM_sf2_file","0330_FluidR3_GM_sf2_file","12836_0_FluidR3_GM_sf2_file","12842_0_FluidR3_GM_sf2_file","12838_0_FluidR3_GM_sf2_file","12839_0_FluidR3_GM_sf2_file"]}}

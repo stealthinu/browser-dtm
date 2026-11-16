@@ -218,3 +218,5 @@ JEV_AUTH_FALLBACK=0 JEV_AUTH_NOTIFY=0 JEV_NO_PREAMBLE=1 jev-route run exec-sol -
 今回のジョブIDとハッシュは `fixtures/llm-real/m3-provenance.json`、未編集返答は `gallery-answer-1.txt` / `long-answer-1.txt`。`scripts/capture-m3-answer.mjs` は今回のジョブ専用です。新規取得時は新しいstatusを参照し、既存返答を上書きせず保存してください。通常のテストは保存済み返答を使い、LLMを呼びません。
 
 dtmのnpm配布物は `dist/index.mjs` に内部SoundFontを含みますが、そのクラスをexportせず元ソース/source mapも含みません。上流改変や抽出コピーはせず、DTM_DIRは上の固定commit（package version 2.1.38）を引き続き使います。環境変数未設定の既定値は `/workspace/dtm-research/dtm`。VocaTabソースも別途必要です。
+
+最終チェックを同じ順序でまとめて再実行する場合は `node scripts/final-verify.mjs`。`npm ci` から全e2eとMCPまでを順番に実行し、失敗時は停止して `docs/evidence/main-v1-m3-*.log` と `out/final-verification.json` に結果を残します。その後の `node scripts/final-evidence.mjs` は最終フォルダ内の全MP3をffmpegで測り、スクリーンショットの更新時刻と集約JSONを保存します。

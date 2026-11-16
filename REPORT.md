@@ -351,3 +351,120 @@ M2の必須条件は完了。M3（サンプル集ページ・MCP整合・SPEC更
 - 単体48/48 PASS。gallery e2eは12/12 PASS（分類3、両コピー/表示、PCM両stem有音、SoundFont、実再生、メインへの読込）。MCPは14道具・instrument番号/名称・vocaloid・JSON往復一致・prompt・MP3実再生がPASS。
 - 長尺返答は16小節・48モーラ、Aメロ8小節/サビ8小節、ピアノ0/ベース33/弦48＋8beat。全MMLをパースし各16.000小節、over/under 0。画面貼付時の自動修正0。
 - README/SPECへ往復とサンプル集を追記、NOTICE/LICENSE-POLICY更新。句別合成時間をexport統計に追加（音声には変更無し）。
+
+### M3 最終結果
+
+M3の必須項目は完了。サンプル7枚、用途別コピー、実LLM往復2件、MCP14道具、日本語ドキュメントを実装。全既存テストを維持した。ビルド依存簡素化（任意）はnpm公開APIの制約でDTM_DIRを維持し、指定された代替の固定版clone手順・既定値をREADMEに記載した。
+
+## main-v1 最終
+
+検証: 2026-11-16 11:25:32〜11:32:33 JST。Node v24.22.1 / npm 11.21.1 / Chrome 156.0.8078.47 / ffmpeg 7.1.5、CPU/WASMのみ。
+
+### 結果表
+
+`node scripts/final-verify.mjs` で次を順に実行。11コマンドすべてexit0。e2eは合計101チェック、失敗0。
+
+| コマンド | 結果 | 数値・内容 | 証拠（docs/evidence/以下） |
+|---|---|---|---|
+| `npm ci` | PASS | 135 packages、audit脆弱性0、1.44秒 | main-v1-m3-ci.log |
+| `npm run build` | PASS | 0.25秒、VocaTab＋dtm同版sourceをimport/wrapのみ | main-v1-m3-build.log |
+| `npm test` | PASS | 48/48、既存38件＋gallery/MCP/実返答 | main-v1-m3-unit.log |
+| `npm run e2e` | PASS | 8/8、頭0.63ms、録音傷0ブロック、両stem有音 | main-v1-m3-e2e.log |
+| `npm run e2e:fx` | PASS | 25/25、対照相関各1.0000、vocaloid音色変化99.13%維持 | main-v1-m3-fx.log |
+| `npm run e2e:llm` | PASS | 17/17、既存の未編集実返答2件、コピー/修正依頼/UI/MP3 | main-v1-m3-llm.log |
+| `npm run e2e:soundfont` | PASS | 6/6、音色/ドラム・内蔵比較・遮断6件→警告＋有音 | main-v1-m3-soundfont.log |
+| `npm run e2e:pianoroll` | PASS | 14/14、マウス/かな/履歴/重なり/実再生/MP3 | main-v1-m3-pianoroll.log |
+| `npm run e2e:gallery` | PASS | 12/12、7枚・分類・両clipboard・SoundFont録音・アプリで開く | main-v1-m3-gallery.log |
+| `npm run e2e:real` | PASS | 19/19、gallery＋16小節48モーラ、未編集返答→貼付→実再生→MP3 | main-v1-m3-real.log |
+| `npm run mcp:smoke` | PASS | 14道具、instrument0/名称・vocaloid・JSON同形・prompt・MP3実再生 | main-v1-m3-mcp.log |
+| `node scripts/final-evidence.mjs` | PASS | 全MP3 10本、clip0、画面3枚すべて今回の検証開始後に更新 | main-v1-m3.json |
+| 日本語ドキュメント・ライセンス | PASS | SPEC §7/8、README、NOTICE、LICENSE-POLICY | 各ファイル |
+
+集約: `docs/evidence/main-v1-m3.json`。各テストの全数値、曲データ、CLI出所、音声SHA-256、画面更新時刻を参照。音声は `/workspace/browser-dtm-final/` と `out/` のみに保存、commitしない。
+
+### 実LLM往復と音声・同期
+
+- ギャラリー: カードと同じ `galleryPrompt(sunset-pop, claude)` の4467文字をcreative-sonnetへ渡した。未編集返答は `fixtures/llm-real/gallery-answer-1.txt`。パーサ修正0・問題0。4小節、全伴奏4.000小節。歌−19.98 / 伴奏−17.52 dBFS。Chrome実再生9.513秒、Analyser最大RMS0.312。合成5.002秒（解析2.338秒）、4句の合成789 / 629 / 522 / 709ms。
+- 長尺: `exec-sol` の未編集返答 `fixtures/llm-real/long-answer-1.txt`。16小節、48モーラ、Aメロ1〜8/サビ9〜16、歌＋ピアノ0/ベース33/弦48＋ドラム、vocaloid0.8。3パートのMMLはすべて16.000小節、過不足0。パーサ修正0・問題0。描画33.500秒、MP3デコード33.541秒。合成9.092秒（解析1.212秒、波形エフェクト処理を除く）。
+- 長尺の前半0〜16秒: 歌−24.25 / 伴奏−19.34 dBFS。後半16〜32秒: 歌−23.98 / 伴奏−19.66 dBFS。両セクション非無音。
+- 同期: 両曲とも伴奏/歌の予約時刻差0ms。伴奏頭はgallery0.82ms / long0.45ms。曲頭に揃えた歌参照との相関は前半/後半それぞれ1.0000で、長尺後半にも配置のずれ無し。MP3には既存の約25ms符号化遅延がある。長尺のChrome実再生33.523秒・最大RMS0.249。
+- MCP: vocaloid0.5、ピアノinstrument0、ベースinstrument名。歌−22.32 / 伴奏−19.30 dBFS、FluidR3モード、実再生とMP3完了。get_song（既定/full）＝load_song_json後＝export(json)を確認。
+
+長尺の句別合成（各6音符、キャッシュ無し。負の開始秒は曲頭前の子音余白）:
+
+| 句 | 波形開始秒 | 波形秒 | 合成ms |
+|---:|---:|---:|---:|
+| 1 | -0.250 | 4.000 | 1018 |
+| 2 | 3.709 | 4.040 | 999 |
+| 3 | 7.721 | 4.029 | 1046 |
+| 4 | 11.697 | 3.553 | 917 |
+| 5 | 15.720 | 4.029 | 995 |
+| 6 | 19.708 | 4.040 | 982 |
+| 7 | 23.638 | 4.110 | 969 |
+| 8 | 27.707 | 4.040 | 947 |
+
+### 最終フォルダの全MP3（ffmpegデコード）
+
+測定: 44.1kHz、両chの全サンプル。clipは絶対値 >=0.999。ブラウザ内のPCM統計とはMP3圧縮・余白により多少異なる。
+| MP3 | 秒 | RMS dBFS | peak dBFS | clip数（両ch） |
+|---|---:|---:|---:|---:|
+| llm-answer-1.mp3 | 9.535 | -14.6 | -0.87 | 0 |
+| llm-answer-2.mp3 | 11.546 | -14.13 | -1.88 | 0 |
+| llm-gallery-answer.mp3 | 9.535 | -14.82 | -0.9 | 0 |
+| llm-long-song.mp3 | 33.541 | -16.77 | -1.6 | 0 |
+| mcp-song.mp3 | 5.904 | -16.01 | -1.52 | 0 |
+| pianoroll-edited.mp3 | 5.538 | -18.47 | -1.29 | 0 |
+| soundfont-song.mp3 | 9.535 | -15.29 | -1.28 | 0 |
+| vocaloid-0.5.mp3 | 9.535 | -15.19 | -1.59 | 0 |
+| vocaloid-0.mp3 | 9.535 | -15.29 | -1.28 | 0 |
+| vocaloid-1.mp3 | 9.535 | -15.19 | -1.26 | 0 |
+
+### 最新スクリーンショット・証拠
+
+| 画面 | 最終ファイル | 更新JST | commitする写し |
+|---|---|---|---|
+| main | /workspace/browser-dtm-final/screenshot-main.png | 11:30:42 | docs/evidence/main-v1-m3-main.png |
+| pianoroll | /workspace/browser-dtm-final/screenshot-pianoroll.png | 11:29:46 | docs/evidence/main-v1-m3-pianoroll.png |
+| gallery | /workspace/browser-dtm-final/screenshot-gallery.png | 11:30:13 | docs/evidence/main-v1-m3-gallery.png |
+
+3枚とも今回のbuild後。mainは実gallery返答の歌詞・音符、pianorollは編集後の「さ・きゃ・ら」、galleryは7カードとコピー成功を視認した。全ファイルのSHA-256は集約JSON。
+
+### 変更とcommits
+
+- `2db10ca`: 作業前にM3 GOAL/ACCEPTANCE TESTSを追記しpush。
+- `999d6b2`: サンプル7JSON、カード・分類・試聴・両用途コピー・URL読込、MCP共通スキーマ/楽器/丸ごと読込/prompt、句別計測と単体検査。
+- `39003fd`: 実LLM未編集返答と出所、19チェックのUI往復、MCP整合smoke、日本語ドキュメント。
+- この最終記録commit（`git log -1`）: 全検証ログ・集約JSON・更新画面・全音声表・手書き使用量ログ、再検証スクリプトの計測。
+
+すべてmain-v1へ通常commit/push、force-push/PR/公開無し。音声・歌声モデル・ボコーダ・SoundFont・秘密情報のcommit無し。dtm/VocaTab上流、他worktreeは変更無し。
+
+### ローカルでの動かし方
+
+```bash
+cd /workspace/browser-dtm-wt/main-v1
+export VOCATAB_DIR=/workspace/dtm-research/vocatab
+export DTM_DIR=/workspace/dtm-research/dtm
+npm ci
+npm run build
+npm run serve
+# 作曲画面 http://127.0.0.1:5500/
+# サンプル集 http://127.0.0.1:5500/gallery.html
+# 再検証: node scripts/final-verify.mjs
+# 音声表: node scripts/final-evidence.mjs
+```
+
+別環境のclone/checkoutはREADME。確認済みVocaTab `2d2a48b7f345bcfd499bbe516e65afeef5a3e3d5`、dtm `3a89f4f1bc12a6c4e9562bcc551b6abf5132892a`（npmと同じ2.1.38）。npm配布物は内部SoundFontをexportせず、上流改変禁止を守るためDTM_DIRは引き続き必要。
+
+### NEXT STEPS
+
+M1/M2/M3の必須項目は完了。通常は保存済みLLM返答で全検証を再現できる。将来dtmが内部SoundFontの必要機能を公開した場合は、DTM_DIRを外して同じSoundFont回帰を再確認する。長尺ピアノロールの拡大/横スクロール、MP3符号化遅延の除去は今回の範囲外として残る。
+
+### BLOCKED APPROVALS
+
+なし。指定の購読CLI2件と非公開origin/main-v1へのpushのみ実施。外部メッセージ・購入・認証変更・プロジェクト外削除・従量API・公開・上流issue/PRは実行していない。
+
+### 修復・制約
+
+受入失敗後修復0（全テスト初回PASS）、provider/quotaによるCLI切替0。指定のSonnet→Codexのロール切替1、購読LLM各1回、Opus判断0、従量API0。実際の接続障害無し（音源遮断は既存の意図的試験）。全サーバーはfinallyで終了、5500〜5599のlistener無しを確認。
+
+開始: 2026-11-16 11:16:16 JST。終了記録（最終commit直前）: 2026-11-16 11:34:32 JST。所要18分16秒。80分切上げ期限12:36:16 JSTより前に終了。
