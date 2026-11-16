@@ -37,14 +37,15 @@
       <h2>1. LLM に頼む（プロンプトをコピー）</h2>
       <label>歌詞</label><input type="text" id="lyrics" value="ゆうやけ そらに とけていく">
       <label>イメージ</label><input type="text" id="image" value="BPM 120、明るいポップ、4小節。ピアノ・ベース・ドラム。">
-      <button id="mkPrompt">プロンプトを作る</button><button id="copyPrompt" class="sub">コピー</button>
+      <button id="mkPrompt">プロンプトを作る</button><button id="copyPrompt" class="sub">プロンプトをコピー</button>
+      <label><input type="checkbox" id="baseSong">今の曲を土台にする</label>
       <textarea id="prompt" readonly></textarea>
     </section>
     <section>
-      <h2>2. LLM の返答を貼り戻す</h2>
+      <h2>2. LLM の返答を貼る</h2>
       <textarea id="answer" placeholder="LLM の返答（SongDoc JSON を含むテキスト）をここに貼る"></textarea>
-      <button id="load">読み込む</button><button id="sample" class="sub">見本返答を入れる</button>
-      <div id="problems"></div>
+      <button id="load">読み込んで鳴らす</button><button id="sample" class="sub">見本返答を入れる</button>
+      <div id="problems"></div><div id="repairs" style="white-space:pre-wrap;color:#95e6cb;font-size:12px"></div>
       <textarea id="fix" readonly style="display:none" title="LLM に返す修正依頼文"></textarea>
       <button id="copyFix" class="sub" style="display:none">修正依頼文をコピー</button>
     </section>

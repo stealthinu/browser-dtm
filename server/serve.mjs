@@ -1,4 +1,4 @@
-// 開発用の静的サーバー（手元だけ。公開しない）。ポートは SPEC §4 の claude-code 枠 5100〜5199。
+// 開発用の静的サーバー（手元だけ。公開しない）。ポートは SPEC §4 の claude-code 枠 5500〜5599。
 //   /            web/index.html
 //   /dist/*      esbuild の出力
 //   /vocatab/*   VOCATAB_DIR の web_index.json・voicebanks/・vocoders/（読み取りだけ。再配布しない）
@@ -19,8 +19,8 @@ function safeJoin(base, rel) {
   return p.startsWith(base) ? p : null;
 }
 
-export function startServer(port = Number(process.env.PORT ?? 5100), host = "127.0.0.1") {
-  if (port < 5100 || port > 5199) throw new Error("PORT は 5100〜5199（SPEC §4）");
+export function startServer(port = Number(process.env.PORT ?? 5500), host = "127.0.0.1") {
+  if (port < 5500 || port > 5599) throw new Error("PORT は 5500〜5599（SPEC §4）");
   const srv = createServer((req, res) => {
     const url = new URL(req.url, "http://x");
     // cross-origin isolated にして onnxruntime-web を複数スレッドで回す（CDN の読み込みは credentialless で通す）

@@ -17,7 +17,7 @@ import { ROOT } from "../scripts/paths.mjs";
 const { parseMML } = await import("@onjmin/dtm");
 
 const session = new SongSession(undefined, parseMML);
-const port = Number(process.env.MCP_RENDER_PORT ?? 5101);
+const port = Number(process.env.MCP_RENDER_PORT ?? 5501);
 
 async function exportSong(format: string, name: string): Promise<unknown> {
   mkdirSync(resolve(ROOT, "out"), { recursive: true });

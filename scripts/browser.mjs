@@ -4,7 +4,7 @@ import { startServer } from "../server/serve.mjs";
 
 export const CHROME = process.env.CHROME_PATH ?? "/usr/bin/google-chrome";
 
-export async function openApp({ port = 5100, log = console.error } = {}) {
+export async function openApp({ port = 5500, log = console.error } = {}) {
   const srv = await startServer(port);
   const browser = await puppeteer.launch({
     executablePath: CHROME,

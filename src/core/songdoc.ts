@@ -5,13 +5,14 @@
 export const TPQ = 480; // VocaTab の刻み（4分音符 = 480）
 export const DTM_STEPS_PER_BAR = 192; // dtm の 1 小節（4/4）= 192 step → 1 拍 48 step = TPQ/10
 
-export type EffectType = "kero" | "vocoder" | "bitcrusher" | "doubling";
-export const EFFECT_TYPES: EffectType[] = ["kero", "vocoder", "bitcrusher", "doubling"];
+export type EffectType = "kero" | "vocoder" | "bitcrusher" | "doubling" | "vocaloid";
+export const EFFECT_TYPES: EffectType[] = ["kero", "vocoder", "bitcrusher", "doubling", "vocaloid"];
 export const EFFECT_LABELS: Record<EffectType, string> = {
   kero: "ケロケロボイス（ピッチを平らに）",
   vocoder: "ボコーダー",
   bitcrusher: "ビットクラッシャー",
   doubling: "ダブリング",
+  vocaloid: "ボカロ風 v2",
 };
 
 export interface Effect {
@@ -205,6 +206,7 @@ export function validateSong(doc: unknown): Problem[] {
     if (!t || typeof t.id !== "string" || !t.id) ps.push({ path: `${P}.id`, message: "id（文字列）が要ります" });
     else if (ids.has(t.id)) ps.push({ path: `${P}.id`, message: `id "${t.id}" が重複` });
     else ids.add(t.id);
+    if (!t || typeof t !== "object") return;
     if (t.kind === "vocal") {
       if (!Array.isArray(t.notes)) {
         ps.push({ path: `${P}.notes`, message: "notes が配列ではありません" });
@@ -213,6 +215,7 @@ export function validateSong(doc: unknown): Problem[] {
       const spans: Array<[number, number, number]> = [];
       t.notes.forEach((n, ni) => {
         const Q = `${P}.notes[${ni}]`;
+        if (!n || typeof n !== "object") { ps.push({ path: Q, message: "音符がオブジェクトではありません" }); return; }
         if (!(Number.isInteger(n.bar) && n.bar >= 1 && n.bar <= (d.bars ?? 256))) {
           ps.push({ path: `${Q}.bar`, message: `bar=${n.bar} は 1〜${d.bars} の整数` });
         }
@@ -227,7 +230,7 @@ export function validateSong(doc: unknown): Problem[] {
           ps.push({ path: `${Q}.pitch`, message: `pitch=${n.pitch} は歌の音域（C3〜C6）の外` });
         }
         if (n.lyric !== undefined) {
-          const { morae, unknown } = splitMorae(n.lyric);
+          const { morae, unknown } = splitMorae(typeof n.lyric === "string" ? n.lyric : "");
           if (morae.length !== 1 || unknown.length) {
             ps.push({ path: `${Q}.lyric`, message: `lyric="${n.lyric}" は かな1モーラ（または ー）にしてください` });
           }
@@ -248,7 +251,9 @@ export function validateSong(doc: unknown): Problem[] {
           ps.push({ path: `${P}.notes[${spans[k][2]}]`, message: `notes[${spans[k - 1][2]}] と重なっています（歌は単音）` });
         }
       }
-      for (const [ei, e] of (t.effects ?? []).entries()) {
+      if (t.effects !== undefined && !Array.isArray(t.effects)) ps.push({ path: `${P}.effects`, message: "effects は配列" });
+      for (const [ei, e] of (Array.isArray(t.effects) ? t.effects : []).entries()) {
+        if (!e || typeof e !== "object") { ps.push({ path: `${P}.effects[${ei}]`, message: "effect がオブジェクトではありません" }); continue; }
         if (!EFFECT_TYPES.includes(e.type)) ps.push({ path: `${P}.effects[${ei}].type`, message: `type は ${EFFECT_TYPES.join("/")}` });
         if (!(typeof e.amount === "number" && e.amount >= 0 && e.amount <= 1)) {
           ps.push({ path: `${P}.effects[${ei}].amount`, message: "amount は 0〜1" });
@@ -256,14 +261,14 @@ export function validateSong(doc: unknown): Problem[] {
       }
     } else if (t.kind === "inst") {
       if (typeof t.mml !== "string" || !t.mml.trim()) ps.push({ path: `${P}.mml`, message: "mml（文字列）が要ります" });
-      else if (/[;@#]/.test(t.mml)) ps.push({ path: `${P}.mml`, message: "mml にはこのパートの音符だけを書く（; @ # は使わない）" });
+      else if (/[;@]|(?<![a-gA-G])#/.test(t.mml)) ps.push({ path: `${P}.mml`, message: "mml にはこのパートの音符だけを書く（; @ # は使わない）" });
     } else if (t.kind === "drums") {
       if (typeof t.pattern !== "string" || !t.pattern) ps.push({ path: `${P}.pattern`, message: "pattern（dtm のドラムパターン名）が要ります" });
     } else {
       ps.push({ path: `${P}.kind`, message: `kind は "vocal" "inst" "drums" のどれか（"${(t as Track)?.kind}"）` });
     }
   });
-  if (!d.tracks.some((t) => t.kind === "vocal")) ps.push({ path: "tracks", message: "歌トラック（kind: vocal）がありません" });
+  if (!d.tracks.some((t) => t?.kind === "vocal")) ps.push({ path: "tracks", message: "歌トラック（kind: vocal）がありません" });
   return ps;
 }
 
@@ -322,7 +327,7 @@ export function songSeconds(doc: SongDoc): number {
 }
 
 export function vocalTrack(doc: SongDoc): VocalTrack | undefined {
-  return doc.tracks.find((t): t is VocalTrack => t.kind === "vocal");
+  return doc.tracks.find((t): t is VocalTrack => t?.kind === "vocal");
 }
 
 export function effectAmount(t: VocalTrack, type: EffectType): number {
