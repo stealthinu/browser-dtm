@@ -1,5 +1,6 @@
 // 画面（プロンプトコピー欄・貼り戻し欄・エフェクト・ピアノロール・再生/停止・書き出し）と、自動操作用の window.app。
 // Copyright (c) 2026 browser-dtm authors. AGPL-3.0-or-later.
+import { GALLERY } from "../core/gallery";
 import { PianoRoll } from "./pianoroll";
 import { encodeMp3, encodeWav, levels } from "../core/encode";
 import { applyWaveEffects, type CarrierNote } from "../core/fx";
@@ -23,6 +24,7 @@ const engine = new VocaTabEngine();
 const player = new Player();
 let doc: SongDoc | null = null;
 let vocalCache: { key: string; stereo: [Float32Array, Float32Array]; lead: number; mono: Float32Array } | null = null;
+let lastVocalRender: unknown = null;
 let engineReady = false;
 let action = 0;
 
@@ -52,6 +54,7 @@ async function renderVocal(): Promise<NonNullable<typeof vocalCache>> {
   if (vocalCache?.key === key) return vocalCache;
   status("歌を合成中…");
   const r = await engine.render(notes, doc.bpm, v.singer, fx.kero);
+  lastVocalRender = { ms: r.ms, analyzeMs: r.analyzeMs, cached: r.cached, phrases: r.phrases, phraseTimings: r.phraseTimings };
   log(`vocal: ${r.phrases} phrases, ${(r.wav.length / SR).toFixed(2)} s, ${Math.round(r.ms)} ms (kero=${fx.kero})`);
   const spt = 60 / (doc.bpm * TPQ);
   const carrier: CarrierNote[] = notes.map((n) => ({ startSec: n.onset * spt, endSec: (n.onset + n.dur) * spt, midi: n.pitch }));
@@ -107,7 +110,7 @@ async function exportAudio(o: ExportOpts = {}) {
   const stats = {
     file, bytes: bytes.length, seconds: rec.mix[0].length / SR,
     mixL: levels(rec.mix[0], SR), mixR: levels(rec.mix[1], SR), acc: levels(rec.acc, SR), vox: levels(rec.vox, SR),
-    scheduled: rec.scheduled, playback: rec.playback, soundfont: rec.soundfont,
+    scheduled: rec.scheduled, playback: rec.playback, soundfont: rec.soundfont, vocalRender: lastVocalRender,
   };
   const saved: string[] = [];
   if (o.toServer) {
@@ -273,3 +276,14 @@ $("expJson").onclick = () => doc && download(new TextEncoder().encode(JSON.strin
   },
   isPlaying: () => player.isPlaying,
 };
+
+// URL は一覧のIDだけを受け付ける。
+const sampleId = new URLSearchParams(location.search).get("sample");
+if (GALLERY.some(s => s.id === sampleId)) {
+  fetch(`/fixtures/gallery/${sampleId}.json`).then(r => r.json()).then(d => {
+    ($("lyrics") as HTMLInputElement).value = vocalTrack(d)!.notes.map(n => n.lyric ?? "").join("");
+    ($("answer") as HTMLTextAreaElement).value = JSON.stringify(d, null, 2);
+    importText(JSON.stringify(d));
+    status("サンプルを読み込みました。再生ボタンで試聴できます");
+  }).catch(e => status(`サンプルの読み込みに失敗: ${e}`));
+}

@@ -25,4 +25,5 @@ await build({ ...common, entryPoints: [resolve(VT, "ui/src/engine-web/worker.ts"
               outfile: resolve(ROOT, "dist/engine-worker.js") });
 await build({ ...common, entryPoints: [resolve(ROOT, "src/web/main.ts")], format: "esm", outfile: resolve(ROOT, "dist/app.js"),
               plugins: [vocatabAlias, dtmInternal] });
+await build({ ...common, entryPoints: [resolve(ROOT, "src/web/gallery.ts")], format: "esm", outfile: resolve(ROOT, "dist/gallery.js") });
 console.log(`built dist/ (VocaTab: ${VT}, build ${BUILD})`);

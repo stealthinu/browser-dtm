@@ -41,6 +41,7 @@ export function startServer(port = Number(process.env.PORT ?? 5500), host = "127
     let file = null;
     const p = url.pathname;
     if (p === "/" || p === "/index.html") file = resolve(ROOT, "web/index.html");
+    else if (p === "/gallery.html") file = resolve(ROOT, "web/gallery.html");
     else if (p.startsWith("/dist/")) file = safeJoin(resolve(ROOT, "dist"), p.slice(6));
     else if (p.startsWith("/fixtures/")) file = safeJoin(resolve(ROOT, "fixtures"), p.slice(10));
     else if (p.startsWith("/web/")) file = safeJoin(resolve(ROOT, "web"), p.slice(5));

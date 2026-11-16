@@ -338,3 +338,10 @@ M2の必須条件は完了。M3（サンプル集ページ・MCP整合・SPEC更
 | M3-doc | README/SPEC/NOTICE/LICENSE-POLICY | 日本語手順、コピー往復・サンプル集、依存版/ライセンス/ローカルURL |
 
 失敗後の修復は各テスト最大2回、CLIの代替切替最大1回。従量API不使用。成果音声・モデルはcommitしない。
+
+### M3 実装ステップ1
+- 7枚（曲3・伴奏2・効果2）、M1共通プロンプト、用途別コピー・分類・メインへのURL読込を実装。試聴は同一オリジンの作曲画面を再生ホストにし、VocaTab/FluidR3/エフェクト/時計を共用。
+- `npm test`: 47/47 PASS、既存38件を維持。新規は全7JSON・用途別コピーとMCP全体読込/楽器0/名称/状態維持。`out/m3-unit-initial.log`。
+- MCP: `load_song_json` / `get_prompt`追加、`set_track_mml.instrument`対応。`get_song`既定/fullは同じSongDoc全体、旧summaryは明示指定で保持。
+- npm 2.1.38同梱物を確認: distに内部SoundFontは存在するがexportされず、同梱ソース・source mapも無い。npmを改変して内部exportを足す方法は上流patch禁止に反するため採用しない。DTM_DIRの同版cloneを維持し手順を明記する。
+- 参考: https://designbookmark.com/motion のカテゴリ付きカード一覧・その場で試す・用途別コピーの導線を参照。外部のUIコードや素材は取り込まない。

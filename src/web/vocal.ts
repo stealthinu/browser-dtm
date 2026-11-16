@@ -10,7 +10,12 @@ import type { VtNote } from "../core/songdoc";
 export const SR = 44100;
 const HOP = 256;
 
+export interface PhraseTiming { index: number; startSec: number; seconds: number; ms: number; notes: number }
+
 export interface VocalRender {
+  phraseTimings: PhraseTiming[];
+  analyzeMs: number;
+  cached: boolean;
   /** 曲の頭（0 秒）= サンプル `lead` の位置。頭の前（最初の句の前の pau・子音）が要るので前に余白を持つ */
   wav: Float32Array;
   lead: number;
@@ -24,7 +29,7 @@ export class VocaTabEngine {
   private waiting = new Map<number, { ok: (v: any) => void; ng: (e: Error) => void }>();
   index: WebIndex | null = null;
   onProgress: (loaded: number, total: number) => void = () => {};
-  private cache = new Map<string, Float32Array>();
+  private cache = new Map<string, { wav: Float32Array; phraseTimings: PhraseTiming[] }>();
 
   constructor(workerUrl = "/dist/engine-worker.js") {
     this.worker = new Worker(workerUrl);
@@ -73,15 +78,18 @@ export class VocaTabEngine {
                               notes: notes.map((n) => ({ id: n.id, onset: n.onset, dur: n.dur, pitch: n.pitch, lyric: n.lyric,
                                                          retake_f0: 0, ph_shift: {} })) };
     const an = await this.send<AnalyzeResp>({ type: "analyze", req });
+    const analyzeMs = performance.now() - t0;
     const track: Track = { id: 1, name: "vo", voice: singer ?? "ritsu", color: "", mute: false, solo: false, base: defaultBase(),
                            params: {}, notes: notes.map((n) => ({ ...n, attrs: { vMod: 1 } })) };
     const project: Project = { bpm, beatsPerBar: 4, tracks: [track], activeTrack: 1 };
     const pitchOf = new Map(notes.map((n) => [n.id, Math.log2(440) + (n.pitch - 69) / 12]));
     const minStart = Math.min(0, ...an.phrases.map((q) => q.start_frame * HOP));
     const lead = -minStart + HOP * 4;
-    if (hit) return { wav: hit, lead, phrases: an.phrases.length, ms: performance.now() - t0 };
+    if (hit) return { wav: hit.wav, phraseTimings: hit.phraseTimings, analyzeMs, cached: true, lead, phrases: an.phrases.length, ms: performance.now() - t0 };
+    const phraseTimings: PhraseTiming[] = [];
     const parts: Array<{ start: number; wav: Float32Array }> = [];
-    for (const q of an.phrases) {
+    for (const [index, q] of an.phrases.entries()) {
+      const phraseStart = performance.now();
       const ph: EPhrase = { key: q.key, noteIds: q.note_ids, startFrame: q.start_frame, startSec: q.start_sec, nFrames: q.n_frames,
                             phonemes: q.phonemes, plain: q.plain, base: q.base, vib: q.vib, uv: q.uv, seed: q.seed, status: "解析済み" };
       const { log2 } = composeF0(ph, track, project);
@@ -91,13 +99,14 @@ export class VocaTabEngine {
       const res = await this.send<SynthResp>({ type: "synthesize", req: sreq });
       for (let i = 0; i < res.wav.length; i++) if (!Number.isFinite(res.wav[i])) res.wav[i] = 0;
       parts.push({ start: q.start_frame * HOP + lead, wav: res.wav });
+      phraseTimings.push({ index, startSec: q.start_frame * HOP / SR, seconds: res.wav.length / SR, ms: performance.now() - phraseStart, notes: q.note_ids.length });
     }
     let n = lead;
     for (const p of parts) n = Math.max(n, p.start + p.wav.length);
     const wav = new Float32Array(n);
     for (const p of parts) for (let i = 0; i < p.wav.length; i++) wav[p.start + i] += p.wav[i];
-    this.cache.set(key, wav);
-    return { wav, lead, phrases: an.phrases.length, ms: performance.now() - t0 };
+    this.cache.set(key, { wav, phraseTimings });
+    return { wav, lead, phrases: an.phrases.length, ms: performance.now() - t0, phraseTimings, analyzeMs, cached: false };
   }
 }
 

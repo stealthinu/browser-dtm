@@ -1,6 +1,7 @@
 // LLM 向けの道具（SPEC §2-2、設計メモ (c)）。SongDoc への純粋な操作で、ブラウザ・MCP サーバー・テストで共有する。
 // 道具は事実（過不足・音域外・エラー位置）だけを返し、点数は返さない。
 // Copyright (c) 2026 browser-dtm authors. AGPL-3.0-or-later.
+import { buildPrompt, importResponse } from "./prompt";
 import {
   assignLyrics, DTM_STEPS_PER_BAR, type Effect, EFFECT_TYPES, type InstTrack, lenToTicks, midiToName, newSong,
   noteOnsetTicks, pitchToMidi, type SongDoc, TPQ, toDtmMML, type Track, validateSong, type VocalNote, type VocalTrack,
@@ -23,7 +24,11 @@ const int = (description: string) => ({ type: "integer", description });
 const num = (description: string) => ({ type: "number", description });
 
 export const TOOL_DEFS: ToolDef[] = [
-  { name: "get_song", description: "曲（SongDoc）を返す。part=summary で要約、full で全体。",
+  { name: "load_song_json", description: "貼り付け欄と同じパーサでSongDoc全体またはLLM返答を読む。問題があれば現在曲を変えず修正依頼文を返す。",
+    inputSchema: { type: "object", required: ["text"], properties: { text: str("SongDoc JSONまたはLLM返答全文") } } },
+  { name: "get_prompt", description: "現在曲・SongDoc仕様・要望を含む自己完結プロンプトを返す。",
+    inputSchema: { type: "object", properties: { lyrics: str("歌詞（省略時は現在曲）"), image: str("この曲を土台にどう変えるか") } } },
+  { name: "get_song", description: "曲（SongDoc）を返す。既定/full は貼り付け用JSONと同じ全体、part=summary で要約。",
     inputSchema: { type: "object", properties: { part: { type: "string", enum: ["summary", "full"] } } } },
   { name: "new_song", description: "空の曲を作る（歌トラック vo だけ）。",
     inputSchema: { type: "object", properties: { bpm: num("テンポ"), beatsPerBar: int("拍子（既定4）"), key: str("調"),
@@ -41,7 +46,8 @@ export const TOOL_DEFS: ToolDef[] = [
   { name: "set_track_mml", description: "伴奏パートを dtm の MML で書く（このパートの音符だけ。; @ # は使わない）。無ければ作る。パース結果（音符数、長さ、音域）を返す。",
     inputSchema: { type: "object", required: ["trackId", "mml"], properties: {
       trackId: str("パートの id（例 pf, ba）"), mml: str("MML 例: o4 l4 'ceg' 'ceg' 'dfa' 'dfa'"),
-      program: str("GM 楽器名（例 acoustic_grand_piano, electric_bass_finger）") } } },
+      program: str("旧GM楽器名（互換用）"),
+      instrument: { anyOf: [str("GM楽器名（例 Acoustic Grand Piano）"), { type: "integer", minimum: 0, maximum: 127 }] } } } },
   { name: "set_drums", description: "ドラムパターンを決める（dtm の #drum= 名。例 8beat, 16beat, 4beat, shuffle, dance, bossa, disco, none）。",
     inputSchema: { type: "object", required: ["pattern"], properties: { pattern: str("パターン名") } } },
   { name: "set_effects", description: "歌のエフェクト（kero=ケロケロボイス, vocoder=ボコーダー, bitcrusher=ビットクラッシャー, doubling=ダブリング, vocaloid=ボカロ風v2）と強度 0〜1。",
@@ -76,7 +82,16 @@ export class SongSession {
   /** 道具を名前で呼ぶ（返り値は JSON にできる事実）。 */
   call(name: string, a: any = {}): unknown {
     switch (name) {
-      case "get_song": return a.part === "full" ? this.doc : this.summary();
+      case "get_song": return a.part === "summary" ? this.summary() : structuredClone(this.doc);
+      case "load_song_json": {
+        const r = importResponse(String(a.text ?? ""));
+        if (r.doc && !r.problems.length) this.doc = r.doc;
+        return { loaded: !!r.doc && !r.problems.length, ...r };
+      }
+      case "get_prompt": {
+        const lyrics = a.lyrics ?? this.doc.tracks.filter(t => t.kind === "vocal").flatMap(t => t.notes.map(n => n.lyric ?? "")).join("");
+        return { prompt: buildPrompt(lyrics, a.image ?? "この曲を土台にメロディを変えてください。", this.doc) };
+      }
       case "new_song": this.doc = newSong(a); return this.summary();
       case "set_chords": {
         this.doc.chords = String(a.progression);
@@ -88,7 +103,7 @@ export class SongSession {
         const t = this.vocal(a.trackId);
         return assignLyrics(t, String(a.text ?? ""), this.doc.beatsPerBar, a.fromBar ?? 1);
       }
-      case "set_track_mml": return this.setMml(a.trackId, String(a.mml ?? ""), a.program);
+      case "set_track_mml": return this.setMml(a.trackId, String(a.mml ?? ""), a.program, a.instrument);
       case "set_drums": {
         this.doc.tracks = this.doc.tracks.filter((t) => t.kind !== "drums");
         if (a.pattern && a.pattern !== "none") this.doc.tracks.push({ id: "dr", kind: "drums", pattern: String(a.pattern) });
@@ -119,7 +134,7 @@ export class SongSession {
       tracks: d.tracks.map((t) =>
         t.kind === "vocal" ? { id: t.id, kind: t.kind, singer: t.singer, notes: t.notes.length,
                                lyrics: t.notes.map((n) => n.lyric ?? "?").join(""), effects: t.effects ?? [] }
-        : t.kind === "inst" ? { id: t.id, kind: t.kind, program: t.program, mmlChars: t.mml.length }
+        : t.kind === "inst" ? { id: t.id, kind: t.kind, program: t.program, instrument: t.instrument, mmlChars: t.mml.length }
         : { id: t.id, kind: t.kind, pattern: t.pattern }),
       problems: validateSong(d).length,
     };
@@ -144,7 +159,7 @@ export class SongSession {
     return { placed: notes.length, removed, total: t.notes.length, outsideSong: outside, problems };
   }
 
-  private setMml(trackId: string, mml: string, program?: string): unknown {
+  private setMml(trackId: string, mml: string, program?: string, instrument?: string | number): unknown {
     let t = this.doc.tracks.find((x) => x.id === trackId) as InstTrack | undefined;
     if (t && t.kind !== "inst") throw new Error(`${trackId} は伴奏パートではありません`);
     if (!t) {
@@ -153,6 +168,7 @@ export class SongSession {
     }
     t.mml = mml;
     if (program) t.program = program;
+    if (instrument !== undefined) t.instrument = instrument;
     return this.mmlFacts(t);
   }
 
