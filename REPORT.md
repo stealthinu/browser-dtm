@@ -266,3 +266,56 @@ M1の実装を維持し、実行時ロードのFluidR3 GMによる旋律楽器�
 - 三連音符を曲端へ移動するときも開始をグリッドに揃える境界処理と単体1件を追加（受入失敗に対する修復ではない）。単体38/38 PASS。
 - `e2e` 8チェック / `e2e:llm` 17チェック / `mcp:smoke` PASS。`e2e:fx`の最終確認中。
 - dtm上流読取専用clone: commit `3a89f4f1bc12a6c4e9562bcc551b6abf5132892a`、package version2.1.38。再現用にDTM_DIRの準備とこのcommitをREADMEへ記載。
+
+### M2 最終結果
+
+| 受入条件 | 結果 | 数値・証拠 |
+|---|---|---|
+| M2-unit `npm test` | **PASS** | 38/38、fail0。M1全32件＋編集/GM6件。`docs/evidence/main-v1-m2-unit.log` |
+| M2-sf `npm run e2e:soundfont` | **PASS** | 6/6。旋律0000/0330＋ドラム36/42/38/39。伴奏相関−0.069、重心3440.13→3255.25Hz。MP3 RMS−15.29 / peak−1.28dBFS、clip0。歌区間−19.34 / 伴奏区間−18.11dBFS。Chrome9.5134秒・最大RMS0.3198。遮断6件→日本語警告・内蔵伴奏−18.20dBFS・実再生。`docs/evidence/main-v1-m2-soundfont.log` |
+| M2-roll `npm run e2e:pianoroll` | **PASS** | 14/14。全編集操作とhistory、重なり拒否、現在曲プロンプト反映。変更前後の歌相関0.803。編集後MP3 RMS−18.47 / peak−1.29dBFS、clip0、歌−26.35 / 伴奏−20.82dBFS。`docs/evidence/main-v1-m2-pianoroll.log`、`main-v1-m2-pianoroll.png` |
+| M1回帰 `npm run e2e` | **PASS** | 8/8。SoundFontが既定でも頭の差0.63ms、傷0ブロック、両stem有音、MP3 clip0。`docs/evidence/main-v1-m2-e2e.log` |
+| M1回帰 `npm run e2e:fx` | **PASS** | 25/25。同設定の歌/mix/MP3相関各1.0000。有声RMS差最大0.00674dB、子音2–8kHz差最小0dB、重心上昇99.13%保持、各MP3 clip0。`docs/evidence/main-v1-m2-fx.log` |
+| M1回帰 `npm run e2e:llm` | **PASS** | 17/17。既存の購読LLM未編集2返答を再利用、SoundFontでUI往復・MP3・clip0。LLMの新規呼出無し。`docs/evidence/main-v1-m2-llm.log` |
+| M1回帰 `npm run mcp:smoke` | **PASS** | 12道具、vocaloid0.5→check→MP3。141688bytes、mix−15.72 / peak−1.61dBFS、歌−22.32 / 伴奏−19.30dBFS、clip0。`docs/evidence/main-v1-m2-mcp.log` |
+| M2-doc / build | **PASS** | `npm run build`成功。日本語READMEにGM名/番号・編集操作・DTM_DIR同版ソースの準備、NOTICE/LICENSE-POLICYに一次資料・著作権・URL・非同梱方針 |
+
+#### 変更と証拠
+
+- SongDocに`instrument: string | number`（GM0〜127）を追加し、旧`program`を維持。MMLへ楽器とFluidR3宣言を付け、プロンプトへ短いGM一覧・指定例を追加。ドラムはFluidR3標準キット。
+- 再生とMP3/WAVは同一のオフライン描画。必要な音色をURLから先読みし、dtm自身のSoundFont発音を公開シーケンサのフックで予約する。ロード失敗・15秒の時間切れでは警告して内蔵へ落ちる。UIで内蔵/SFを切替可能。
+- canvasの歌音符をクリック追加・ドラッグ移動・右端resize・Delete/Backspace/右クリック削除・小入力欄のかな編集に対応。1/4,1/8,1/16 snap、100段階history、単音重なり拒否、C3〜C6と曲境界の保持。SongDocと現在曲プロンプトへ即反映し、次回再生で再合成。
+- 視覚確認でも編集後の「さ」「きゃ」「ら」が読めることを確認。伴奏は編集対象外。UIは歌の音域C3〜C6を表示する（低いベースは凡例と音声で確認）。全曲幅を表示するため長い曲の拡大/スクロールは後続の検討。
+- 集約JSON: `docs/evidence/main-v1-m2.json`（全数値・変更後SongDoc・出力hash・修復回数）。最初の失敗ログも `docs/evidence/m2-{soundfont-initial,soundfont-repair1,roll-initial}.log` に保持。
+- 原音声・stemは `out/`、音源データはブラウザの実行時だけ。上流cloneはread-only、音声/モデル/SoundFontをcommitしていない。起動ポート5500〜5504はすべてfinallyで閉じ、`ss -ltnp '( sport >= :5500 and sport <= :5599 )'`でlistener無しを確認。
+
+受け渡し（音声はcommitしない）:
+
+- `/workspace/browser-dtm-final/soundfont-song.mp3`（228832bytes）
+- `/workspace/browser-dtm-final/screenshot-pianoroll.png`（編集後の歌詞可視）
+- `/workspace/browser-dtm-final/pianoroll-edited.mp3`（132911bytes）
+
+#### commits
+
+| commit | 内容 |
+|---|---|
+| `4a3895a` | 実装前にM2 GOAL / ACCEPTANCE TESTSを記録 |
+| `08beff7` | 実行時FluidR3・フォールバック・GM・編集モデル/UI・ライセンス |
+| `3ead900` | マウス編集e2e・曲端のsnap・日本語手順・中間結果 |
+| この最終記録commit（`git log -1`） | 最終結果・集約証拠・手書き使用量ログ |
+
+すべて`main-v1`へcommitし、`git push origin HEAD`による通常push。PR・force-push・公開は無し。
+
+#### NEXT STEPS
+
+M2の必須条件は完了。M3（サンプル集ページ・MCP整合・SPEC更新）は未着手として次のジョブへ残す。dtm内部ローダーを使う制限は上記のとおりで、上流更新時はDTM_DIRの同版確認とe2e:soundfontで再検証する。MP3約25msの符号化遅延はM1から継続。
+
+#### BLOCKED APPROVALS
+
+なし。外部メッセージ・購入・認証情報変更・プロジェクト外削除・従量API・公開・上流issue/PRは実行していない。非公開origin/main-v1へのpushは依頼どおり実施。
+
+#### 修復回数・制約
+
+失敗後修復は計3回（SoundFont受入2、ピアノロール受入1）、各テスト上限2以内。単体とM1回帰の修復0。CLI切替0、購読CLI/Opus呼出0、従量API使用0。GPU不使用。他worktree未操作。実際の接続障害は無し（音源遮断はテストによる意図的シミュレーション）。
+
+開始: 2026-11-16 10:59:16 JST。終了記録（最終commit直前）: 2026-11-16 11:14:53 JST。所要15分37秒。110分切上げ期限12:49:16 JSTより前に終了。
