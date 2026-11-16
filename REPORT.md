@@ -319,3 +319,22 @@ M2の必須条件は完了。M3（サンプル集ページ・MCP整合・SPEC更
 失敗後修復は計3回（SoundFont受入2、ピアノロール受入1）、各テスト上限2以内。単体とM1回帰の修復0。CLI切替0、購読CLI/Opus呼出0、従量API使用0。GPU不使用。他worktree未操作。実際の接続障害は無し（音源遮断はテストによる意図的シミュレーション）。
 
 開始: 2026-11-16 10:59:16 JST。終了記録（最終commit直前）: 2026-11-16 11:14:53 JST。所要15分37秒。110分切上げ期限12:49:16 JSTより前に終了。
+
+## main-v1 M3
+
+開始: 2026-11-16 11:16 JST。80分（12:36 JST）で切り上げ。
+
+### GOAL
+サンプル集（曲3・伴奏2・効果2以上）、Claude/ChatGPT用の自己完結コピー、実LLM往復2件、MCPのSongDoc整合、日本語ドキュメントと最終音声検証を完了する。M1/M2を維持し上流はimport/wrapのみ。
+
+### ACCEPTANCE TESTS
+| ID | コマンド | PASS条件 |
+|---|---|---|
+| M3-unit | `npm test` | 全既存＋gallery全JSONのM1パーサ/検査、MCP丸ごと読込・楽器・prompt一致 |
+| M3-gallery | `npm run e2e:gallery` | 7枚以上、歌合成＋SoundFont実再生/録音非無音、両copy内容、アプリへ読込、最新gallery画面 |
+| M3-real | `npm run e2e:real` | 未編集gallery/16小節以上LLM返答をUI貼付・実再生・MP3、両stem非無音、clip0、句別合成時間と同期 |
+| M3-mcp | `npm run mcp:smoke` | 楽器指定・vocaloid、get_songと貼付JSON一致、prompt、MP3実再生、最終フォルダへ保存 |
+| M3-final | `npm ci && npm run build && npm test` ＋全e2e＋mcp:smoke | 全通過、全MP3をffmpegで計測、最新main/pianoroll/galleryスクリーンショット |
+| M3-doc | README/SPEC/NOTICE/LICENSE-POLICY | 日本語手順、コピー往復・サンプル集、依存版/ライセンス/ローカルURL |
+
+失敗後の修復は各テスト最大2回、CLIの代替切替最大1回。従量API不使用。成果音声・モデルはcommitしない。
