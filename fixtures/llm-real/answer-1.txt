@@ -1,0 +1,48 @@
+```json
+{
+ "version": 1,
+ "title": "さくら",
+ "bpm": 120,
+ "beatsPerBar": 4,
+ "key": "C",
+ "bars": 4,
+ "chords": "| C | G | Am | F |",
+ "tracks": [
+  {
+   "id": "vo",
+   "kind": "vocal",
+   "engine": "vocatab",
+   "singer": "ritsu",
+   "effects": [],
+   "notes": [
+    {"bar": 1, "beat": 1, "len": "4", "pitch": "E4", "lyric": "さ"},
+    {"bar": 1, "beat": 2, "len": "4", "pitch": "G4", "lyric": "く"},
+    {"bar": 1, "beat": 3, "len": "2", "pitch": "C5", "lyric": "ら"},
+    {"bar": 2, "beat": 1, "len": "4", "pitch": "D5", "lyric": "か"},
+    {"bar": 2, "beat": 2, "len": "4", "pitch": "B4", "lyric": "ぜ"},
+    {"bar": 2, "beat": 3, "len": "2", "pitch": "G4", "lyric": "に"},
+    {"bar": 3, "beat": 1, "len": "2", "pitch": "E4", "lyric": "ゆ"},
+    {"bar": 3, "beat": 3, "len": "2", "pitch": "A4", "lyric": "れ"},
+    {"bar": 4, "beat": 1, "len": "1", "pitch": "A4", "lyric": "る"}
+   ]
+  },
+  {
+   "id": "pf",
+   "kind": "inst",
+   "program": "acoustic_grand_piano",
+   "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'gbd' 'gbd' 'gbd' 'gbd' 'ace' 'ace' 'ace' 'ace' 'acf' 'acf' 'acf' 'acf'"
+  },
+  {
+   "id": "ba",
+   "kind": "inst",
+   "program": "electric_bass_finger",
+   "mml": "o2 l8 c c c c c c c c g g g g g g g g a a a a a a a a f f f f f f f f"
+  },
+  {
+   "id": "dr",
+   "kind": "drums",
+   "pattern": "8beat"
+  }
+ ]
+}
+```

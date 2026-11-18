@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>サンプル集 — browser-dtm</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"Noto Sans JP",sans-serif;background:#111318;color:#eef0f5}*{box-sizing:border-box}body{margin:0}a{color:inherit}header{display:flex;justify-content:space-between;align-items:center;padding:24px 5vw;border-bottom:1px solid #30343d}header a{text-decoration:none}header b{letter-spacing:.06em}main{max-width:1400px;margin:auto;padding:44px 5vw}h1{font-size:clamp(32px,5vw,54px);margin:12px 0;letter-spacing:-.04em}p{color:#b6bdca;line-height:1.8}.eyebrow{color:#9ccfb9;font-size:12px;letter-spacing:.18em}nav{display:flex;gap:8px;margin:28px 0}button,.open{border:1px solid #3e4654;background:#252a34;color:#edf0f5;border-radius:8px;padding:10px 12px;cursor:pointer;font:inherit;font-size:12px;text-decoration:none}button:hover,.open:hover{border-color:#a9dbc5;background:#343d46}button:focus-visible,a:focus-visible{outline:2px solid #a9dbc5;outline-offset:3px}nav button[aria-pressed=true]{background:#d7f4e4;color:#16271f}#cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.card{border:1px solid #343945;border-radius:14px;overflow:hidden;background:#1a1d24}.art{height:150px;position:relative;display:flex;align-items:center;justify-content:center;gap:5px;background:radial-gradient(ellipse at 25% 20%,var(--tint),transparent 78%),#20232b}.art span{display:block;width:7px;height:var(--h);border-radius:8px;background:#fff9}.card.playing .art span{animation:pulse .7s infinite alternate;animation-delay:var(--d)}.art .number{position:absolute;top:16px;left:18px;font-size:12px;letter-spacing:.12em}.info{padding:20px}h2{font-size:18px;margin:10px 0}.meta{color:#a9d9c5;font-size:11px;letter-spacing:.05em}.desc{font-size:12px;min-height:44px;margin:8px 0 14px}.actions,.copies{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}.play:hover{background:#b4dec8}.play{background:#d2eddf;color:#15251e;border-color:transparent}.message{min-height:20px;font-size:11px;color:#b8e5cc;margin:10px 0 0}#status{min-height:28px;color:#b8e5cc}footer{font-size:11px;color:#919aab;padding:30px 5vw;border-top:1px solid #30343d;line-height:1.8}iframe{display:none}@keyframes pulse{to{transform:scaleY(.35)}}@media(max-width:950px){#cards{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){#cards{grid-template-columns:1fr}main{padding-top:25px}}@media(prefers-reduced-motion:reduce){.card.playing .art span{animation:none}}
+</style>
+</head>
+<body>
+<header><a href="./">browser-dtm <b> / サンプル集</b></a><a href="./">作曲画面へ ↗</a></header>
+<main><div class="eyebrow">LISTEN · COPY · CREATE</div><h1>音から、はじめよう。</h1><p>歌と伴奏をその場で試聴。気に入った曲を開くか、Claude・ChatGPT へコピーして、続きを作ろう。<br>コピー文には曲データ・書式仕様・変更のお願いがすべて入っています。</p>
+<nav aria-label="サンプルの種類"><button data-filter="すべて" aria-pressed="true">すべて</button><button data-filter="曲" aria-pressed="false">曲</button><button data-filter="伴奏" aria-pressed="false">伴奏</button><button data-filter="エフェクト" aria-pressed="false">エフェクト</button></nav>
+<div id="status" role="status" aria-live="polite">試聴の初回は歌声エンジンと楽器の読み込みに時間がかかります。</div><div id="cards"></div>
+<button id="stop" style="margin-top:24px">■ 試聴を停止</button>
+</main>
+<footer>歌声モデルは VocaTab 公式配布から読み込み（個人・非商用・再配布禁止）。歌声: VocaTab（MIT, © 2026 wavtechyukky）。歌い手: 波音リツ（波音リツ・カノン）/ 夏目悠李（歌声DB制作: アマノケイ／音声提供者: 霧野蒼太）/ 御丹宮くるみ。<br>伴奏: onjmin/dtm（AGPL-3.0-or-later）。FluidR3 GM © Frank Wen / WebAudioFont data © Srgy Surkv（MIT、実行時読み込み）。モデル・音源データは同梱しません。<a href="./">作曲画面と著作権表示</a> ／ <a href="https://github.com/stealthinu/browser-dtm">ソースコード（AGPL-3.0）</a> ／ <a href="LICENSE">LICENSE</a> ／ <a href="NOTICE.md">NOTICE</a></footer>
+<script type="module" src="dist/gallery.js"></script>
+</body></html>

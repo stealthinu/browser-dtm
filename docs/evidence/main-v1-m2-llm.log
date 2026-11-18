@@ -1,0 +1,38 @@
+
+> browser-dtm@0.1.0 e2e:llm
+> node scripts/e2e-llm.mjs
+
+[page] VocaTab engine ready: leapsinger_ja_3singer / vocoders nhvsing_v3_2_1
+PASS llm1.unmodified {"job":"20261116-104156-creative-sonnet-253b"}
+PASS llm1.copy-prompt {"chars":2607}
+[page] import: 0 problems
+[page] vocal: 1 phrases, 8.63 s, 6101 ms (kero=0)
+[page] load _drum_42_0_FluidR3_GM_sf2_file
+[page] load _drum_38_0_FluidR3_GM_sf2_file
+[page] load _drum_36_0_FluidR3_GM_sf2_file
+[page] load _drum_39_0_FluidR3_GM_sf2_file
+[page] load _tone_0330_FluidR3_GM_sf2_file
+[page] load _tone_0000_FluidR3_GM_sf2_file
+PASS llm1.load-and-play {"problems":"問題なし","repairs":"","playing":true,"doc":{"version":1,"title":"さくら","bpm":120,"beatsPerBar":4,"key":"C","bars":4,"chords":"| C | G | Am | F |","tracks":[{"id":"vo","kind":"vocal","engine":"vocatab","singer":"ritsu","effects":[],"notes":[{"bar":1,"beat":1,"len":"4","pitch":"E4","lyric":"さ"},{"bar":1,"beat":2,"len":"4","pitch":"G4","lyric":"く"},{"bar":1,"beat":3,"len":"2","pitch":"C5","lyric":"ら"},{"bar":2,"beat":1,"len":"4","pitch":"D5","lyric":"か"},{"bar":2,"beat":2,"len":"4","pitch":"B4","lyric":"ぜ"},{"bar":2,"beat":3,"len":"2","pitch":"G4","lyric":"に"},{"bar":3,"beat":1,"len":"2","pitch":"E4","lyric":"ゆ"},{"bar":3,"beat":3,"len":"2","pitch":"A4","lyric":"れ"},{"bar":4,"beat":1,"len":"1","pitch":"A4","lyric":"る"}]},{"id":"pf","kind":"inst","program":"acoustic_grand_piano","mml":"o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'gbd' 'gbd' 'gbd' 'gbd' 'ace' 'ace' 'ace' 'ace' 'acf' 'acf' 'acf' 'acf'"},{"id":"ba","kind":"inst","program":"electric_bass_finger","mml":"o2 l8 c c c c c c c c g g g g g g g g a a a a a a a a f f f f f f f f"},{"id":"dr","kind":"drums","pattern":"8beat"}]},"exportEnabled":true}
+PASS ui.base-song {"chars":4202}
+[page] export さくら.mp3: {"file":"さくら.mp3","bytes":228832,"seconds":9.5,"mixL":{"rmsDb":-14.33,"peakDb":-0.81,"clipped":0},"mixR":{"rmsDb":-14.33,"peakDb":-0.81,"clipped":0},"acc":{"rmsDb":-18.13,"peakDb":-2.31,"clipped":0},"vox":{"rmsDb":-19.71,"peakDb":-3.13,"clipped":0},"scheduled":{"accStart":0.5831292517006803,"vocalSongZero":0.5831292517006803},"playback":{"elapsedSeconds":9.51340136054422,"maxRms":0.31470055311170747,"observations":317},"soundfont":{"mode":"soundfont","files":["0000_FluidR3_GM_sf2_file","0330_FluidR3_GM_sf2_file","12836_0_FluidR3_GM_sf2_file","12842_0_FluidR3_GM_sf2_file","12838_0_FluidR3_GM_sf2_file","12839_0_FluidR3_GM_sf2_file"]}}
+PASS llm1.mp3-button {"download":"./out/llm-downloads-1794794987046/さくら.mp3"}
+[page] export llm-answer-1.mp3: {"file":"llm-answer-1.mp3","bytes":228832,"seconds":9.5,"mixL":{"rmsDb":-14.33,"peakDb":-0.81,"clipped":0},"mixR":{"rmsDb":-14.33,"peakDb":-0.81,"clipped":0},"acc":{"rmsDb":-18.13,"peakDb":-2.31,"clipped":0},"vox":{"rmsDb":-19.71,"peakDb":-3.13,"clipped":0},"scheduled":{"accStart":0.5831292517006803,"vocalSongZero":0.5831292517006803},"playback":{"elapsedSeconds":9.513401360544215,"maxRms":0.3100796838583808,"observations":318},"soundfont":{"mode":"soundfont","files":["0000_FluidR3_GM_sf2_file","0330_FluidR3_GM_sf2_file","12836_0_FluidR3_GM_sf2_file","12842_0_FluidR3_GM_sf2_file","12838_0_FluidR3_GM_sf2_file","12839_0_FluidR3_GM_sf2_file"]}}
+PASS llm1.actual-playback {"playback":{"elapsedSeconds":9.513401360544215,"maxRms":0.3100796838583808,"observations":318}}
+PASS llm1.download-matches-export {"corr":1,"diffDb":-50.089999999999996,"bytes":228832}
+PASS llm1.audio {"mixL":{"rmsDb":-14.6,"peakDb":-0.87,"clipped":0},"mixR":{"rmsDb":-14.6,"peakDb":-0.87,"clipped":0},"vocalSection":{"rmsDb":-18.96,"peakDb":-3.13,"clipped":0},"accSection":{"rmsDb":-17.42,"peakDb":-2.31,"clipped":0},"seconds":8}
+PASS llm2.unmodified {"job":"20261116-104332-exec-sol-7d9f"}
+PASS llm2.copy-prompt {"chars":2630}
+[page] import: 0 problems
+[page] vocal: 1 phrases, 10.59 s, 3268 ms (kero=0)
+[page] load _tone_0040_FluidR3_GM_sf2_file
+PASS llm2.load-and-play {"problems":"問題なし","repairs":"","playing":true,"doc":{"version":1,"title":"つきのひかり","bpm":96,"beatsPerBar":4,"key":"A minor","bars":4,"chords":"| Am | Fmaj7 | Dm7 | Am |","tracks":[{"id":"vo","kind":"vocal","engine":"vocatab","singer":"ritsu","effects":[{"type":"vocaloid","amount":0.5}],"notes":[{"bar":1,"beat":1,"len":"4","pitch":"E4","lyric":"つ"},{"bar":1,"beat":2,"len":"4","pitch":"G4","lyric":"き"},{"bar":1,"beat":3,"len":"2","pitch":"A4","lyric":"の"},{"bar":2,"beat":1,"len":"4","pitch":"A4","lyric":"ひ"},{"bar":2,"beat":2,"len":"4","pitch":"G4","lyric":"か"},{"bar":2,"beat":3,"len":"2","pitch":"E4","lyric":"り"},{"bar":3,"beat":1,"len":"2","pitch":"F4","lyric":"し"},{"bar":3,"beat":3,"len":"2","pitch":"D4","lyric":"ず"},{"bar":4,"beat":1,"len":"1","pitch":"A3","lyric":"か"}]},{"id":"pf","kind":"inst","program":"electric_piano_1","mml":"o3 l4 'ace'2 'ace'4 e4 'face'2 'face'4 e4 'dfac'2 'dfac'4 a4 'ace'1"},{"id":"ba","kind":"inst","program":"electric_bass_finger","mml":"o2 l4 a e a e f c f c d a d a a e a a"},{"id":"dr","kind":"drums","pattern":"4beat"}]},"exportEnabled":true}
+[page] export つきのひかり.mp3: {"file":"つきのひかり.mp3","bytes":277106,"seconds":11.5,"mixL":{"rmsDb":-13.84,"peakDb":-1.5,"clipped":0},"mixR":{"rmsDb":-13.84,"peakDb":-1.5,"clipped":0},"acc":{"rmsDb":-17.66,"peakDb":-3.95,"clipped":0},"vox":{"rmsDb":-19.85,"peakDb":-8.99,"clipped":0},"scheduled":{"accStart":0.5366893424036281,"vocalSongZero":0.5366893424036281},"playback":{"elapsedSeconds":11.51031746031746,"maxRms":0.31833038637386135,"observations":383},"soundfont":{"mode":"soundfont","files":["0040_FluidR3_GM_sf2_file","0330_FluidR3_GM_sf2_file","12836_0_FluidR3_GM_sf2_file"]}}
+PASS llm2.mp3-button {"download":"./out/llm-downloads-1794794987046/つきのひかり.mp3"}
+[page] export llm-answer-2.mp3: {"file":"llm-answer-2.mp3","bytes":277106,"seconds":11.5,"mixL":{"rmsDb":-13.84,"peakDb":-1.5,"clipped":0},"mixR":{"rmsDb":-13.84,"peakDb":-1.5,"clipped":0},"acc":{"rmsDb":-17.66,"peakDb":-3.95,"clipped":0},"vox":{"rmsDb":-19.85,"peakDb":-8.99,"clipped":0},"scheduled":{"accStart":0.5366893424036281,"vocalSongZero":0.5366893424036281},"playback":{"elapsedSeconds":11.51031746031746,"maxRms":0.31833041648872384,"observations":382},"soundfont":{"mode":"soundfont","files":["0040_FluidR3_GM_sf2_file","0330_FluidR3_GM_sf2_file","12836_0_FluidR3_GM_sf2_file"]}}
+PASS llm2.actual-playback {"playback":{"elapsedSeconds":11.51031746031746,"maxRms":0.31833041648872384,"observations":382}}
+PASS llm2.download-matches-export {"corr":1,"diffDb":-76.10000000000001,"bytes":277106}
+PASS llm2.audio {"mixL":{"rmsDb":-14.13,"peakDb":-1.88,"clipped":0},"mixR":{"rmsDb":-14.13,"peakDb":-1.88,"clipped":0},"vocalSection":{"rmsDb":-19.24,"peakDb":-9,"clipped":0},"accSection":{"rmsDb":-17.07,"peakDb":-3.95,"clipped":0},"seconds":10}
+[page] import: 1 problems
+PASS ui.located-error {"fixRequest":"さきほどの SongDoc に次の問題がありました。MML も含む、直した SongDoc の JSON 全体を ```json フェンス1つで返してください。\n\n- tracks[0].notes[0].pitch: 歌 1小節目 1拍目: pitch=\"H4\" が読めません（例 \"G4\" \"C#5\"）\n"}
+PASS ui.copy-fix {"chars":154}

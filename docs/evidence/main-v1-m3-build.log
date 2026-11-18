@@ -1,0 +1,5 @@
+
+> browser-dtm@0.1.0 build
+> node scripts/build.mjs
+
+built dist/ (VocaTab: $VOCATAB_DIR, build 20261116022534)

@@ -1,0 +1,107 @@
+```json
+{
+  "version": 1,
+  "title": "つきのひかり",
+  "bpm": 96,
+  "beatsPerBar": 4,
+  "key": "A minor",
+  "bars": 4,
+  "chords": "| Am | Fmaj7 | Dm7 | Am |",
+  "tracks": [
+    {
+      "id": "vo",
+      "kind": "vocal",
+      "engine": "vocatab",
+      "singer": "ritsu",
+      "effects": [
+        {
+          "type": "vocaloid",
+          "amount": 0.5
+        }
+      ],
+      "notes": [
+        {
+          "bar": 1,
+          "beat": 1,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "つ"
+        },
+        {
+          "bar": 1,
+          "beat": 2,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "き"
+        },
+        {
+          "bar": 1,
+          "beat": 3,
+          "len": "2",
+          "pitch": "A4",
+          "lyric": "の"
+        },
+        {
+          "bar": 2,
+          "beat": 1,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "ひ"
+        },
+        {
+          "bar": 2,
+          "beat": 2,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "か"
+        },
+        {
+          "bar": 2,
+          "beat": 3,
+          "len": "2",
+          "pitch": "E4",
+          "lyric": "り"
+        },
+        {
+          "bar": 3,
+          "beat": 1,
+          "len": "2",
+          "pitch": "F4",
+          "lyric": "し"
+        },
+        {
+          "bar": 3,
+          "beat": 3,
+          "len": "2",
+          "pitch": "D4",
+          "lyric": "ず"
+        },
+        {
+          "bar": 4,
+          "beat": 1,
+          "len": "1",
+          "pitch": "A3",
+          "lyric": "か"
+        }
+      ]
+    },
+    {
+      "id": "pf",
+      "kind": "inst",
+      "program": "electric_piano_1",
+      "mml": "o3 l4 'ace'2 'ace'4 e4 'face'2 'face'4 e4 'dfac'2 'dfac'4 a4 'ace'1"
+    },
+    {
+      "id": "ba",
+      "kind": "inst",
+      "program": "electric_bass_finger",
+      "mml": "o2 l4 a e a e f c f c d a d a a e a a"
+    },
+    {
+      "id": "dr",
+      "kind": "drums",
+      "pattern": "4beat"
+    }
+  ]
+}
+```

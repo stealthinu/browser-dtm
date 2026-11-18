@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "title": "夕空ポップ",
+  "bpm": 120,
+  "beatsPerBar": 4,
+  "key": "C",
+  "bars": 4,
+  "chords": "| C | F | G | C |",
+  "tracks": [
+    {
+      "id": "vo",
+      "kind": "vocal",
+      "singer": "ritsu",
+      "effects": [],
+      "notes": [
+        {
+          "bar": 1,
+          "beat": 1,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "ゆ"
+        },
+        {
+          "bar": 1,
+          "beat": 2,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "う"
+        },
+        {
+          "bar": 1,
+          "beat": 3,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "や"
+        },
+        {
+          "bar": 2,
+          "beat": 1,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "け"
+        },
+        {
+          "bar": 2,
+          "beat": 2,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "そ"
+        },
+        {
+          "bar": 2,
+          "beat": 3,
+          "len": "4",
+          "pitch": "D4",
+          "lyric": "ら"
+        },
+        {
+          "bar": 3,
+          "beat": 1,
+          "len": "4",
+          "pitch": "F4",
+          "lyric": "に"
+        },
+        {
+          "bar": 3,
+          "beat": 2,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "と"
+        },
+        {
+          "bar": 3,
+          "beat": 3,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "け"
+        },
+        {
+          "bar": 4,
+          "beat": 1,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "て"
+        },
+        {
+          "bar": 4,
+          "beat": 2,
+          "len": "4",
+          "pitch": "D4",
+          "lyric": "い"
+        },
+        {
+          "bar": 4,
+          "beat": 3,
+          "len": "4",
+          "pitch": "C4",
+          "lyric": "く"
+        }
+      ]
+    },
+    {
+      "id": "pf",
+      "kind": "inst",
+      "instrument": 0,
+      "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'fac' 'fac' 'fac' 'fac' 'dgb' 'dgb' 'dgb' 'dgb' 'ceg' 'ceg' 'ceg' 'ceg'"
+    },
+    {
+      "id": "ba",
+      "kind": "inst",
+      "instrument": 33,
+      "mml": "o2 l2 c g f c g d c c"
+    },
+    {
+      "id": "dr",
+      "kind": "drums",
+      "pattern": "8beat"
+    }
+  ]
+}

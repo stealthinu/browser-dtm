@@ -1,0 +1,22 @@
+[
+  {
+    "answer": "gallery-answer-1.txt",
+    "job": "20261116-112030-creative-sonnet-1a3b",
+    "provider": "claude/claude-sonnet-5-5",
+    "prompt_sha256": "05221ea545aca7b76e919499b3c63314640fefc4691d8d3c7b015df0b0f0720c",
+    "answer_sha256": "6b7e0fa9777b92645c7e6d84394d8448de475ca49ca5f7f9f355e216f3a4b155",
+    "source": "status/<job>.json result_text (未編集)",
+    "auth_fallback": false,
+    "duration_s": 11.3
+  },
+  {
+    "answer": "long-answer-1.txt",
+    "job": "20261116-112056-exec-sol-2a27",
+    "provider": "codex/gpt-6.1-sol",
+    "prompt_sha256": "9db3553151bce5d59fb35a67309947434be804f047ea74f5e82005b7fb82d9ce",
+    "answer_sha256": "d826c1b09b49bcbf5b48e096ec332ee5cf585cf2c3b2b7f5c0b8b0e4a878c651",
+    "source": "status/<job>.json result_text (未編集)",
+    "auth_fallback": false,
+    "duration_s": 54.9
+  }
+]

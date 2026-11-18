@@ -1,0 +1,26 @@
+
+> browser-dtm@0.1.0 e2e:soundfont
+> node scripts/e2e-soundfont.mjs
+
+PASS FluidR3楽器とドラムをロード {"mode":"soundfont","files":["0000_FluidR3_GM_sf2_file","0330_FluidR3_GM_sf2_file","12836_0_FluidR3_GM_sf2_file","12842_0_FluidR3_GM_sf2_file","12838_0_FluidR3_GM_sf2_file","12839_0_FluidR3_GM_sf2_file"]}
+PASS 伴奏の波形・スペクトル差 {"correlation":-0.069,"synthCentroid":3440.125663579791,"sfCentroid":3255.247531439587}
+PASS MP3有音・clip0 {"L":{"rmsDb":-15.29,"peakDb":-1.28,"clipped":0},"R":{"rmsDb":-15.29,"peakDb":-1.28,"clipped":0}}
+PASS 歌・伴奏区間有音 {"vocal":{"rmsDb":-20.36,"peakDb":-5.62,"clipped":0},"accompaniment":{"rmsDb":-18.11,"peakDb":-1.73,"clipped":0}}
+PASS Chromeで実再生 {"elapsedSeconds":9.513401360544218,"maxRms":0.31905476878056854,"observations":317}
+FAIL 失敗時に警告・内蔵で有音 {"soundfont":{"mode":"soundfont","files":["0000_FluidR3_GM_sf2_file","0330_FluidR3_GM_sf2_file","12836_0_FluidR3_GM_sf2_file","12842_0_FluidR3_GM_sf2_file","12838_0_FluidR3_GM_sf2_file","12839_0_FluidR3_GM_sf2_file"]},"warning":"","acc":{"rmsDb":-18.84,"peakDb":-1.73,"clipped":0}}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: SoundFont受入テスト失敗
+    at file://./scripts/e2e-soundfont.mjs:43:1
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

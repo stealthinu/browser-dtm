@@ -1,0 +1,20 @@
+[
+  {
+    "answer": "answer-1.txt",
+    "job": "20261116-104156-creative-sonnet-253b",
+    "provider": "claude/claude-sonnet-5-5",
+    "prompt_sha256": "68c0ea109f06d106193e9ae7d65856782498651446d0b310366e9ff863b2d92f",
+    "answer_sha256": "0b0e89ff2e85c831430fb78402904b27f31f6210fcb1c7154fcd5fac626beb6c",
+    "source": "status/<job>.json result_text (未編集)",
+    "auth_fallback": false
+  },
+  {
+    "answer": "answer-2.txt",
+    "job": "20261116-104332-exec-sol-7d9f",
+    "provider": "codex/exec-sol",
+    "prompt_sha256": "9cf97f203489143bf5f549831535a920574a29985246e4736d8b47ded8f7b3b9",
+    "answer_sha256": "efe850777541dbd01118d98ee4e20925b393a5afe44120a2ab404791e6c77be6",
+    "source": "status/<job>.json result_text (未編集)",
+    "auth_fallback": false
+  }
+]

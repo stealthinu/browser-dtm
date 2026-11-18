@@ -35,10 +35,10 @@ LLM に「この歌詞で、こんな曲」と頼むと、**歌＋数パート�
 - **A7**: `README.md` に起動方法（依存の取得、上流ソース・モデルの取得手順、テスト、書き出しの手順）が書かれていて、そのとおりに再現できる。
 
 ## 4. 制約（必ず守る）
-- 正本は**非公開** GitHub リポジトリ `stealthinu/browser-dtm`。自分のブランチ（`impl/<手法>`）だけに commit/push。**main へ直接 push しない、force-push しない、他のブランチに触らない**。節目ごとに commit/push。
-- **公開しない**（リポジトリを public にしない、GitHub Pages・外部ホスティングに出さない）。**上流（VocaTab・dtm）に issue/PR/コメントをしない**。作った曲を SNS 等に**投稿しない**。
+- 正本は GitHub リポジトリ `stealthinu/browser-dtm`（AGPL-3.0-or-later）。デモは GitHub Pages（https://stealthinu.github.io/browser-dtm/）。歌声モデルは同梱せず VocaTab 公式配布から読む。
+- **上流（VocaTab・dtm）に issue/PR/コメントをしない**。作った曲を SNS 等に**投稿しない**。歌声モデル・ボコーダは再ホストしない。
 - **著作権表示を残す**: VocaTab（MIT, Copyright (c) 2026 wavtechyukky、THIRD_PARTY_NOTICES）と dtm（AGPL-3.0-or-later, onjmin）の表示を `NOTICE.md`／README に残し、取り込んだコードのヘッダも消さない。本リポジトリは dtm の AGPL を継承する前提（`LICENSE-POLICY.md`）。
-- **歌声モデル・ボコーダ・SoundFont をリポジトリに commit しない**。VocaTab の `voicebanks/`・`vocoders/` は「個人・非商用・再配布禁止」。実行時に上流の clone（`.gitignore` した `vendor/` 等）から読むか、ローカルの置き場所（環境変数 `VOCATAB_DIR`。box では `/workspace/dtm-research/vocatab` に clone 済み）を指す。SoundFont は実行時に CDN（dtm 既定、FluidR3 / GeneralUser GS のみ）から読む。`.gitignore` に `vendor/`, `*.onnx`, `*.sf2`, `node_modules/`, 生成した音声（`out/`）を入れる。
+- **歌声モデル・ボコーダ・SoundFont をリポジトリに commit しない**。VocaTab の `voicebanks/`・`vocoders/` は「個人・非商用・再配布禁止」。実行時は VocaTab 公式配布（GitHub Pages）から読むか、開発時は上流の clone（`.gitignore` した `vendor/` 等、環境変数 `VOCATAB_DIR`）を指す。SoundFont は実行時に CDN（dtm 既定、FluidR3 / GeneralUser GS のみ）から読む。`.gitignore` に `vendor/`, `*.onnx`, `*.sf2`, `node_modules/`, 生成した音声（`out/`）を入れる。
 - 生成したサンプルの音声（MP3/WAV）は commit しない（`out/` に置く）。確認用の数値・スクリーンショット（小さな PNG）は可。
 - **秘密の値（トークン・APIキー・パスワード）をどこにも書かない**（コード、コミット、ログ、REPORT）。
 - GPU は使わない（必要なら止めて REPORT に書く。GPU 処理は gpuq 経由の別作業）。MogulSim のジョブ・プロセスに触らない。他のジョブのプロセスを kill しない（kill は自分が起こした PID 指定だけ）。
@@ -57,3 +57,24 @@ LLM に「この歌詞で、こんな曲」と頼むと、**歌＋数パート�
 ## 6. 参考（上流の場所、メモより）
 - VocaTab: `ui/src/model.ts`（Project/Note, TPQ=480）、`ui/src/engine-web/{worker,core,client,protocol}.ts`、`ui/src/engine.ts`（composeF0, phraseParams）、`ui/src/export.ts`（OfflineAudioContext）、ビルド `python tools/build.py`（esbuild）。
 - dtm: `src/types.ts`（DawInstance: loadMML/getMML/play/stop/exportMIDI…）、`playMML`、`createBackingAudio`（`src/audio/backing-audio.ts`、同じ AudioContext の時計で頭を揃える）、`scripts/compose/strata-compose.ts`（OpenAI 互換の道具ループの前例）、README の MML 記法。
+
+## 7. プロンプト往復の流れ（main-v1）
+
+1. 歌詞（かな）と曲のイメージを入力し、プロンプトをコピーする。既存の曲を変える場合は「今の曲を土台にする」を選ぶ。
+2. 契約しているLLMへ貼る。プロンプトにはSongDoc仕様、音価・音名・MML、GM楽器指定、vocaloidを含むエフェクト、完全な例と任意の現在曲が含まれる。従量APIやキーは不要。
+3. LLMの返答全文を貼り、「読み込んで鳴らす」。正規出力は `json` フェンス1つのSongDoc全体で、伴奏MMLもJSON内に含む。歌をVocaTabで合成し、FluidR3 GM伴奏と同じ時計で実再生する。
+4. 説明文・裸JSON・複数フェンス・末尾カンマ・コメント・全角・表記ゆれなどの軽微な崩れを共通パーサで直し、「自動修正した点」に表示する。曲の構造・単音の重なり・音域・小節範囲・歌詞の一致は検査する。
+5. 修復できない場合は場所つきの問題を出し、「修正依頼文をコピー」でLLMへ戻す。返答を手編集せず、直された返答全文を貼り直す。
+6. ピアノロールで歌の音符とかなを編集できる。再生とMP3/WAV書き出しは同じオフラインPCMを使い、書き出し前にもブラウザで実再生する。
+
+MCPも同じSongDocを正本にする。`get_song` の既定/fullとJSON書き出しは貼付JSONと同形。`load_song_json` は同じパーサを通し、失敗時は元の曲を保つ。`get_prompt` は現在曲と仕様を含む。`set_track_mml.instrument` はGM名/0始まり番号、旧programは互換用に維持する。
+
+## 8. サンプル集ページ（main-v1）
+
+`/gallery.html` を作曲画面から開く。カードは曲3枚以上（ジャンルとテンポを変える）、伴奏2枚以上、歌の効果プリセット2枚以上（ボカロ風0.8・ケロケロ）とし、種類で絞り込める。
+
+各カードは「▶ 試聴」「アプリで開く」「Claude 用にコピー」「ChatGPT 用にコピー」を持つ。試聴はページ内で歌を合成し、伴奏をSoundFontで鳴らす。作曲画面を同一オリジンの再生ホストとして共用する。停止でき、複数カードを同時に鳴らさない。楽器取得失敗時の警告も表示する。
+
+コピー文はサンプルSongDoc全体、共通の書式仕様、「これを土台にどう変えるか」の指示を含む自己完結の文章。M1プロンプト生成器を共有し、ClaudeにはArtifact不要、ChatGPTにはファイルリンク/実行コード不要を添える。成功時は「コピーしました」と表示する。「アプリで開く」は曲・歌詞を読み込み、後から再生・編集・書き出しできる。
+
+データは `fixtures/gallery/*.json`。全件を共通パーサと検査へ通す。headless Chromeのe2eで両コピー内容・実再生録音の非無音・SoundFont利用・画面を確認する。実LLM返答は未編集のテキストとハッシュだけを保存し、MP3・モデル・音源データはcommitしない。

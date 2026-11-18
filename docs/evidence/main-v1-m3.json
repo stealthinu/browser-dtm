@@ -1,0 +1,4741 @@
+{
+  "verification": [
+    {
+      "name": "ci",
+      "command": "npm ci",
+      "code": 0,
+      "start": "2026-11-16T02:25:32.684Z",
+      "seconds": 1.444,
+      "log": "docs/evidence/main-v1-m3-ci.log"
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "code": 0,
+      "start": "2026-11-16T02:25:34.129Z",
+      "seconds": 0.254,
+      "log": "docs/evidence/main-v1-m3-build.log"
+    },
+    {
+      "name": "unit",
+      "command": "npm test",
+      "code": 0,
+      "start": "2026-11-16T02:25:34.383Z",
+      "seconds": 0.662,
+      "log": "docs/evidence/main-v1-m3-unit.log"
+    },
+    {
+      "name": "e2e",
+      "command": "npm run e2e",
+      "code": 0,
+      "start": "2026-11-16T02:25:35.045Z",
+      "seconds": 20.038,
+      "log": "docs/evidence/main-v1-m3-e2e.log"
+    },
+    {
+      "name": "fx",
+      "command": "npm run e2e:fx",
+      "code": 0,
+      "start": "2026-11-16T02:25:55.083Z",
+      "seconds": 109.7,
+      "log": "docs/evidence/main-v1-m3-fx.log"
+    },
+    {
+      "name": "llm",
+      "command": "npm run e2e:llm",
+      "code": 0,
+      "start": "2026-11-16T02:27:44.783Z",
+      "seconds": 60.206,
+      "log": "docs/evidence/main-v1-m3-llm.log"
+    },
+    {
+      "name": "soundfont",
+      "command": "npm run e2e:soundfont",
+      "code": 0,
+      "start": "2026-11-16T02:28:44.990Z",
+      "seconds": 43.792,
+      "log": "docs/evidence/main-v1-m3-soundfont.log"
+    },
+    {
+      "name": "pianoroll",
+      "command": "npm run e2e:pianoroll",
+      "code": 0,
+      "start": "2026-11-16T02:29:28.783Z",
+      "seconds": 17.647,
+      "log": "docs/evidence/main-v1-m3-pianoroll.log"
+    },
+    {
+      "name": "gallery",
+      "command": "npm run e2e:gallery",
+      "code": 0,
+      "start": "2026-11-16T02:29:46.430Z",
+      "seconds": 27.318,
+      "log": "docs/evidence/main-v1-m3-gallery.log"
+    },
+    {
+      "name": "real",
+      "command": "npm run e2e:real",
+      "code": 0,
+      "start": "2026-11-16T02:30:13.749Z",
+      "seconds": 125.465,
+      "log": "docs/evidence/main-v1-m3-real.log"
+    },
+    {
+      "name": "mcp",
+      "command": "npm run mcp:smoke",
+      "code": 0,
+      "start": "2026-11-16T02:32:19.214Z",
+      "seconds": 14.052,
+      "log": "docs/evidence/main-v1-m3-mcp.log"
+    }
+  ],
+  "audio": [
+    {
+      "file": "llm-answer-1.mp3",
+      "seconds": 9.535,
+      "rmsDb": -14.6,
+      "peakDb": -0.87,
+      "clipped": 0,
+      "samples": 840960,
+      "bytes": 228832,
+      "sha256": "89b95aebb1237436a95810f2333ea1547e3f866bfa31c77e19619f44fcb9f182",
+      "mtime": "2026-11-16T02:28:13.392Z"
+    },
+    {
+      "file": "llm-answer-2.mp3",
+      "seconds": 11.546,
+      "rmsDb": -14.13,
+      "peakDb": -1.88,
+      "clipped": 0,
+      "samples": 1018368,
+      "bytes": 277106,
+      "sha256": "99a2bc2dff48de4a80b458451ee23212766373bc02f1478e383c0be42e88ec04",
+      "mtime": "2026-11-16T02:28:44.799Z"
+    },
+    {
+      "file": "llm-gallery-answer.mp3",
+      "seconds": 9.535,
+      "rmsDb": -14.82,
+      "peakDb": -0.9,
+      "clipped": 0,
+      "samples": 840960,
+      "bytes": 228832,
+      "sha256": "1ae76173063337b95d9c87a30c19fc2a47db93c1066455b5aac876b1456de093",
+      "mtime": "2026-11-16T02:30:42.048Z"
+    },
+    {
+      "file": "llm-long-song.mp3",
+      "seconds": 33.541,
+      "rmsDb": -16.77,
+      "peakDb": -1.6,
+      "clipped": 0,
+      "samples": 2958336,
+      "bytes": 804989,
+      "sha256": "cd57ba0b9613ebf8af7c3769d5cfcd03cf429aa05794ad560e443ffe3a106d48",
+      "mtime": "2026-11-16T02:32:19.073Z"
+    },
+    {
+      "file": "mcp-song.mp3",
+      "seconds": 5.904,
+      "rmsDb": -16.01,
+      "peakDb": -1.52,
+      "clipped": 0,
+      "samples": 520704,
+      "bytes": 141688,
+      "sha256": "9df93004227145d718c10f5367a3405abea742cc11a7fc1e8ba17bba19e2032c",
+      "mtime": "2026-11-16T02:32:33.201Z"
+    },
+    {
+      "file": "pianoroll-edited.mp3",
+      "seconds": 5.538,
+      "rmsDb": -18.47,
+      "peakDb": -1.29,
+      "clipped": 0,
+      "samples": 488448,
+      "bytes": 132911,
+      "sha256": "d797d3e0dc80e4805d6603f79186c7f0a3c02b2a231798a791553a72a8abdfe7",
+      "mtime": "2026-11-16T02:29:46.333Z"
+    },
+    {
+      "file": "soundfont-song.mp3",
+      "seconds": 9.535,
+      "rmsDb": -15.29,
+      "peakDb": -1.28,
+      "clipped": 0,
+      "samples": 840960,
+      "bytes": 228832,
+      "sha256": "ae9e479c44bdcb600d6eda21185f3bc573ed6686506c06fee499d4606f3f5264",
+      "mtime": "2026-11-16T02:29:28.682Z"
+    },
+    {
+      "file": "vocaloid-0.5.mp3",
+      "seconds": 9.535,
+      "rmsDb": -15.19,
+      "peakDb": -1.59,
+      "clipped": 0,
+      "samples": 840960,
+      "bytes": 228832,
+      "sha256": "32aec3de6c23308ceaa813a538db6cf98e3ea05e1f137cc2d4e458849bee82b3",
+      "mtime": "2026-11-16T02:27:32.437Z"
+    },
+    {
+      "file": "vocaloid-0.mp3",
+      "seconds": 9.535,
+      "rmsDb": -15.29,
+      "peakDb": -1.28,
+      "clipped": 0,
+      "samples": 840960,
+      "bytes": 228832,
+      "sha256": "a124f6d14dd3dfde996fc6b6c4508183716e678d94675900a03b74de10c27d00",
+      "mtime": "2026-11-16T02:27:20.290Z"
+    },
+    {
+      "file": "vocaloid-1.mp3",
+      "seconds": 9.535,
+      "rmsDb": -15.19,
+      "peakDb": -1.26,
+      "clipped": 0,
+      "samples": 840960,
+      "bytes": 228832,
+      "sha256": "f9a6f87c9a31c3d9d1a2ce7abb4ee6d7f7da6c2a02be1994322f2d239ee8d245",
+      "mtime": "2026-11-16T02:27:44.661Z"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "out/final/screenshot-main.png",
+      "bytes": 230381,
+      "mtime": "2026-11-16T02:30:42.168Z",
+      "fresh": true,
+      "sha256": "ec1cac72eb18059212d5ed8787847f3e7e96216a7c4dc45341aea9bc9ece2beb"
+    },
+    {
+      "path": "out/final/screenshot-pianoroll.png",
+      "bytes": 222064,
+      "mtime": "2026-11-16T02:29:46.333Z",
+      "fresh": true,
+      "sha256": "5827c5cf268b2718e8d1d9d59b759e4da36455afc25cebb13ac0196f103ef394"
+    },
+    {
+      "path": "out/final/screenshot-gallery.png",
+      "bytes": 401193,
+      "mtime": "2026-11-16T02:30:13.509Z",
+      "fresh": true,
+      "sha256": "70a5170db4be166d6c9eaaac77bfcdeafd7b9a398462fc2758ed0bfc863db377"
+    }
+  ],
+  "base": {
+    "checks": {
+      "A1.import": {
+        "ok": true,
+        "problems": "問題なし",
+        "tracks": [
+          "vo:vocal",
+          "pf:inst",
+          "ba:inst",
+          "dr:drums"
+        ]
+      },
+      "A2.actual-playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.513401360544217,
+          "maxRms": 0.3197675849536961,
+          "observations": 317
+        }
+      },
+      "A2.mp3-not-silent": {
+        "ok": true,
+        "rmsDb": -15.29,
+        "peakDb": -1.28
+      },
+      "A2.mp3-not-clipping": {
+        "ok": true,
+        "clipped": 0
+      },
+      "A2.vocal-section": {
+        "ok": true,
+        "voxRmsDb": -19.34
+      },
+      "A2.acc-section": {
+        "ok": true,
+        "accRmsDb": -18.11
+      },
+      "A2.each-bar": {
+        "ok": true,
+        "bars": 4
+      },
+      "A3.head-offset<30ms": {
+        "ok": true,
+        "accOnsetMs": 0.63,
+        "vocalPlacementLagMs": 0,
+        "vocalOnsetRecordedMs": 0,
+        "vocalOnsetRenderedMs": 0,
+        "scheduledDiffMs": 0,
+        "headOffsetMs": 0.63,
+        "recorderGlitchBlocks256": 0
+      }
+    },
+    "browser": {
+      "file": "song.mp3",
+      "bytes": 228832,
+      "seconds": 9.5,
+      "mixL": {
+        "rmsDb": -15.01,
+        "peakDb": -1.18,
+        "clipped": 0
+      },
+      "mixR": {
+        "rmsDb": -15.01,
+        "peakDb": -1.18,
+        "clipped": 0
+      },
+      "acc": {
+        "rmsDb": -18.84,
+        "peakDb": -1.73,
+        "clipped": 0
+      },
+      "vox": {
+        "rmsDb": -20.36,
+        "peakDb": -5.62,
+        "clipped": 0
+      },
+      "scheduled": {
+        "accStart": 0.530907029478458,
+        "vocalSongZero": 0.530907029478458
+      },
+      "playback": {
+        "elapsedSeconds": 9.513401360544217,
+        "maxRms": 0.3197675849536961,
+        "observations": 317
+      },
+      "soundfont": {
+        "mode": "soundfont",
+        "files": [
+          "0000_FluidR3_GM_sf2_file",
+          "0330_FluidR3_GM_sf2_file",
+          "12836_0_FluidR3_GM_sf2_file",
+          "12842_0_FluidR3_GM_sf2_file",
+          "12838_0_FluidR3_GM_sf2_file",
+          "12839_0_FluidR3_GM_sf2_file"
+        ]
+      },
+      "vocalRender": {
+        "ms": 4885.969999998808,
+        "analyzeMs": 2244.1500000059605,
+        "cached": false,
+        "phrases": 1,
+        "phraseTimings": [
+          {
+            "index": 0,
+            "startSec": -0.3076643990929705,
+            "seconds": 8.057324263038549,
+            "ms": 2637.8350000083447,
+            "notes": 12
+          }
+        ]
+      },
+      "saved": [
+        "out/song.mp3",
+        "out/song.acc.wav",
+        "out/song.vox.wav",
+        "out/song.mix.wav",
+        "out/song.vox-ref.wav"
+      ]
+    },
+    "mp3": {
+      "seconds": 9.535,
+      "L": {
+        "rmsDb": -15.29,
+        "peakDb": -1.28,
+        "clipped": 0
+      },
+      "R": {
+        "rmsDb": -15.29,
+        "peakDb": -1.28,
+        "clipped": 0
+      },
+      "mp3VsWavLagMs": 25.057
+    },
+    "perBar": [
+      {
+        "bar": 1,
+        "mix": -14.15,
+        "acc": -17.43,
+        "vox": -20.28
+      },
+      {
+        "bar": 2,
+        "mix": -13.54,
+        "acc": -17.7,
+        "vox": -18.43
+      },
+      {
+        "bar": 3,
+        "mix": -13.67,
+        "acc": -17.52,
+        "vox": -19.34
+      },
+      {
+        "bar": 4,
+        "mix": -16.26,
+        "acc": -20.47,
+        "vox": -20.81
+      },
+      {
+        "bar": 5,
+        "mix": -31.98,
+        "acc": -33.95,
+        "vox": -999
+      }
+    ],
+    "sections": {
+      "vocalSection": {
+        "from": 0,
+        "to": 7.5,
+        "vox": {
+          "rmsDb": -19.34,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "acc": {
+          "rmsDb": -17.89,
+          "peakDb": -1.73,
+          "clipped": 0
+        }
+      },
+      "accSection": {
+        "from": 0,
+        "to": 8,
+        "acc": {
+          "rmsDb": -18.11,
+          "peakDb": -1.73,
+          "clipped": 0
+        }
+      },
+      "afterSong": {
+        "from": 9,
+        "vox": {
+          "rmsDb": -999,
+          "peakDb": -999,
+          "clipped": 0
+        },
+        "acc": {
+          "rmsDb": -999,
+          "peakDb": -999,
+          "clipped": 0
+        }
+      }
+    },
+    "head": {
+      "accOnsetMs": 0.63,
+      "vocalPlacementLagMs": 0,
+      "vocalOnsetRecordedMs": 0,
+      "vocalOnsetRenderedMs": 0,
+      "scheduledDiffMs": 0,
+      "headOffsetMs": 0.63,
+      "recorderGlitchBlocks256": 0
+    },
+    "elapsedSec": 19.763
+  },
+  "fx": {
+    "checks": {
+      "A1.import": {
+        "ok": true,
+        "problems": "問題なし",
+        "tracks": [
+          "vo:vocal",
+          "pf:inst",
+          "ba:inst",
+          "dr:drums"
+        ]
+      },
+      "A4.kero.0.playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.513401360544218,
+          "maxRms": 0.3197675851263745,
+          "observations": 317
+        }
+      },
+      "A4.kero.1.playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.513401360544215,
+          "maxRms": 0.3069790887433963,
+          "observations": 317
+        }
+      },
+      "A4.vocoder.1.playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.513401360544215,
+          "maxRms": 0.3233587919719853,
+          "observations": 317
+        }
+      },
+      "A4.bitcrusher.1.playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.513401360544215,
+          "maxRms": 0.31718942378358544,
+          "observations": 317
+        }
+      },
+      "A4.doubling.1.playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.513401360544215,
+          "maxRms": 0.33501777245778774,
+          "observations": 317
+        }
+      },
+      "A4.control(no-fx twice)": {
+        "ok": true,
+        "corrVox": 1,
+        "corrMix": 1,
+        "corrMp3": 1,
+        "identicalMp3": false,
+        "diffVoxDb": -978.64
+      },
+      "A4.kero": {
+        "ok": true,
+        "corrVox": -0.0953,
+        "diffVoxDb": 3.37,
+        "corrMp3L": 0.5438,
+        "lrDiffDb": -983.83,
+        "vox0": {
+          "rmsDb": -20.36,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "vox1": {
+          "rmsDb": -20.43,
+          "peakDb": -7.58,
+          "clipped": 0
+        }
+      },
+      "A4.vocoder": {
+        "ok": true,
+        "corrVox": 0.1909,
+        "diffVoxDb": 2.09,
+        "corrMp3L": 0.6649,
+        "lrDiffDb": -983.71,
+        "vox0": {
+          "rmsDb": -20.36,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "vox1": {
+          "rmsDb": -20.35,
+          "peakDb": -2.05,
+          "clipped": 0
+        }
+      },
+      "A4.bitcrusher": {
+        "ok": true,
+        "corrVox": 0.6174,
+        "diffVoxDb": -0.59,
+        "corrMp3L": 0.8237,
+        "lrDiffDb": -984.07,
+        "vox0": {
+          "rmsDb": -20.36,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "vox1": {
+          "rmsDb": -19.37,
+          "peakDb": -6.02,
+          "clipped": 0
+        }
+      },
+      "A4.doubling": {
+        "ok": true,
+        "corrVox": 0.731,
+        "diffVoxDb": -2.67,
+        "corrMp3L": 0.8581,
+        "lrDiffDb": -5.33,
+        "vox0": {
+          "rmsDb": -20.36,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "vox1": {
+          "rmsDb": -20.31,
+          "peakDb": -3.99,
+          "clipped": 0
+        }
+      },
+      "vocaloid.0.playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.513401360544222,
+          "maxRms": 0.31976758541217654,
+          "observations": 317
+        }
+      },
+      "vocaloid.0.loudness": {
+        "ok": true,
+        "voicedRmsDeltaDb": 0,
+        "voicedRmsDb": -19.089160286580913,
+        "voicedSamples": 312236,
+        "voicedFrames": 602,
+        "unvoicedFrames": 14,
+        "consonantBandDeltaDb": 0,
+        "centroidHz": 3044.4880404513174
+      },
+      "vocaloid.0.consonants": {
+        "ok": true,
+        "voicedRmsDeltaDb": 0,
+        "voicedRmsDb": -19.089160286580913,
+        "voicedSamples": 312236,
+        "voicedFrames": 602,
+        "unvoicedFrames": 14,
+        "consonantBandDeltaDb": 0,
+        "centroidHz": 3044.4880404513174
+      },
+      "vocaloid.0.audio": {
+        "ok": true,
+        "mp3": {
+          "L": {
+            "rmsDb": -15.29,
+            "peakDb": -1.28,
+            "clipped": 0
+          },
+          "R": {
+            "rmsDb": -15.29,
+            "peakDb": -1.28,
+            "clipped": 0
+          }
+        },
+        "vox": {
+          "rmsDb": -20.36,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "acc": {
+          "rmsDb": -18.84,
+          "peakDb": -1.73,
+          "clipped": 0
+        }
+      },
+      "vocaloid.zero-identical": {
+        "ok": true,
+        "corr": 1,
+        "diffDb": -978.64
+      },
+      "vocaloid.0.5.playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.513401360544222,
+          "maxRms": 0.3191138188347172,
+          "observations": 317
+        }
+      },
+      "vocaloid.0.5.loudness": {
+        "ok": true,
+        "voicedRmsDeltaDb": -0.0019396000791483323,
+        "voicedRmsDb": -19.091099886660064,
+        "voicedSamples": 312236,
+        "voicedFrames": 602,
+        "unvoicedFrames": 14,
+        "consonantBandDeltaDb": 0.48086413336820244,
+        "centroidHz": 3805.10678626306
+      },
+      "vocaloid.0.5.consonants": {
+        "ok": true,
+        "voicedRmsDeltaDb": -0.0019396000791483323,
+        "voicedRmsDb": -19.091099886660064,
+        "voicedSamples": 312236,
+        "voicedFrames": 602,
+        "unvoicedFrames": 14,
+        "consonantBandDeltaDb": 0.48086413336820244,
+        "centroidHz": 3805.10678626306
+      },
+      "vocaloid.0.5.audio": {
+        "ok": true,
+        "mp3": {
+          "L": {
+            "rmsDb": -15.19,
+            "peakDb": -1.59,
+            "clipped": 0
+          },
+          "R": {
+            "rmsDb": -15.19,
+            "peakDb": -1.59,
+            "clipped": 0
+          }
+        },
+        "vox": {
+          "rmsDb": -20.36,
+          "peakDb": -9.19,
+          "clipped": 0
+        },
+        "acc": {
+          "rmsDb": -18.84,
+          "peakDb": -1.73,
+          "clipped": 0
+        }
+      },
+      "vocaloid.1.playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.513401360544222,
+          "maxRms": 0.3311402189078302,
+          "observations": 317
+        }
+      },
+      "vocaloid.1.loudness": {
+        "ok": true,
+        "voicedRmsDeltaDb": -0.006733124047748033,
+        "voicedRmsDb": -19.095893410628662,
+        "voicedSamples": 312236,
+        "voicedFrames": 602,
+        "unvoicedFrames": 14,
+        "consonantBandDeltaDb": 0.5184232432392437,
+        "centroidHz": 4111.275183987935
+      },
+      "vocaloid.1.consonants": {
+        "ok": true,
+        "voicedRmsDeltaDb": -0.006733124047748033,
+        "voicedRmsDb": -19.095893410628662,
+        "voicedSamples": 312236,
+        "voicedFrames": 602,
+        "unvoicedFrames": 14,
+        "consonantBandDeltaDb": 0.5184232432392437,
+        "centroidHz": 4111.275183987935
+      },
+      "vocaloid.1.audio": {
+        "ok": true,
+        "mp3": {
+          "L": {
+            "rmsDb": -15.19,
+            "peakDb": -1.26,
+            "clipped": 0
+          },
+          "R": {
+            "rmsDb": -15.19,
+            "peakDb": -1.26,
+            "clipped": 0
+          }
+        },
+        "vox": {
+          "rmsDb": -20.36,
+          "peakDb": -8.49,
+          "clipped": 0
+        },
+        "acc": {
+          "rmsDb": -18.84,
+          "peakDb": -1.73,
+          "clipped": 0
+        }
+      },
+      "vocaloid.timbre": {
+        "ok": true,
+        "liftHz": 1066.7871435366174,
+        "originalLiftHz": 1076.1836722045623,
+        "retained": 0.9912686570976345
+      }
+    },
+    "fx": {
+      "kero@0": {
+        "name": "fx-kero-0",
+        "vox": {
+          "rmsDb": -20.36,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "mixL": {
+          "rmsDb": -15.01,
+          "peakDb": -1.18,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -15.01,
+          "peakDb": -1.18,
+          "clipped": 0
+        }
+      },
+      "kero@1": {
+        "name": "fx-kero-1",
+        "vox": {
+          "rmsDb": -20.43,
+          "peakDb": -7.58,
+          "clipped": 0
+        },
+        "mixL": {
+          "rmsDb": -14.89,
+          "peakDb": -1.04,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -14.89,
+          "peakDb": -1.04,
+          "clipped": 0
+        },
+        "vs0": {
+          "corrVox": -0.0953,
+          "diffVoxDb": 3.37,
+          "corrMp3L": 0.5438,
+          "lrDiffDb": -983.83,
+          "vox0": {
+            "rmsDb": -20.36,
+            "peakDb": -5.62,
+            "clipped": 0
+          },
+          "vox1": {
+            "rmsDb": -20.43,
+            "peakDb": -7.58,
+            "clipped": 0
+          }
+        }
+      },
+      "vocoder@0": {
+        "name": "fx-kero-0",
+        "vox": {
+          "rmsDb": -20.36,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "mixL": {
+          "rmsDb": -15.01,
+          "peakDb": -1.18,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -15.01,
+          "peakDb": -1.18,
+          "clipped": 0
+        }
+      },
+      "vocoder@1": {
+        "name": "fx-vocoder-1",
+        "vox": {
+          "rmsDb": -20.35,
+          "peakDb": -2.05,
+          "clipped": 0
+        },
+        "mixL": {
+          "rmsDb": -15.01,
+          "peakDb": -0.98,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -15.01,
+          "peakDb": -0.98,
+          "clipped": 0
+        },
+        "vs0": {
+          "corrVox": 0.1909,
+          "diffVoxDb": 2.09,
+          "corrMp3L": 0.6649,
+          "lrDiffDb": -983.71,
+          "vox0": {
+            "rmsDb": -20.36,
+            "peakDb": -5.62,
+            "clipped": 0
+          },
+          "vox1": {
+            "rmsDb": -20.35,
+            "peakDb": -2.05,
+            "clipped": 0
+          }
+        }
+      },
+      "bitcrusher@0": {
+        "name": "fx-kero-0",
+        "vox": {
+          "rmsDb": -20.36,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "mixL": {
+          "rmsDb": -15.01,
+          "peakDb": -1.18,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -15.01,
+          "peakDb": -1.18,
+          "clipped": 0
+        }
+      },
+      "bitcrusher@1": {
+        "name": "fx-bitcrusher-1",
+        "vox": {
+          "rmsDb": -19.37,
+          "peakDb": -6.02,
+          "clipped": 0
+        },
+        "mixL": {
+          "rmsDb": -14.65,
+          "peakDb": -0.99,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -14.65,
+          "peakDb": -0.99,
+          "clipped": 0
+        },
+        "vs0": {
+          "corrVox": 0.6174,
+          "diffVoxDb": -0.59,
+          "corrMp3L": 0.8237,
+          "lrDiffDb": -984.07,
+          "vox0": {
+            "rmsDb": -20.36,
+            "peakDb": -5.62,
+            "clipped": 0
+          },
+          "vox1": {
+            "rmsDb": -19.37,
+            "peakDb": -6.02,
+            "clipped": 0
+          }
+        }
+      },
+      "doubling@0": {
+        "name": "fx-kero-0",
+        "vox": {
+          "rmsDb": -20.36,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "mixL": {
+          "rmsDb": -15.01,
+          "peakDb": -1.18,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -15.01,
+          "peakDb": -1.18,
+          "clipped": 0
+        }
+      },
+      "doubling@1": {
+        "name": "fx-doubling-1",
+        "vox": {
+          "rmsDb": -20.31,
+          "peakDb": -3.99,
+          "clipped": 0
+        },
+        "mixL": {
+          "rmsDb": -14.72,
+          "peakDb": -0.8,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -14.81,
+          "peakDb": -1.07,
+          "clipped": 0
+        },
+        "vs0": {
+          "corrVox": 0.731,
+          "diffVoxDb": -2.67,
+          "corrMp3L": 0.8581,
+          "lrDiffDb": -5.33,
+          "vox0": {
+            "rmsDb": -20.36,
+            "peakDb": -5.62,
+            "clipped": 0
+          },
+          "vox1": {
+            "rmsDb": -20.31,
+            "peakDb": -3.99,
+            "clipped": 0
+          }
+        }
+      },
+      "control": {
+        "corrVox": 1,
+        "corrMix": 1,
+        "corrMp3": 1,
+        "identicalMp3": false,
+        "diffVoxDb": -978.64
+      }
+    },
+    "vocaloid": {
+      "dry": {
+        "voicedRmsDeltaDb": 0,
+        "voicedRmsDb": -19.089160286580913,
+        "voicedSamples": 312236,
+        "voicedFrames": 602,
+        "unvoicedFrames": 14,
+        "consonantBandDeltaDb": 0,
+        "centroidHz": 3044.4880404513174
+      },
+      "originalV2": {
+        "voicedRmsDeltaDb": 4.054353314717379,
+        "voicedRmsDb": -15.034806971863537,
+        "voicedSamples": 312236,
+        "voicedFrames": 602,
+        "unvoicedFrames": 14,
+        "consonantBandDeltaDb": 3.0487472274432763,
+        "centroidHz": 4120.67171265588
+      },
+      "amounts": {
+        "0": {
+          "voicedRmsDeltaDb": 0,
+          "voicedRmsDb": -19.089160286580913,
+          "voicedSamples": 312236,
+          "voicedFrames": 602,
+          "unvoicedFrames": 14,
+          "consonantBandDeltaDb": 0,
+          "centroidHz": 3044.4880404513174,
+          "mp3": {
+            "L": {
+              "rmsDb": -15.29,
+              "peakDb": -1.28,
+              "clipped": 0
+            },
+            "R": {
+              "rmsDb": -15.29,
+              "peakDb": -1.28,
+              "clipped": 0
+            }
+          },
+          "browser": {
+            "file": "vocaloid-0.mp3",
+            "bytes": 228832,
+            "seconds": 9.5,
+            "mixL": {
+              "rmsDb": -15.01,
+              "peakDb": -1.18,
+              "clipped": 0
+            },
+            "mixR": {
+              "rmsDb": -15.01,
+              "peakDb": -1.18,
+              "clipped": 0
+            },
+            "acc": {
+              "rmsDb": -18.84,
+              "peakDb": -1.73,
+              "clipped": 0
+            },
+            "vox": {
+              "rmsDb": -20.36,
+              "peakDb": -5.62,
+              "clipped": 0
+            },
+            "scheduled": {
+              "accStart": 0.530907029478458,
+              "vocalSongZero": 0.530907029478458
+            },
+            "playback": {
+              "elapsedSeconds": 9.513401360544222,
+              "maxRms": 0.31976758541217654,
+              "observations": 317
+            },
+            "soundfont": {
+              "mode": "soundfont",
+              "files": [
+                "0000_FluidR3_GM_sf2_file",
+                "0330_FluidR3_GM_sf2_file",
+                "12836_0_FluidR3_GM_sf2_file",
+                "12842_0_FluidR3_GM_sf2_file",
+                "12838_0_FluidR3_GM_sf2_file",
+                "12839_0_FluidR3_GM_sf2_file"
+              ]
+            },
+            "vocalRender": {
+              "ms": 1.050000011920929,
+              "analyzeMs": 1.0050000250339508,
+              "cached": true,
+              "phrases": 1,
+              "phraseTimings": [
+                {
+                  "index": 0,
+                  "startSec": -0.3076643990929705,
+                  "seconds": 8.057324263038549,
+                  "ms": 2713.979999989271,
+                  "notes": 12
+                }
+              ]
+            },
+            "saved": [
+              "out/vocaloid-0.mp3",
+              "out/vocaloid-0.acc.wav",
+              "out/vocaloid-0.vox.wav",
+              "out/vocaloid-0.mix.wav",
+              "out/vocaloid-0.vox-ref.wav"
+            ]
+          }
+        },
+        "1": {
+          "voicedRmsDeltaDb": -0.006733124047748033,
+          "voicedRmsDb": -19.095893410628662,
+          "voicedSamples": 312236,
+          "voicedFrames": 602,
+          "unvoicedFrames": 14,
+          "consonantBandDeltaDb": 0.5184232432392437,
+          "centroidHz": 4111.275183987935,
+          "mp3": {
+            "L": {
+              "rmsDb": -15.19,
+              "peakDb": -1.26,
+              "clipped": 0
+            },
+            "R": {
+              "rmsDb": -15.19,
+              "peakDb": -1.26,
+              "clipped": 0
+            }
+          },
+          "browser": {
+            "file": "vocaloid-1.mp3",
+            "bytes": 228832,
+            "seconds": 9.5,
+            "mixL": {
+              "rmsDb": -14.92,
+              "peakDb": -1.46,
+              "clipped": 0
+            },
+            "mixR": {
+              "rmsDb": -14.92,
+              "peakDb": -1.46,
+              "clipped": 0
+            },
+            "acc": {
+              "rmsDb": -18.84,
+              "peakDb": -1.73,
+              "clipped": 0
+            },
+            "vox": {
+              "rmsDb": -20.36,
+              "peakDb": -8.49,
+              "clipped": 0
+            },
+            "scheduled": {
+              "accStart": 0.530907029478458,
+              "vocalSongZero": 0.530907029478458
+            },
+            "playback": {
+              "elapsedSeconds": 9.513401360544222,
+              "maxRms": 0.3311402189078302,
+              "observations": 317
+            },
+            "soundfont": {
+              "mode": "soundfont",
+              "files": [
+                "0000_FluidR3_GM_sf2_file",
+                "0330_FluidR3_GM_sf2_file",
+                "12836_0_FluidR3_GM_sf2_file",
+                "12842_0_FluidR3_GM_sf2_file",
+                "12838_0_FluidR3_GM_sf2_file",
+                "12839_0_FluidR3_GM_sf2_file"
+              ]
+            },
+            "vocalRender": {
+              "ms": 1.1500000059604645,
+              "analyzeMs": 1.1150000095367432,
+              "cached": true,
+              "phrases": 1,
+              "phraseTimings": [
+                {
+                  "index": 0,
+                  "startSec": -0.3076643990929705,
+                  "seconds": 8.057324263038549,
+                  "ms": 2713.979999989271,
+                  "notes": 12
+                }
+              ]
+            },
+            "saved": [
+              "out/vocaloid-1.mp3",
+              "out/vocaloid-1.acc.wav",
+              "out/vocaloid-1.vox.wav",
+              "out/vocaloid-1.mix.wav",
+              "out/vocaloid-1.vox-ref.wav"
+            ]
+          }
+        },
+        "0.5": {
+          "voicedRmsDeltaDb": -0.0019396000791483323,
+          "voicedRmsDb": -19.091099886660064,
+          "voicedSamples": 312236,
+          "voicedFrames": 602,
+          "unvoicedFrames": 14,
+          "consonantBandDeltaDb": 0.48086413336820244,
+          "centroidHz": 3805.10678626306,
+          "mp3": {
+            "L": {
+              "rmsDb": -15.19,
+              "peakDb": -1.59,
+              "clipped": 0
+            },
+            "R": {
+              "rmsDb": -15.19,
+              "peakDb": -1.59,
+              "clipped": 0
+            }
+          },
+          "browser": {
+            "file": "vocaloid-0.5.mp3",
+            "bytes": 228832,
+            "seconds": 9.5,
+            "mixL": {
+              "rmsDb": -14.92,
+              "peakDb": -1.38,
+              "clipped": 0
+            },
+            "mixR": {
+              "rmsDb": -14.92,
+              "peakDb": -1.38,
+              "clipped": 0
+            },
+            "acc": {
+              "rmsDb": -18.84,
+              "peakDb": -1.73,
+              "clipped": 0
+            },
+            "vox": {
+              "rmsDb": -20.36,
+              "peakDb": -9.19,
+              "clipped": 0
+            },
+            "scheduled": {
+              "accStart": 0.530907029478458,
+              "vocalSongZero": 0.530907029478458
+            },
+            "playback": {
+              "elapsedSeconds": 9.513401360544222,
+              "maxRms": 0.3191138188347172,
+              "observations": 317
+            },
+            "soundfont": {
+              "mode": "soundfont",
+              "files": [
+                "0000_FluidR3_GM_sf2_file",
+                "0330_FluidR3_GM_sf2_file",
+                "12836_0_FluidR3_GM_sf2_file",
+                "12842_0_FluidR3_GM_sf2_file",
+                "12838_0_FluidR3_GM_sf2_file",
+                "12839_0_FluidR3_GM_sf2_file"
+              ]
+            },
+            "vocalRender": {
+              "ms": 0.7999999821186066,
+              "analyzeMs": 0.7549999952316284,
+              "cached": true,
+              "phrases": 1,
+              "phraseTimings": [
+                {
+                  "index": 0,
+                  "startSec": -0.3076643990929705,
+                  "seconds": 8.057324263038549,
+                  "ms": 2713.979999989271,
+                  "notes": 12
+                }
+              ]
+            },
+            "saved": [
+              "out/vocaloid-0.5.mp3",
+              "out/vocaloid-0.5.acc.wav",
+              "out/vocaloid-0.5.vox.wav",
+              "out/vocaloid-0.5.mix.wav",
+              "out/vocaloid-0.5.vox-ref.wav"
+            ]
+          }
+        }
+      }
+    },
+    "elapsedSec": 109.382
+  },
+  "llm": {
+    "checks": {
+      "llm1.unmodified": {
+        "ok": true,
+        "job": "20261116-104156-creative-sonnet-253b"
+      },
+      "llm1.copy-prompt": {
+        "ok": true,
+        "chars": 2607
+      },
+      "llm1.load-and-play": {
+        "ok": true,
+        "problems": "問題なし",
+        "repairs": "",
+        "playing": true,
+        "doc": {
+          "version": 1,
+          "title": "さくら",
+          "bpm": 120,
+          "beatsPerBar": 4,
+          "key": "C",
+          "bars": 4,
+          "chords": "| C | G | Am | F |",
+          "tracks": [
+            {
+              "id": "vo",
+              "kind": "vocal",
+              "engine": "vocatab",
+              "singer": "ritsu",
+              "effects": [],
+              "notes": [
+                {
+                  "bar": 1,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "さ"
+                },
+                {
+                  "bar": 1,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "く"
+                },
+                {
+                  "bar": 1,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "C5",
+                  "lyric": "ら"
+                },
+                {
+                  "bar": 2,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "か"
+                },
+                {
+                  "bar": 2,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "ぜ"
+                },
+                {
+                  "bar": 2,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "G4",
+                  "lyric": "に"
+                },
+                {
+                  "bar": 3,
+                  "beat": 1,
+                  "len": "2",
+                  "pitch": "E4",
+                  "lyric": "ゆ"
+                },
+                {
+                  "bar": 3,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "A4",
+                  "lyric": "れ"
+                },
+                {
+                  "bar": 4,
+                  "beat": 1,
+                  "len": "1",
+                  "pitch": "A4",
+                  "lyric": "る"
+                }
+              ]
+            },
+            {
+              "id": "pf",
+              "kind": "inst",
+              "program": "acoustic_grand_piano",
+              "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'gbd' 'gbd' 'gbd' 'gbd' 'ace' 'ace' 'ace' 'ace' 'acf' 'acf' 'acf' 'acf'"
+            },
+            {
+              "id": "ba",
+              "kind": "inst",
+              "program": "electric_bass_finger",
+              "mml": "o2 l8 c c c c c c c c g g g g g g g g a a a a a a a a f f f f f f f f"
+            },
+            {
+              "id": "dr",
+              "kind": "drums",
+              "pattern": "8beat"
+            }
+          ]
+        },
+        "exportEnabled": true
+      },
+      "ui.base-song": {
+        "ok": true,
+        "chars": 4202
+      },
+      "llm1.mp3-button": {
+        "ok": true,
+        "download": "./out/llm-downloads-1794796065033/さくら.mp3"
+      },
+      "llm1.actual-playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.513401360544215,
+          "maxRms": 0.31470055479206227,
+          "observations": 318
+        }
+      },
+      "llm1.download-matches-export": {
+        "ok": true,
+        "corr": 1,
+        "diffDb": -50.190000000000005,
+        "bytes": 228832
+      },
+      "llm1.audio": {
+        "ok": true,
+        "mixL": {
+          "rmsDb": -14.6,
+          "peakDb": -0.87,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -14.6,
+          "peakDb": -0.87,
+          "clipped": 0
+        },
+        "vocalSection": {
+          "rmsDb": -18.96,
+          "peakDb": -3.13,
+          "clipped": 0
+        },
+        "accSection": {
+          "rmsDb": -17.42,
+          "peakDb": -2.31,
+          "clipped": 0
+        },
+        "seconds": 8
+      },
+      "llm2.unmodified": {
+        "ok": true,
+        "job": "20261116-104332-exec-sol-7d9f"
+      },
+      "llm2.copy-prompt": {
+        "ok": true,
+        "chars": 2630
+      },
+      "llm2.load-and-play": {
+        "ok": true,
+        "problems": "問題なし",
+        "repairs": "",
+        "playing": true,
+        "doc": {
+          "version": 1,
+          "title": "つきのひかり",
+          "bpm": 96,
+          "beatsPerBar": 4,
+          "key": "A minor",
+          "bars": 4,
+          "chords": "| Am | Fmaj7 | Dm7 | Am |",
+          "tracks": [
+            {
+              "id": "vo",
+              "kind": "vocal",
+              "engine": "vocatab",
+              "singer": "ritsu",
+              "effects": [
+                {
+                  "type": "vocaloid",
+                  "amount": 0.5
+                }
+              ],
+              "notes": [
+                {
+                  "bar": 1,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "つ"
+                },
+                {
+                  "bar": 1,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "き"
+                },
+                {
+                  "bar": 1,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "A4",
+                  "lyric": "の"
+                },
+                {
+                  "bar": 2,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "ひ"
+                },
+                {
+                  "bar": 2,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "か"
+                },
+                {
+                  "bar": 2,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "E4",
+                  "lyric": "り"
+                },
+                {
+                  "bar": 3,
+                  "beat": 1,
+                  "len": "2",
+                  "pitch": "F4",
+                  "lyric": "し"
+                },
+                {
+                  "bar": 3,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "D4",
+                  "lyric": "ず"
+                },
+                {
+                  "bar": 4,
+                  "beat": 1,
+                  "len": "1",
+                  "pitch": "A3",
+                  "lyric": "か"
+                }
+              ]
+            },
+            {
+              "id": "pf",
+              "kind": "inst",
+              "program": "electric_piano_1",
+              "mml": "o3 l4 'ace'2 'ace'4 e4 'face'2 'face'4 e4 'dfac'2 'dfac'4 a4 'ace'1"
+            },
+            {
+              "id": "ba",
+              "kind": "inst",
+              "program": "electric_bass_finger",
+              "mml": "o2 l4 a e a e f c f c d a d a a e a a"
+            },
+            {
+              "id": "dr",
+              "kind": "drums",
+              "pattern": "4beat"
+            }
+          ]
+        },
+        "exportEnabled": true
+      },
+      "llm2.mp3-button": {
+        "ok": true,
+        "download": "./out/llm-downloads-1794796065033/つきのひかり.mp3"
+      },
+      "llm2.actual-playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 11.51031746031746,
+          "maxRms": 0.31833038631499455,
+          "observations": 384
+        }
+      },
+      "llm2.download-matches-export": {
+        "ok": true,
+        "corr": 1,
+        "diffDb": -54.339999999999996,
+        "bytes": 277106
+      },
+      "llm2.audio": {
+        "ok": true,
+        "mixL": {
+          "rmsDb": -14.13,
+          "peakDb": -1.88,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -14.13,
+          "peakDb": -1.88,
+          "clipped": 0
+        },
+        "vocalSection": {
+          "rmsDb": -19.24,
+          "peakDb": -9,
+          "clipped": 0
+        },
+        "accSection": {
+          "rmsDb": -17.07,
+          "peakDb": -3.95,
+          "clipped": 0
+        },
+        "seconds": 10
+      },
+      "ui.located-error": {
+        "ok": true,
+        "fixRequest": "さきほどの SongDoc に次の問題がありました。MML も含む、直した SongDoc の JSON 全体を ```json フェンス1つで返してください。\n\n- tracks[0].notes[0].pitch: 歌 1小節目 1拍目: pitch=\"H4\" が読めません（例 \"G4\" \"C#5\"）\n"
+      },
+      "ui.copy-fix": {
+        "ok": true,
+        "chars": 154
+      }
+    },
+    "answers": [
+      {
+        "i": 1,
+        "mixL": {
+          "rmsDb": -14.6,
+          "peakDb": -0.87,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -14.6,
+          "peakDb": -0.87,
+          "clipped": 0
+        },
+        "vocalSection": {
+          "rmsDb": -18.96,
+          "peakDb": -3.13,
+          "clipped": 0
+        },
+        "accSection": {
+          "rmsDb": -17.42,
+          "peakDb": -2.31,
+          "clipped": 0
+        },
+        "seconds": 8,
+        "browser": {
+          "file": "llm-answer-1.mp3",
+          "bytes": 228832,
+          "seconds": 9.5,
+          "mixL": {
+            "rmsDb": -14.33,
+            "peakDb": -0.81,
+            "clipped": 0
+          },
+          "mixR": {
+            "rmsDb": -14.33,
+            "peakDb": -0.81,
+            "clipped": 0
+          },
+          "acc": {
+            "rmsDb": -18.13,
+            "peakDb": -2.31,
+            "clipped": 0
+          },
+          "vox": {
+            "rmsDb": -19.71,
+            "peakDb": -3.13,
+            "clipped": 0
+          },
+          "scheduled": {
+            "accStart": 0.5831292517006803,
+            "vocalSongZero": 0.5831292517006803
+          },
+          "playback": {
+            "elapsedSeconds": 9.513401360544215,
+            "maxRms": 0.31470055479206227,
+            "observations": 318
+          },
+          "soundfont": {
+            "mode": "soundfont",
+            "files": [
+              "0000_FluidR3_GM_sf2_file",
+              "0330_FluidR3_GM_sf2_file",
+              "12836_0_FluidR3_GM_sf2_file",
+              "12842_0_FluidR3_GM_sf2_file",
+              "12838_0_FluidR3_GM_sf2_file",
+              "12839_0_FluidR3_GM_sf2_file"
+            ]
+          },
+          "vocalRender": {
+            "ms": 4887.364999979734,
+            "analyzeMs": 2156.25,
+            "cached": false,
+            "phrases": 1,
+            "phraseTimings": [
+              {
+                "index": 0,
+                "startSec": -0.3599092970521542,
+                "seconds": 8.608798185941042,
+                "ms": 2727.1349999904633,
+                "notes": 9
+              }
+            ]
+          },
+          "saved": [
+            "out/llm-answer-1.mp3",
+            "out/llm-answer-1.acc.wav",
+            "out/llm-answer-1.vox.wav",
+            "out/llm-answer-1.mix.wav",
+            "out/llm-answer-1.vox-ref.wav"
+          ]
+        }
+      },
+      {
+        "i": 2,
+        "mixL": {
+          "rmsDb": -14.13,
+          "peakDb": -1.88,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -14.13,
+          "peakDb": -1.88,
+          "clipped": 0
+        },
+        "vocalSection": {
+          "rmsDb": -19.24,
+          "peakDb": -9,
+          "clipped": 0
+        },
+        "accSection": {
+          "rmsDb": -17.07,
+          "peakDb": -3.95,
+          "clipped": 0
+        },
+        "seconds": 10,
+        "browser": {
+          "file": "llm-answer-2.mp3",
+          "bytes": 277106,
+          "seconds": 11.5,
+          "mixL": {
+            "rmsDb": -13.84,
+            "peakDb": -1.5,
+            "clipped": 0
+          },
+          "mixR": {
+            "rmsDb": -13.84,
+            "peakDb": -1.5,
+            "clipped": 0
+          },
+          "acc": {
+            "rmsDb": -17.66,
+            "peakDb": -3.95,
+            "clipped": 0
+          },
+          "vox": {
+            "rmsDb": -19.85,
+            "peakDb": -8.99,
+            "clipped": 0
+          },
+          "scheduled": {
+            "accStart": 0.5366893424036281,
+            "vocalSongZero": 0.5366893424036281
+          },
+          "playback": {
+            "elapsedSeconds": 11.51031746031746,
+            "maxRms": 0.31833038631499455,
+            "observations": 384
+          },
+          "soundfont": {
+            "mode": "soundfont",
+            "files": [
+              "0040_FluidR3_GM_sf2_file",
+              "0330_FluidR3_GM_sf2_file",
+              "12836_0_FluidR3_GM_sf2_file"
+            ]
+          },
+          "vocalRender": {
+            "ms": 3234.530000001192,
+            "analyzeMs": 224.375,
+            "cached": false,
+            "phrases": 1,
+            "phraseTimings": [
+              {
+                "index": 0,
+                "startSec": -0.313469387755102,
+                "seconds": 10.565079365079365,
+                "ms": 3005.684999972582,
+                "notes": 9
+              }
+            ]
+          },
+          "saved": [
+            "out/llm-answer-2.mp3",
+            "out/llm-answer-2.acc.wav",
+            "out/llm-answer-2.vox.wav",
+            "out/llm-answer-2.mix.wav",
+            "out/llm-answer-2.vox-ref.wav"
+          ]
+        }
+      }
+    ]
+  },
+  "soundfont": {
+    "checks": [
+      {
+        "name": "FluidR3楽器とドラムをロード",
+        "ok": true,
+        "mode": "soundfont",
+        "files": [
+          "0000_FluidR3_GM_sf2_file",
+          "0330_FluidR3_GM_sf2_file",
+          "12836_0_FluidR3_GM_sf2_file",
+          "12842_0_FluidR3_GM_sf2_file",
+          "12838_0_FluidR3_GM_sf2_file",
+          "12839_0_FluidR3_GM_sf2_file"
+        ]
+      },
+      {
+        "name": "伴奏の波形・スペクトル差",
+        "ok": true,
+        "correlation": -0.069,
+        "synthCentroid": 3440.1256052103986,
+        "sfCentroid": 3255.247442746032
+      },
+      {
+        "name": "MP3有音・clip0",
+        "ok": true,
+        "L": {
+          "rmsDb": -15.29,
+          "peakDb": -1.28,
+          "clipped": 0
+        },
+        "R": {
+          "rmsDb": -15.29,
+          "peakDb": -1.28,
+          "clipped": 0
+        }
+      },
+      {
+        "name": "歌・伴奏区間有音",
+        "ok": true,
+        "vocal": {
+          "rmsDb": -20.36,
+          "peakDb": -5.62,
+          "clipped": 0
+        },
+        "accompaniment": {
+          "rmsDb": -18.11,
+          "peakDb": -1.73,
+          "clipped": 0
+        }
+      },
+      {
+        "name": "Chromeで実再生",
+        "ok": true,
+        "elapsedSeconds": 9.513401360544218,
+        "maxRms": 0.3190547685150534,
+        "observations": 316
+      },
+      {
+        "name": "失敗時に警告・内蔵で有音",
+        "ok": true,
+        "aborted": 6,
+        "soundfont": {
+          "mode": "synth",
+          "files": [],
+          "warning": "SoundFontを読めないため内蔵シンセで再生します: Error: SoundFont 読み込み失敗: 0000_FluidR3_GM_sf2_file"
+        },
+        "warning": "SoundFontを読めないため内蔵シンセで再生します: Error: SoundFont 読み込み失敗: 0000_FluidR3_GM_sf2_file",
+        "acc": {
+          "rmsDb": -18.2,
+          "peakDb": -10.74,
+          "clipped": 0
+        }
+      }
+    ],
+    "synth": {
+      "file": "synth-song.mp3",
+      "bytes": 228832,
+      "seconds": 9.5,
+      "mixL": {
+        "rmsDb": -14.32,
+        "peakDb": -1.47,
+        "clipped": 0
+      },
+      "mixR": {
+        "rmsDb": -14.32,
+        "peakDb": -1.47,
+        "clipped": 0
+      },
+      "acc": {
+        "rmsDb": -18.2,
+        "peakDb": -10.74,
+        "clipped": 0
+      },
+      "vox": {
+        "rmsDb": -20.36,
+        "peakDb": -5.62,
+        "clipped": 0
+      },
+      "scheduled": {
+        "accStart": 0.530907029478458,
+        "vocalSongZero": 0.530907029478458
+      },
+      "playback": {
+        "elapsedSeconds": 9.513401360544217,
+        "maxRms": 0.3240677697626042,
+        "observations": 318
+      },
+      "soundfont": {
+        "mode": "synth",
+        "files": []
+      },
+      "vocalRender": {
+        "ms": 4409.520000010729,
+        "analyzeMs": 1699.6800000071526,
+        "cached": false,
+        "phrases": 1,
+        "phraseTimings": [
+          {
+            "index": 0,
+            "startSec": -0.3076643990929705,
+            "seconds": 8.057324263038549,
+            "ms": 2705.844999998808,
+            "notes": 12
+          }
+        ]
+      },
+      "saved": [
+        "out/synth-song.mp3",
+        "out/synth-song.acc.wav",
+        "out/synth-song.vox.wav",
+        "out/synth-song.mix.wav",
+        "out/synth-song.vox-ref.wav"
+      ]
+    },
+    "sf": {
+      "file": "soundfont-song.mp3",
+      "bytes": 228832,
+      "seconds": 9.5,
+      "mixL": {
+        "rmsDb": -15.01,
+        "peakDb": -1.18,
+        "clipped": 0
+      },
+      "mixR": {
+        "rmsDb": -15.01,
+        "peakDb": -1.18,
+        "clipped": 0
+      },
+      "acc": {
+        "rmsDb": -18.84,
+        "peakDb": -1.73,
+        "clipped": 0
+      },
+      "vox": {
+        "rmsDb": -20.36,
+        "peakDb": -5.62,
+        "clipped": 0
+      },
+      "scheduled": {
+        "accStart": 0.530907029478458,
+        "vocalSongZero": 0.530907029478458
+      },
+      "playback": {
+        "elapsedSeconds": 9.513401360544218,
+        "maxRms": 0.3190547685150534,
+        "observations": 316
+      },
+      "soundfont": {
+        "mode": "soundfont",
+        "files": [
+          "0000_FluidR3_GM_sf2_file",
+          "0330_FluidR3_GM_sf2_file",
+          "12836_0_FluidR3_GM_sf2_file",
+          "12842_0_FluidR3_GM_sf2_file",
+          "12838_0_FluidR3_GM_sf2_file",
+          "12839_0_FluidR3_GM_sf2_file"
+        ]
+      },
+      "vocalRender": {
+        "ms": 4409.520000010729,
+        "analyzeMs": 1699.6800000071526,
+        "cached": false,
+        "phrases": 1,
+        "phraseTimings": [
+          {
+            "index": 0,
+            "startSec": -0.3076643990929705,
+            "seconds": 8.057324263038549,
+            "ms": 2705.844999998808,
+            "notes": 12
+          }
+        ]
+      },
+      "saved": [
+        "out/soundfont-song.mp3",
+        "out/soundfont-song.acc.wav",
+        "out/soundfont-song.vox.wav",
+        "out/soundfont-song.mix.wav",
+        "out/soundfont-song.vox-ref.wav"
+      ]
+    },
+    "comparison": {
+      "correlation": -0.069,
+      "synthCentroid": 3440.1256052103986,
+      "sfCentroid": 3255.247442746032
+    },
+    "mp3": {
+      "L": {
+        "rmsDb": -15.29,
+        "peakDb": -1.28,
+        "clipped": 0
+      },
+      "R": {
+        "rmsDb": -15.29,
+        "peakDb": -1.28,
+        "clipped": 0
+      }
+    },
+    "fallback": {
+      "file": "soundfont-fallback.mp3",
+      "bytes": 228832,
+      "seconds": 9.5,
+      "mixL": {
+        "rmsDb": -14.32,
+        "peakDb": -1.47,
+        "clipped": 0
+      },
+      "mixR": {
+        "rmsDb": -14.32,
+        "peakDb": -1.47,
+        "clipped": 0
+      },
+      "acc": {
+        "rmsDb": -18.2,
+        "peakDb": -10.74,
+        "clipped": 0
+      },
+      "vox": {
+        "rmsDb": -20.36,
+        "peakDb": -5.62,
+        "clipped": 0
+      },
+      "scheduled": {
+        "accStart": 0.530907029478458,
+        "vocalSongZero": 0.530907029478458
+      },
+      "playback": {
+        "elapsedSeconds": 9.513401360544218,
+        "maxRms": 0.3240677692208327,
+        "observations": 318
+      },
+      "soundfont": {
+        "mode": "synth",
+        "files": [],
+        "warning": "SoundFontを読めないため内蔵シンセで再生します: Error: SoundFont 読み込み失敗: 0000_FluidR3_GM_sf2_file"
+      },
+      "vocalRender": {
+        "ms": 4131.300000011921,
+        "analyzeMs": 1481.455000013113,
+        "cached": false,
+        "phrases": 1,
+        "phraseTimings": [
+          {
+            "index": 0,
+            "startSec": -0.3076643990929705,
+            "seconds": 8.057324263038549,
+            "ms": 2645.0900000035763,
+            "notes": 12
+          }
+        ]
+      },
+      "saved": [
+        "out/soundfont-fallback.mp3",
+        "out/soundfont-fallback.acc.wav",
+        "out/soundfont-fallback.vox.wav",
+        "out/soundfont-fallback.mix.wav",
+        "out/soundfont-fallback.vox-ref.wav"
+      ]
+    }
+  },
+  "pianoroll": {
+    "checks": [
+      {
+        "name": "曲の読み込み",
+        "ok": true
+      },
+      {
+        "name": "クリック追加・snap1/8",
+        "ok": true,
+        "note": {
+          "bar": 1,
+          "beat": 2,
+          "len": "8",
+          "pitch": "C4",
+          "lyric": "あ"
+        }
+      },
+      {
+        "name": "ドラッグ移動・時間と音高",
+        "ok": true,
+        "note": {
+          "bar": 1,
+          "beat": 3,
+          "len": "8",
+          "pitch": "G4",
+          "lyric": "あ"
+        }
+      },
+      {
+        "name": "右端ドラッグで長さ",
+        "ok": true,
+        "note": {
+          "bar": 1,
+          "beat": 3,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "あ"
+        }
+      },
+      {
+        "name": "かな編集",
+        "ok": true,
+        "note": {
+          "bar": 1,
+          "beat": 3,
+          "len": "4",
+          "pitch": "G4",
+          "lyric": "きゃ"
+        }
+      },
+      {
+        "name": "Ctrl+Z",
+        "ok": true
+      },
+      {
+        "name": "Ctrl+Shift+Z",
+        "ok": true
+      },
+      {
+        "name": "Delete削除",
+        "ok": true
+      },
+      {
+        "name": "Backspace削除",
+        "ok": true
+      },
+      {
+        "name": "右クリック削除",
+        "ok": true
+      },
+      {
+        "name": "重なる歌音符を拒否",
+        "ok": true
+      },
+      {
+        "name": "現在曲プロンプトへ反映",
+        "ok": true
+      },
+      {
+        "name": "変更後の歌を再合成",
+        "ok": true,
+        "correlation": 0.803,
+        "voice": {
+          "rmsDb": -26.35,
+          "peakDb": -7.4,
+          "clipped": 0
+        }
+      },
+      {
+        "name": "編集後Chrome実再生・MP3・clip0",
+        "ok": true,
+        "mp3": {
+          "L": {
+            "rmsDb": -18.47,
+            "peakDb": -1.29,
+            "clipped": 0
+          },
+          "R": {
+            "rmsDb": -18.47,
+            "peakDb": -1.29,
+            "clipped": 0
+          }
+        },
+        "playback": {
+          "elapsedSeconds": 5.519569160997733,
+          "maxRms": 0.29380824642821846,
+          "observations": 185
+        },
+        "soundfont": {
+          "mode": "soundfont",
+          "files": [
+            "0000_FluidR3_GM_sf2_file",
+            "0330_FluidR3_GM_sf2_file",
+            "12836_0_FluidR3_GM_sf2_file",
+            "12842_0_FluidR3_GM_sf2_file",
+            "12838_0_FluidR3_GM_sf2_file",
+            "12839_0_FluidR3_GM_sf2_file"
+          ]
+        }
+      }
+    ],
+    "before": {
+      "file": "pianoroll-before.mp3",
+      "bytes": 132911,
+      "seconds": 5.5,
+      "mixL": {
+        "rmsDb": -18.44,
+        "peakDb": -1.48,
+        "clipped": 0
+      },
+      "mixR": {
+        "rmsDb": -18.44,
+        "peakDb": -1.48,
+        "clipped": 0
+      },
+      "acc": {
+        "rmsDb": -20.82,
+        "peakDb": -3.83,
+        "clipped": 0
+      },
+      "vox": {
+        "rmsDb": -28.25,
+        "peakDb": -7.93,
+        "clipped": 0
+      },
+      "scheduled": {
+        "accStart": 0.5831292517006803,
+        "vocalSongZero": 0.5831292517006803
+      },
+      "playback": {
+        "elapsedSeconds": 5.519569160997732,
+        "maxRms": 0.28973225494650695,
+        "observations": 184
+      },
+      "soundfont": {
+        "mode": "soundfont",
+        "files": [
+          "0000_FluidR3_GM_sf2_file",
+          "0330_FluidR3_GM_sf2_file",
+          "12836_0_FluidR3_GM_sf2_file",
+          "12842_0_FluidR3_GM_sf2_file",
+          "12838_0_FluidR3_GM_sf2_file",
+          "12839_0_FluidR3_GM_sf2_file"
+        ]
+      },
+      "vocalRender": {
+        "ms": 2468.984999984503,
+        "analyzeMs": 1716.5649999976158,
+        "cached": false,
+        "phrases": 2,
+        "phraseTimings": [
+          {
+            "index": 0,
+            "startSec": -0.3599092970521542,
+            "seconds": 0.8591383219954648,
+            "ms": 389.82000002264977,
+            "notes": 1
+          },
+          {
+            "index": 1,
+            "startSec": 2.705124716553288,
+            "seconds": 1.0448979591836736,
+            "ms": 360.7450000047684,
+            "notes": 1
+          }
+        ]
+      },
+      "saved": [
+        "out/pianoroll-before.mp3",
+        "out/pianoroll-before.acc.wav",
+        "out/pianoroll-before.vox.wav",
+        "out/pianoroll-before.mix.wav",
+        "out/pianoroll-before.vox-ref.wav"
+      ]
+    },
+    "after": {
+      "version": 1,
+      "title": "ピアノロール編集",
+      "bpm": 120,
+      "beatsPerBar": 4,
+      "bars": 2,
+      "tracks": [
+        {
+          "id": "vo",
+          "kind": "vocal",
+          "singer": "ritsu",
+          "notes": [
+            {
+              "bar": 1,
+              "beat": 1,
+              "len": "8",
+              "pitch": "E4",
+              "lyric": "さ"
+            },
+            {
+              "bar": 2,
+              "beat": 3,
+              "len": "4",
+              "pitch": "A4",
+              "lyric": "ら"
+            },
+            {
+              "bar": 1,
+              "beat": 3,
+              "len": "4",
+              "pitch": "G4",
+              "lyric": "きゃ"
+            }
+          ]
+        },
+        {
+          "id": "pf",
+          "kind": "inst",
+          "instrument": "Acoustic Grand Piano",
+          "mml": "o4 l4 'ceg' r 'ceg' r 'dgb' r 'dgb' r"
+        },
+        {
+          "id": "ba",
+          "kind": "inst",
+          "instrument": 33,
+          "mml": "o2 l4 c c g c g g d g"
+        },
+        {
+          "id": "dr",
+          "kind": "drums",
+          "pattern": "8beat"
+        }
+      ]
+    },
+    "export": {
+      "file": "pianoroll-edited.mp3",
+      "bytes": 132911,
+      "seconds": 5.5,
+      "mixL": {
+        "rmsDb": -18.17,
+        "peakDb": -1.48,
+        "clipped": 0
+      },
+      "mixR": {
+        "rmsDb": -18.17,
+        "peakDb": -1.48,
+        "clipped": 0
+      },
+      "acc": {
+        "rmsDb": -20.82,
+        "peakDb": -3.83,
+        "clipped": 0
+      },
+      "vox": {
+        "rmsDb": -26.35,
+        "peakDb": -7.4,
+        "clipped": 0
+      },
+      "scheduled": {
+        "accStart": 0.5831292517006803,
+        "vocalSongZero": 0.5831292517006803
+      },
+      "playback": {
+        "elapsedSeconds": 5.519569160997733,
+        "maxRms": 0.29380824642821846,
+        "observations": 185
+      },
+      "soundfont": {
+        "mode": "soundfont",
+        "files": [
+          "0000_FluidR3_GM_sf2_file",
+          "0330_FluidR3_GM_sf2_file",
+          "12836_0_FluidR3_GM_sf2_file",
+          "12842_0_FluidR3_GM_sf2_file",
+          "12838_0_FluidR3_GM_sf2_file",
+          "12839_0_FluidR3_GM_sf2_file"
+        ]
+      },
+      "vocalRender": {
+        "ms": 394.4200000166893,
+        "analyzeMs": 69.31000000238419,
+        "cached": false,
+        "phrases": 3,
+        "phraseTimings": [
+          {
+            "index": 0,
+            "startSec": -0.3599092970521542,
+            "seconds": 0.8591383219954648,
+            "ms": 4.509999990463257,
+            "notes": 1
+          },
+          {
+            "index": 1,
+            "startSec": 0.7140136054421768,
+            "seconds": 1.0332879818594105,
+            "ms": 312.49000000953674,
+            "notes": 1
+          },
+          {
+            "index": 2,
+            "startSec": 2.705124716553288,
+            "seconds": 1.0448979591836736,
+            "ms": 3.770000010728836,
+            "notes": 1
+          }
+        ]
+      },
+      "saved": [
+        "out/pianoroll-edited.mp3",
+        "out/pianoroll-edited.acc.wav",
+        "out/pianoroll-edited.vox.wav",
+        "out/pianoroll-edited.mix.wav",
+        "out/pianoroll-edited.vox-ref.wav"
+      ]
+    },
+    "mp3": {
+      "L": {
+        "rmsDb": -18.47,
+        "peakDb": -1.29,
+        "clipped": 0
+      },
+      "R": {
+        "rmsDb": -18.47,
+        "peakDb": -1.29,
+        "clipped": 0
+      }
+    }
+  },
+  "gallery": {
+    "checks": {
+      "cards": {
+        "ok": true
+      },
+      "filter-曲": {
+        "ok": true
+      },
+      "filter-伴奏": {
+        "ok": true
+      },
+      "filter-エフェクト": {
+        "ok": true
+      },
+      "copy-claude": {
+        "ok": true,
+        "chars": 4467
+      },
+      "copy-feedback-claude": {
+        "ok": true
+      },
+      "copy-chatgpt": {
+        "ok": true,
+        "chars": 4478
+      },
+      "copy-feedback-chatgpt": {
+        "ok": true
+      },
+      "preview-recorded-nonsilent": {
+        "ok": true,
+        "mix": {
+          "rmsDb": -14.97,
+          "peakDb": -1.01,
+          "clipped": 0
+        },
+        "vox": {
+          "rmsDb": -21.54,
+          "peakDb": -5.35,
+          "clipped": 0
+        },
+        "acc": {
+          "rmsDb": -18.24,
+          "peakDb": -1.45,
+          "clipped": 0
+        },
+        "playback": {
+          "elapsedSeconds": 9.513401360544218,
+          "maxRms": 0.32713347341567717,
+          "observations": 318
+        },
+        "soundfont": {
+          "mode": "soundfont",
+          "files": [
+            "0000_FluidR3_GM_sf2_file",
+            "0330_FluidR3_GM_sf2_file",
+            "12836_0_FluidR3_GM_sf2_file",
+            "12842_0_FluidR3_GM_sf2_file",
+            "12838_0_FluidR3_GM_sf2_file",
+            "12839_0_FluidR3_GM_sf2_file"
+          ]
+        }
+      },
+      "preview-actual-playback": {
+        "ok": true,
+        "elapsedSeconds": 9.513401360544218,
+        "maxRms": 0.32713347341567717,
+        "observations": 318
+      },
+      "preview-soundfont": {
+        "ok": true,
+        "mode": "soundfont",
+        "files": [
+          "0000_FluidR3_GM_sf2_file",
+          "0330_FluidR3_GM_sf2_file",
+          "12836_0_FluidR3_GM_sf2_file",
+          "12842_0_FluidR3_GM_sf2_file",
+          "12838_0_FluidR3_GM_sf2_file",
+          "12839_0_FluidR3_GM_sf2_file"
+        ]
+      },
+      "open-in-app": {
+        "ok": true
+      }
+    },
+    "audio": {
+      "mix": {
+        "rmsDb": -14.97,
+        "peakDb": -1.01,
+        "clipped": 0
+      },
+      "vox": {
+        "rmsDb": -21.54,
+        "peakDb": -5.35,
+        "clipped": 0
+      },
+      "acc": {
+        "rmsDb": -18.24,
+        "peakDb": -1.45,
+        "clipped": 0
+      },
+      "playback": {
+        "elapsedSeconds": 9.513401360544218,
+        "maxRms": 0.32713347341567717,
+        "observations": 318
+      },
+      "soundfont": {
+        "mode": "soundfont",
+        "files": [
+          "0000_FluidR3_GM_sf2_file",
+          "0330_FluidR3_GM_sf2_file",
+          "12836_0_FluidR3_GM_sf2_file",
+          "12842_0_FluidR3_GM_sf2_file",
+          "12838_0_FluidR3_GM_sf2_file",
+          "12839_0_FluidR3_GM_sf2_file"
+        ]
+      }
+    }
+  },
+  "real": {
+    "checks": {
+      "llm-gallery-answer.unmodified": {
+        "ok": true,
+        "job": "20261116-112030-creative-sonnet-1a3b"
+      },
+      "llm-gallery-answer.ui-paste-and-play": {
+        "ok": true,
+        "doc": {
+          "version": 1,
+          "title": "夕空ポップ",
+          "bpm": 120,
+          "beatsPerBar": 4,
+          "key": "C",
+          "bars": 4,
+          "chords": "| C | F | G | C |",
+          "tracks": [
+            {
+              "id": "vo",
+              "kind": "vocal",
+              "singer": "ritsu",
+              "effects": [],
+              "notes": [
+                {
+                  "bar": 1,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "ゆ"
+                },
+                {
+                  "bar": 1,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "う"
+                },
+                {
+                  "bar": 1,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "や"
+                },
+                {
+                  "bar": 2,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "け"
+                },
+                {
+                  "bar": 2,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "そ"
+                },
+                {
+                  "bar": 2,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "D4",
+                  "lyric": "ら"
+                },
+                {
+                  "bar": 3,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "に"
+                },
+                {
+                  "bar": 3,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "C5",
+                  "lyric": "と"
+                },
+                {
+                  "bar": 3,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "け"
+                },
+                {
+                  "bar": 4,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "て"
+                },
+                {
+                  "bar": 4,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "い"
+                },
+                {
+                  "bar": 4,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "C4",
+                  "lyric": "く"
+                }
+              ]
+            },
+            {
+              "id": "pf",
+              "kind": "inst",
+              "instrument": 0,
+              "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'fac' 'fac' 'fac' 'fac' 'dgb' 'dgb' 'dgb' 'dgb' 'ceg' 'ceg' 'ceg' 'ceg'"
+            },
+            {
+              "id": "ba",
+              "kind": "inst",
+              "instrument": 33,
+              "mml": "o2 l2 c g f c g d c c"
+            },
+            {
+              "id": "dr",
+              "kind": "drums",
+              "pattern": "8beat"
+            }
+          ]
+        },
+        "problems": "問題なし",
+        "repairs": "",
+        "playing": true,
+        "status": "再生中"
+      },
+      "llm-gallery-answer.mml-full-length": {
+        "ok": true,
+        "mmlFacts": [
+          {
+            "track": "pf",
+            "notes": 48,
+            "lengthBars": 4,
+            "songBars": 4,
+            "overBars": 0,
+            "underBars": 0,
+            "lowest": "C4",
+            "highest": "B4",
+            "problems": []
+          },
+          {
+            "track": "ba",
+            "notes": 8,
+            "lengthBars": 4,
+            "songBars": 4,
+            "overBars": 0,
+            "underBars": 0,
+            "lowest": "C2",
+            "highest": "G2",
+            "problems": []
+          }
+        ]
+      },
+      "llm-gallery-answer.mp3-button": {
+        "ok": true
+      },
+      "llm-gallery-answer.audio": {
+        "ok": true,
+        "mixL": {
+          "rmsDb": -14.82,
+          "peakDb": -0.9,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -14.82,
+          "peakDb": -0.9,
+          "clipped": 0
+        },
+        "vocal": {
+          "rmsDb": -19.98,
+          "peakDb": -6.07,
+          "clipped": 0
+        },
+        "acc": {
+          "rmsDb": -17.52,
+          "peakDb": -1.45,
+          "clipped": 0
+        },
+        "perSection": [
+          {
+            "start": 0,
+            "end": 4,
+            "vocal": {
+              "rmsDb": -20.74,
+              "peakDb": -7.15,
+              "clipped": 0
+            },
+            "acc": {
+              "rmsDb": -17.71,
+              "peakDb": -2.99,
+              "clipped": 0
+            }
+          },
+          {
+            "start": 4,
+            "end": 8,
+            "vocal": {
+              "rmsDb": -19.34,
+              "peakDb": -6.07,
+              "clipped": 0
+            },
+            "acc": {
+              "rmsDb": -17.34,
+              "peakDb": -1.45,
+              "clipped": 0
+            }
+          }
+        ]
+      },
+      "llm-gallery-answer.actual-playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 9.51340136054422,
+          "maxRms": 0.31189241685016217,
+          "observations": 317
+        }
+      },
+      "llm-gallery-answer.soundfont": {
+        "ok": true,
+        "mode": "soundfont",
+        "files": [
+          "0000_FluidR3_GM_sf2_file",
+          "0330_FluidR3_GM_sf2_file",
+          "12836_0_FluidR3_GM_sf2_file",
+          "12842_0_FluidR3_GM_sf2_file",
+          "12838_0_FluidR3_GM_sf2_file",
+          "12839_0_FluidR3_GM_sf2_file"
+        ]
+      },
+      "llm-gallery-answer.sync": {
+        "ok": true,
+        "scheduledDiffMs": 0,
+        "accOnsetMs": 0.82,
+        "vocalReferenceCorrelations": [
+          1,
+          1
+        ]
+      },
+      "llm-gallery-answer.phrase-timing": {
+        "ok": true,
+        "ms": 5002.155000001192,
+        "analyzeMs": 2338.294999986887,
+        "cached": false,
+        "phrases": 4,
+        "phraseTimings": [
+          {
+            "index": 0,
+            "startSec": -0.3076643990929705,
+            "seconds": 2.0549659863945577,
+            "ms": 788.9650000035763,
+            "notes": 3
+          },
+          {
+            "index": 1,
+            "startSec": 1.7182766439909296,
+            "seconds": 2.0317460317460316,
+            "ms": 629.339999973774,
+            "notes": 3
+          },
+          {
+            "index": 2,
+            "startSec": 3.7035827664399092,
+            "seconds": 2.043356009070295,
+            "ms": 522.3649999797344,
+            "notes": 3
+          },
+          {
+            "index": 3,
+            "startSec": 5.735328798185941,
+            "seconds": 2.513560090702948,
+            "ms": 709.2100000083447,
+            "notes": 3
+          }
+        ]
+      },
+      "llm-long-song.unmodified": {
+        "ok": true,
+        "job": "20261116-112056-exec-sol-2a27"
+      },
+      "llm-long-song.ui-paste-and-play": {
+        "ok": true,
+        "doc": {
+          "version": 1,
+          "title": "あさのひかり、みらいのみち",
+          "bpm": 120,
+          "beatsPerBar": 4,
+          "key": "C",
+          "bars": 16,
+          "chords": "| C | G | Am | Em | F | C | Dm | G | C | G | Am | Em | F | G | C | C |",
+          "tracks": [
+            {
+              "id": "vo",
+              "kind": "vocal",
+              "engine": "vocatab",
+              "singer": "ritsu",
+              "volume": 0.6,
+              "effects": [
+                {
+                  "type": "vocaloid",
+                  "amount": 0.8
+                }
+              ],
+              "notes": [
+                {
+                  "bar": 1,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "あ"
+                },
+                {
+                  "bar": 1,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "さ"
+                },
+                {
+                  "bar": 1,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "A4",
+                  "lyric": "の"
+                },
+                {
+                  "bar": 2,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "ひ"
+                },
+                {
+                  "bar": 2,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D4",
+                  "lyric": "か"
+                },
+                {
+                  "bar": 2,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "り"
+                },
+                {
+                  "bar": 3,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "ま"
+                },
+                {
+                  "bar": 3,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "ど"
+                },
+                {
+                  "bar": 3,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "G4",
+                  "lyric": "を"
+                },
+                {
+                  "bar": 4,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "あ"
+                },
+                {
+                  "bar": 4,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "け"
+                },
+                {
+                  "bar": 4,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "て"
+                },
+                {
+                  "bar": 5,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "か"
+                },
+                {
+                  "bar": 5,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "ぜ"
+                },
+                {
+                  "bar": 5,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "F4",
+                  "lyric": "に"
+                },
+                {
+                  "bar": 6,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "の"
+                },
+                {
+                  "bar": 6,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "せ"
+                },
+                {
+                  "bar": 6,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "て"
+                },
+                {
+                  "bar": 7,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "F4",
+                  "lyric": "ゆ"
+                },
+                {
+                  "bar": 7,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "め"
+                },
+                {
+                  "bar": 7,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "F4",
+                  "lyric": "を"
+                },
+                {
+                  "bar": 8,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "う"
+                },
+                {
+                  "bar": 8,
+                  "beat": 2,
+                  "len": "8",
+                  "pitch": "A4",
+                  "lyric": "た"
+                },
+                {
+                  "bar": 8,
+                  "beat": 2.5,
+                  "len": "8",
+                  "pitch": "B4",
+                  "lyric": "う"
+                },
+                {
+                  "bar": 9,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "C5",
+                  "lyric": "き"
+                },
+                {
+                  "bar": 9,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "み"
+                },
+                {
+                  "bar": 9,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "E5",
+                  "lyric": "と"
+                },
+                {
+                  "bar": 10,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "あ"
+                },
+                {
+                  "bar": 10,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "る"
+                },
+                {
+                  "bar": 10,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "く"
+                },
+                {
+                  "bar": 11,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "C5",
+                  "lyric": "み"
+                },
+                {
+                  "bar": 11,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "E5",
+                  "lyric": "ら"
+                },
+                {
+                  "bar": 11,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "C5",
+                  "lyric": "い"
+                },
+                {
+                  "bar": 12,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "の"
+                },
+                {
+                  "bar": 12,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "み"
+                },
+                {
+                  "bar": 12,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "E5",
+                  "lyric": "ち"
+                },
+                {
+                  "bar": 13,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "C5",
+                  "lyric": "そ"
+                },
+                {
+                  "bar": 13,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "ら"
+                },
+                {
+                  "bar": 13,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "C5",
+                  "lyric": "の"
+                },
+                {
+                  "bar": 14,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "む"
+                },
+                {
+                  "bar": 14,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "こ"
+                },
+                {
+                  "bar": 14,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "う"
+                },
+                {
+                  "bar": 15,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "C5",
+                  "lyric": "ひ"
+                },
+                {
+                  "bar": 15,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "び"
+                },
+                {
+                  "bar": 15,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "E5",
+                  "lyric": "く"
+                },
+                {
+                  "bar": 16,
+                  "beat": 1,
+                  "len": "8",
+                  "pitch": "D5",
+                  "lyric": "こ"
+                },
+                {
+                  "bar": 16,
+                  "beat": 1.5,
+                  "len": "8",
+                  "pitch": "B4",
+                  "lyric": "え"
+                },
+                {
+                  "bar": 16,
+                  "beat": 2,
+                  "len": "2",
+                  "pitch": "C5",
+                  "lyric": "よ"
+                }
+              ]
+            },
+            {
+              "id": "pf",
+              "kind": "inst",
+              "instrument": 0,
+              "volume": 0.6,
+              "mml": "o4 l8 c e g e c e g e d g b g d g b g c e a e c e a e e g b g e g b g c f a f c f a f c e g e c e g e d f a f d f a f d g b g d g b g o5 l4 'ceg' 'ceg' 'ceg' 'ceg' 'dgb' 'dgb' 'dgb' 'dgb' 'cea' 'cea' 'cea' 'cea' 'egb' 'egb' 'egb' 'egb' 'cfa' 'cfa' 'cfa' 'cfa' 'dgb' 'dgb' 'dgb' 'dgb' 'ceg' 'ceg' 'ceg' 'ceg' 'ceg'2 'ceg'2"
+            },
+            {
+              "id": "ba",
+              "kind": "inst",
+              "instrument": 33,
+              "volume": 0.6,
+              "mml": "o2 l4 c g c g g d g d a e a e e b e b f c f c c g c g d a d a g d g b c g c e g d g b a e a c e b e g f c f a g d g b c g c g c2 c2"
+            },
+            {
+              "id": "st",
+              "kind": "inst",
+              "instrument": 48,
+              "volume": 0.55,
+              "mml": "o3 l1 'ceg' 'dgb' 'cea' 'egb' 'cfa' 'ceg' 'dfa' 'dgb' o4 'ceg' 'dgb' 'cea' 'egb' 'cfa' 'dgb' 'ceg' 'ceg'"
+            },
+            {
+              "id": "dr",
+              "kind": "drums",
+              "volume": 0.5,
+              "pattern": "8beat"
+            }
+          ]
+        },
+        "problems": "問題なし",
+        "repairs": "",
+        "playing": true,
+        "status": "再生中"
+      },
+      "llm-long-song.mml-full-length": {
+        "ok": true,
+        "mmlFacts": [
+          {
+            "track": "pf",
+            "notes": 154,
+            "lengthBars": 16,
+            "songBars": 16,
+            "overBars": 0,
+            "underBars": 0,
+            "lowest": "C4",
+            "highest": "B5",
+            "problems": []
+          },
+          {
+            "track": "ba",
+            "notes": 62,
+            "lengthBars": 16,
+            "songBars": 16,
+            "overBars": 0,
+            "underBars": 0,
+            "lowest": "C2",
+            "highest": "B2",
+            "problems": []
+          },
+          {
+            "track": "st",
+            "notes": 48,
+            "lengthBars": 16,
+            "songBars": 16,
+            "overBars": 0,
+            "underBars": 0,
+            "lowest": "C3",
+            "highest": "B4",
+            "problems": []
+          }
+        ]
+      },
+      "llm-long-song.long-form": {
+        "ok": true,
+        "bars": 16,
+        "morae": 48
+      },
+      "llm-long-song.mp3-button": {
+        "ok": true
+      },
+      "llm-long-song.audio": {
+        "ok": true,
+        "mixL": {
+          "rmsDb": -16.77,
+          "peakDb": -1.6,
+          "clipped": 0
+        },
+        "mixR": {
+          "rmsDb": -16.77,
+          "peakDb": -1.6,
+          "clipped": 0
+        },
+        "vocal": {
+          "rmsDb": -24.12,
+          "peakDb": -11.55,
+          "clipped": 0
+        },
+        "acc": {
+          "rmsDb": -19.5,
+          "peakDb": -2.84,
+          "clipped": 0
+        },
+        "perSection": [
+          {
+            "start": 0,
+            "end": 16,
+            "vocal": {
+              "rmsDb": -24.25,
+              "peakDb": -11.55,
+              "clipped": 0
+            },
+            "acc": {
+              "rmsDb": -19.34,
+              "peakDb": -4.16,
+              "clipped": 0
+            }
+          },
+          {
+            "start": 16,
+            "end": 32,
+            "vocal": {
+              "rmsDb": -23.98,
+              "peakDb": -12.07,
+              "clipped": 0
+            },
+            "acc": {
+              "rmsDb": -19.66,
+              "peakDb": -2.84,
+              "clipped": 0
+            }
+          }
+        ]
+      },
+      "llm-long-song.actual-playback": {
+        "ok": true,
+        "playback": {
+          "elapsedSeconds": 33.52283446712018,
+          "maxRms": 0.26188328512662024,
+          "observations": 1117
+        }
+      },
+      "llm-long-song.soundfont": {
+        "ok": true,
+        "mode": "soundfont",
+        "files": [
+          "0000_FluidR3_GM_sf2_file",
+          "0330_FluidR3_GM_sf2_file",
+          "0480_FluidR3_GM_sf2_file",
+          "12836_0_FluidR3_GM_sf2_file",
+          "12842_0_FluidR3_GM_sf2_file",
+          "12838_0_FluidR3_GM_sf2_file",
+          "12839_0_FluidR3_GM_sf2_file"
+        ]
+      },
+      "llm-long-song.sync": {
+        "ok": true,
+        "scheduledDiffMs": 0,
+        "accOnsetMs": 0.45,
+        "vocalReferenceCorrelations": [
+          1,
+          1
+        ]
+      },
+      "llm-long-song.phrase-timing": {
+        "ok": true,
+        "ms": 9092.384999990463,
+        "analyzeMs": 1212.2100000083447,
+        "cached": false,
+        "phrases": 8,
+        "phraseTimings": [
+          {
+            "index": 0,
+            "startSec": -0.24961451247165534,
+            "seconds": 3.9996371882086166,
+            "ms": 1017.8850000202656,
+            "notes": 6
+          },
+          {
+            "index": 1,
+            "startSec": 3.709387755102041,
+            "seconds": 4.040272108843538,
+            "ms": 999.1049999892712,
+            "notes": 6
+          },
+          {
+            "index": 2,
+            "startSec": 7.720634920634921,
+            "seconds": 4.028662131519274,
+            "ms": 1046.25,
+            "notes": 6
+          },
+          {
+            "index": 3,
+            "startSec": 11.697052154195012,
+            "seconds": 3.5526530612244898,
+            "ms": 916.75,
+            "notes": 6
+          },
+          {
+            "index": 4,
+            "startSec": 15.719909297052155,
+            "seconds": 4.028662131519274,
+            "ms": 994.8249999880791,
+            "notes": 6
+          },
+          {
+            "index": 5,
+            "startSec": 19.70793650793651,
+            "seconds": 4.040272108843538,
+            "ms": 981.6750000119209,
+            "notes": 6
+          },
+          {
+            "index": 6,
+            "startSec": 23.637913832199548,
+            "seconds": 4.1099319727891155,
+            "ms": 969.1850000023842,
+            "notes": 6
+          },
+          {
+            "index": 7,
+            "startSec": 27.707210884353742,
+            "seconds": 4.040272108843538,
+            "ms": 946.669999986887,
+            "notes": 6
+          }
+        ]
+      }
+    },
+    "answers": [
+      {
+        "name": "llm-gallery-answer",
+        "metrics": {
+          "mixL": {
+            "rmsDb": -14.82,
+            "peakDb": -0.9,
+            "clipped": 0
+          },
+          "mixR": {
+            "rmsDb": -14.82,
+            "peakDb": -0.9,
+            "clipped": 0
+          },
+          "vocal": {
+            "rmsDb": -19.98,
+            "peakDb": -6.07,
+            "clipped": 0
+          },
+          "acc": {
+            "rmsDb": -17.52,
+            "peakDb": -1.45,
+            "clipped": 0
+          },
+          "perSection": [
+            {
+              "start": 0,
+              "end": 4,
+              "vocal": {
+                "rmsDb": -20.74,
+                "peakDb": -7.15,
+                "clipped": 0
+              },
+              "acc": {
+                "rmsDb": -17.71,
+                "peakDb": -2.99,
+                "clipped": 0
+              }
+            },
+            {
+              "start": 4,
+              "end": 8,
+              "vocal": {
+                "rmsDb": -19.34,
+                "peakDb": -6.07,
+                "clipped": 0
+              },
+              "acc": {
+                "rmsDb": -17.34,
+                "peakDb": -1.45,
+                "clipped": 0
+              }
+            }
+          ]
+        },
+        "sync": {
+          "scheduledDiffMs": 0,
+          "accOnsetMs": 0.82,
+          "vocalReferenceCorrelations": [
+            1,
+            1
+          ]
+        },
+        "browser": {
+          "file": "llm-gallery-answer.mp3",
+          "bytes": 228832,
+          "seconds": 9.5,
+          "mixL": {
+            "rmsDb": -14.54,
+            "peakDb": -0.63,
+            "clipped": 0
+          },
+          "mixR": {
+            "rmsDb": -14.54,
+            "peakDb": -0.63,
+            "clipped": 0
+          },
+          "acc": {
+            "rmsDb": -18.24,
+            "peakDb": -1.45,
+            "clipped": 0
+          },
+          "vox": {
+            "rmsDb": -20.73,
+            "peakDb": -6.07,
+            "clipped": 0
+          },
+          "scheduled": {
+            "accStart": 0.530907029478458,
+            "vocalSongZero": 0.530907029478458
+          },
+          "playback": {
+            "elapsedSeconds": 9.51340136054422,
+            "maxRms": 0.31189241685016217,
+            "observations": 317
+          },
+          "soundfont": {
+            "mode": "soundfont",
+            "files": [
+              "0000_FluidR3_GM_sf2_file",
+              "0330_FluidR3_GM_sf2_file",
+              "12836_0_FluidR3_GM_sf2_file",
+              "12842_0_FluidR3_GM_sf2_file",
+              "12838_0_FluidR3_GM_sf2_file",
+              "12839_0_FluidR3_GM_sf2_file"
+            ]
+          },
+          "vocalRender": {
+            "ms": 5002.155000001192,
+            "analyzeMs": 2338.294999986887,
+            "cached": false,
+            "phrases": 4,
+            "phraseTimings": [
+              {
+                "index": 0,
+                "startSec": -0.3076643990929705,
+                "seconds": 2.0549659863945577,
+                "ms": 788.9650000035763,
+                "notes": 3
+              },
+              {
+                "index": 1,
+                "startSec": 1.7182766439909296,
+                "seconds": 2.0317460317460316,
+                "ms": 629.339999973774,
+                "notes": 3
+              },
+              {
+                "index": 2,
+                "startSec": 3.7035827664399092,
+                "seconds": 2.043356009070295,
+                "ms": 522.3649999797344,
+                "notes": 3
+              },
+              {
+                "index": 3,
+                "startSec": 5.735328798185941,
+                "seconds": 2.513560090702948,
+                "ms": 709.2100000083447,
+                "notes": 3
+              }
+            ]
+          },
+          "saved": [
+            "out/llm-gallery-answer.mp3",
+            "out/llm-gallery-answer.acc.wav",
+            "out/llm-gallery-answer.vox.wav",
+            "out/llm-gallery-answer.mix.wav",
+            "out/llm-gallery-answer.vox-ref.wav"
+          ]
+        },
+        "doc": {
+          "version": 1,
+          "title": "夕空ポップ",
+          "bpm": 120,
+          "beatsPerBar": 4,
+          "key": "C",
+          "bars": 4,
+          "chords": "| C | F | G | C |",
+          "tracks": [
+            {
+              "id": "vo",
+              "kind": "vocal",
+              "singer": "ritsu",
+              "effects": [],
+              "notes": [
+                {
+                  "bar": 1,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "ゆ"
+                },
+                {
+                  "bar": 1,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "う"
+                },
+                {
+                  "bar": 1,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "や"
+                },
+                {
+                  "bar": 2,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "け"
+                },
+                {
+                  "bar": 2,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "そ"
+                },
+                {
+                  "bar": 2,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "D4",
+                  "lyric": "ら"
+                },
+                {
+                  "bar": 3,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "に"
+                },
+                {
+                  "bar": 3,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "C5",
+                  "lyric": "と"
+                },
+                {
+                  "bar": 3,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "け"
+                },
+                {
+                  "bar": 4,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "て"
+                },
+                {
+                  "bar": 4,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "い"
+                },
+                {
+                  "bar": 4,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "C4",
+                  "lyric": "く"
+                }
+              ]
+            },
+            {
+              "id": "pf",
+              "kind": "inst",
+              "instrument": 0,
+              "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'fac' 'fac' 'fac' 'fac' 'dgb' 'dgb' 'dgb' 'dgb' 'ceg' 'ceg' 'ceg' 'ceg'"
+            },
+            {
+              "id": "ba",
+              "kind": "inst",
+              "instrument": 33,
+              "mml": "o2 l2 c g f c g d c c"
+            },
+            {
+              "id": "dr",
+              "kind": "drums",
+              "pattern": "8beat"
+            }
+          ]
+        }
+      },
+      {
+        "name": "llm-long-song",
+        "metrics": {
+          "mixL": {
+            "rmsDb": -16.77,
+            "peakDb": -1.6,
+            "clipped": 0
+          },
+          "mixR": {
+            "rmsDb": -16.77,
+            "peakDb": -1.6,
+            "clipped": 0
+          },
+          "vocal": {
+            "rmsDb": -24.12,
+            "peakDb": -11.55,
+            "clipped": 0
+          },
+          "acc": {
+            "rmsDb": -19.5,
+            "peakDb": -2.84,
+            "clipped": 0
+          },
+          "perSection": [
+            {
+              "start": 0,
+              "end": 16,
+              "vocal": {
+                "rmsDb": -24.25,
+                "peakDb": -11.55,
+                "clipped": 0
+              },
+              "acc": {
+                "rmsDb": -19.34,
+                "peakDb": -4.16,
+                "clipped": 0
+              }
+            },
+            {
+              "start": 16,
+              "end": 32,
+              "vocal": {
+                "rmsDb": -23.98,
+                "peakDb": -12.07,
+                "clipped": 0
+              },
+              "acc": {
+                "rmsDb": -19.66,
+                "peakDb": -2.84,
+                "clipped": 0
+              }
+            }
+          ]
+        },
+        "sync": {
+          "scheduledDiffMs": 0,
+          "accOnsetMs": 0.45,
+          "vocalReferenceCorrelations": [
+            1,
+            1
+          ]
+        },
+        "browser": {
+          "file": "llm-long-song.mp3",
+          "bytes": 804989,
+          "seconds": 33.5,
+          "mixL": {
+            "rmsDb": -16.51,
+            "peakDb": -1.57,
+            "clipped": 0
+          },
+          "mixR": {
+            "rmsDb": -16.51,
+            "peakDb": -1.57,
+            "clipped": 0
+          },
+          "acc": {
+            "rmsDb": -19.68,
+            "peakDb": -2.84,
+            "clipped": 0
+          },
+          "vox": {
+            "rmsDb": -24.32,
+            "peakDb": -11.55,
+            "clipped": 0
+          },
+          "scheduled": {
+            "accStart": 0.4728344671201814,
+            "vocalSongZero": 0.4728344671201814
+          },
+          "playback": {
+            "elapsedSeconds": 33.52283446712018,
+            "maxRms": 0.26188328512662024,
+            "observations": 1117
+          },
+          "soundfont": {
+            "mode": "soundfont",
+            "files": [
+              "0000_FluidR3_GM_sf2_file",
+              "0330_FluidR3_GM_sf2_file",
+              "0480_FluidR3_GM_sf2_file",
+              "12836_0_FluidR3_GM_sf2_file",
+              "12842_0_FluidR3_GM_sf2_file",
+              "12838_0_FluidR3_GM_sf2_file",
+              "12839_0_FluidR3_GM_sf2_file"
+            ]
+          },
+          "vocalRender": {
+            "ms": 9092.384999990463,
+            "analyzeMs": 1212.2100000083447,
+            "cached": false,
+            "phrases": 8,
+            "phraseTimings": [
+              {
+                "index": 0,
+                "startSec": -0.24961451247165534,
+                "seconds": 3.9996371882086166,
+                "ms": 1017.8850000202656,
+                "notes": 6
+              },
+              {
+                "index": 1,
+                "startSec": 3.709387755102041,
+                "seconds": 4.040272108843538,
+                "ms": 999.1049999892712,
+                "notes": 6
+              },
+              {
+                "index": 2,
+                "startSec": 7.720634920634921,
+                "seconds": 4.028662131519274,
+                "ms": 1046.25,
+                "notes": 6
+              },
+              {
+                "index": 3,
+                "startSec": 11.697052154195012,
+                "seconds": 3.5526530612244898,
+                "ms": 916.75,
+                "notes": 6
+              },
+              {
+                "index": 4,
+                "startSec": 15.719909297052155,
+                "seconds": 4.028662131519274,
+                "ms": 994.8249999880791,
+                "notes": 6
+              },
+              {
+                "index": 5,
+                "startSec": 19.70793650793651,
+                "seconds": 4.040272108843538,
+                "ms": 981.6750000119209,
+                "notes": 6
+              },
+              {
+                "index": 6,
+                "startSec": 23.637913832199548,
+                "seconds": 4.1099319727891155,
+                "ms": 969.1850000023842,
+                "notes": 6
+              },
+              {
+                "index": 7,
+                "startSec": 27.707210884353742,
+                "seconds": 4.040272108843538,
+                "ms": 946.669999986887,
+                "notes": 6
+              }
+            ]
+          },
+          "saved": [
+            "out/llm-long-song.mp3",
+            "out/llm-long-song.acc.wav",
+            "out/llm-long-song.vox.wav",
+            "out/llm-long-song.mix.wav",
+            "out/llm-long-song.vox-ref.wav"
+          ]
+        },
+        "doc": {
+          "version": 1,
+          "title": "あさのひかり、みらいのみち",
+          "bpm": 120,
+          "beatsPerBar": 4,
+          "key": "C",
+          "bars": 16,
+          "chords": "| C | G | Am | Em | F | C | Dm | G | C | G | Am | Em | F | G | C | C |",
+          "tracks": [
+            {
+              "id": "vo",
+              "kind": "vocal",
+              "engine": "vocatab",
+              "singer": "ritsu",
+              "volume": 0.6,
+              "effects": [
+                {
+                  "type": "vocaloid",
+                  "amount": 0.8
+                }
+              ],
+              "notes": [
+                {
+                  "bar": 1,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "あ"
+                },
+                {
+                  "bar": 1,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "さ"
+                },
+                {
+                  "bar": 1,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "A4",
+                  "lyric": "の"
+                },
+                {
+                  "bar": 2,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "ひ"
+                },
+                {
+                  "bar": 2,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D4",
+                  "lyric": "か"
+                },
+                {
+                  "bar": 2,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "り"
+                },
+                {
+                  "bar": 3,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "ま"
+                },
+                {
+                  "bar": 3,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "ど"
+                },
+                {
+                  "bar": 3,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "G4",
+                  "lyric": "を"
+                },
+                {
+                  "bar": 4,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "あ"
+                },
+                {
+                  "bar": 4,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "け"
+                },
+                {
+                  "bar": 4,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "て"
+                },
+                {
+                  "bar": 5,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "か"
+                },
+                {
+                  "bar": 5,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "ぜ"
+                },
+                {
+                  "bar": 5,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "F4",
+                  "lyric": "に"
+                },
+                {
+                  "bar": 6,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "の"
+                },
+                {
+                  "bar": 6,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "せ"
+                },
+                {
+                  "bar": 6,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "て"
+                },
+                {
+                  "bar": 7,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "F4",
+                  "lyric": "ゆ"
+                },
+                {
+                  "bar": 7,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "A4",
+                  "lyric": "め"
+                },
+                {
+                  "bar": 7,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "F4",
+                  "lyric": "を"
+                },
+                {
+                  "bar": 8,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "う"
+                },
+                {
+                  "bar": 8,
+                  "beat": 2,
+                  "len": "8",
+                  "pitch": "A4",
+                  "lyric": "た"
+                },
+                {
+                  "bar": 8,
+                  "beat": 2.5,
+                  "len": "8",
+                  "pitch": "B4",
+                  "lyric": "う"
+                },
+                {
+                  "bar": 9,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "C5",
+                  "lyric": "き"
+                },
+                {
+                  "bar": 9,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "み"
+                },
+                {
+                  "bar": 9,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "E5",
+                  "lyric": "と"
+                },
+                {
+                  "bar": 10,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "あ"
+                },
+                {
+                  "bar": 10,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "る"
+                },
+                {
+                  "bar": 10,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "く"
+                },
+                {
+                  "bar": 11,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "C5",
+                  "lyric": "み"
+                },
+                {
+                  "bar": 11,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "E5",
+                  "lyric": "ら"
+                },
+                {
+                  "bar": 11,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "C5",
+                  "lyric": "い"
+                },
+                {
+                  "bar": 12,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "の"
+                },
+                {
+                  "bar": 12,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "み"
+                },
+                {
+                  "bar": 12,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "E5",
+                  "lyric": "ち"
+                },
+                {
+                  "bar": 13,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "C5",
+                  "lyric": "そ"
+                },
+                {
+                  "bar": 13,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "ら"
+                },
+                {
+                  "bar": 13,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "C5",
+                  "lyric": "の"
+                },
+                {
+                  "bar": 14,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "B4",
+                  "lyric": "む"
+                },
+                {
+                  "bar": 14,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "こ"
+                },
+                {
+                  "bar": 14,
+                  "beat": 3,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "う"
+                },
+                {
+                  "bar": 15,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "C5",
+                  "lyric": "ひ"
+                },
+                {
+                  "bar": 15,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "D5",
+                  "lyric": "び"
+                },
+                {
+                  "bar": 15,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "E5",
+                  "lyric": "く"
+                },
+                {
+                  "bar": 16,
+                  "beat": 1,
+                  "len": "8",
+                  "pitch": "D5",
+                  "lyric": "こ"
+                },
+                {
+                  "bar": 16,
+                  "beat": 1.5,
+                  "len": "8",
+                  "pitch": "B4",
+                  "lyric": "え"
+                },
+                {
+                  "bar": 16,
+                  "beat": 2,
+                  "len": "2",
+                  "pitch": "C5",
+                  "lyric": "よ"
+                }
+              ]
+            },
+            {
+              "id": "pf",
+              "kind": "inst",
+              "instrument": 0,
+              "volume": 0.6,
+              "mml": "o4 l8 c e g e c e g e d g b g d g b g c e a e c e a e e g b g e g b g c f a f c f a f c e g e c e g e d f a f d f a f d g b g d g b g o5 l4 'ceg' 'ceg' 'ceg' 'ceg' 'dgb' 'dgb' 'dgb' 'dgb' 'cea' 'cea' 'cea' 'cea' 'egb' 'egb' 'egb' 'egb' 'cfa' 'cfa' 'cfa' 'cfa' 'dgb' 'dgb' 'dgb' 'dgb' 'ceg' 'ceg' 'ceg' 'ceg' 'ceg'2 'ceg'2"
+            },
+            {
+              "id": "ba",
+              "kind": "inst",
+              "instrument": 33,
+              "volume": 0.6,
+              "mml": "o2 l4 c g c g g d g d a e a e e b e b f c f c c g c g d a d a g d g b c g c e g d g b a e a c e b e g f c f a g d g b c g c g c2 c2"
+            },
+            {
+              "id": "st",
+              "kind": "inst",
+              "instrument": 48,
+              "volume": 0.55,
+              "mml": "o3 l1 'ceg' 'dgb' 'cea' 'egb' 'cfa' 'ceg' 'dfa' 'dgb' o4 'ceg' 'dgb' 'cea' 'egb' 'cfa' 'dgb' 'ceg' 'ceg'"
+            },
+            {
+              "id": "dr",
+              "kind": "drums",
+              "volume": 0.5,
+              "pattern": "8beat"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "mcp": {
+    "calls": [
+      {
+        "name": "new_song",
+        "result": {
+          "title": "mcp-smoke",
+          "bpm": 110,
+          "beatsPerBar": 4,
+          "key": "C",
+          "bars": 2,
+          "tracks": [
+            {
+              "id": "vo",
+              "kind": "vocal",
+              "singer": "ritsu",
+              "notes": 0,
+              "lyrics": "",
+              "effects": []
+            }
+          ],
+          "problems": 0
+        }
+      },
+      {
+        "name": "set_track_notes",
+        "result": {
+          "placed": 5,
+          "removed": 0,
+          "total": 5,
+          "outsideSong": 0,
+          "problems": []
+        }
+      },
+      {
+        "name": "set_lyrics",
+        "result": {
+          "assigned": [
+            {
+              "index": 0,
+              "bar": 1,
+              "beat": 1,
+              "pitch": "E4",
+              "lyric": "あ"
+            },
+            {
+              "index": 1,
+              "bar": 1,
+              "beat": 2,
+              "pitch": "G4",
+              "lyric": "お"
+            },
+            {
+              "index": 2,
+              "bar": 1,
+              "beat": 3,
+              "pitch": "A4",
+              "lyric": "い"
+            },
+            {
+              "index": 3,
+              "bar": 2,
+              "beat": 1,
+              "pitch": "G4",
+              "lyric": "そ"
+            },
+            {
+              "index": 4,
+              "bar": 2,
+              "beat": 2,
+              "pitch": "E4",
+              "lyric": "ら"
+            }
+          ],
+          "morae": 5,
+          "notes": 5,
+          "surplus": [],
+          "missing": 0,
+          "unknown": []
+        }
+      },
+      {
+        "name": "set_track_mml",
+        "result": {
+          "track": "pf",
+          "notes": 24,
+          "lengthBars": 2,
+          "songBars": 2,
+          "overBars": 0,
+          "underBars": 0,
+          "lowest": "C4",
+          "highest": "B4",
+          "problems": []
+        }
+      },
+      {
+        "name": "set_track_mml",
+        "result": {
+          "track": "ba",
+          "notes": 4,
+          "lengthBars": 2,
+          "songBars": 2,
+          "overBars": 0,
+          "underBars": 0,
+          "lowest": "C2",
+          "highest": "G2",
+          "problems": []
+        }
+      },
+      {
+        "name": "set_drums",
+        "result": {
+          "pattern": "8beat"
+        }
+      },
+      {
+        "name": "set_effects",
+        "result": {
+          "effects": [
+            {
+              "type": "vocaloid",
+              "amount": 0.5
+            }
+          ],
+          "problems": []
+        }
+      },
+      {
+        "name": "get_song",
+        "result": {
+          "version": 1,
+          "title": "mcp-smoke",
+          "bpm": 110,
+          "beatsPerBar": 4,
+          "key": "C",
+          "bars": 2,
+          "tracks": [
+            {
+              "id": "vo",
+              "kind": "vocal",
+              "engine": "vocatab",
+              "singer": "ritsu",
+              "notes": [
+                {
+                  "bar": 1,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "あ"
+                },
+                {
+                  "bar": 1,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "お"
+                },
+                {
+                  "bar": 1,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "A4",
+                  "lyric": "い"
+                },
+                {
+                  "bar": 2,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "そ"
+                },
+                {
+                  "bar": 2,
+                  "beat": 2,
+                  "len": "2.",
+                  "pitch": "E4",
+                  "lyric": "ら"
+                }
+              ],
+              "effects": [
+                {
+                  "type": "vocaloid",
+                  "amount": 0.5
+                }
+              ]
+            },
+            {
+              "id": "pf",
+              "kind": "inst",
+              "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'dgb' 'dgb' 'dgb' 'dgb'",
+              "instrument": 0
+            },
+            {
+              "id": "ba",
+              "kind": "inst",
+              "mml": "o2 l2 c c g g",
+              "instrument": "Electric Bass (finger)"
+            },
+            {
+              "id": "dr",
+              "kind": "drums",
+              "pattern": "8beat"
+            }
+          ]
+        }
+      },
+      {
+        "name": "get_prompt",
+        "result": {
+          "prompt": "あなたは作曲家です。次の歌詞とイメージで、歌のメロディと伴奏を作ってください。\n\n## 歌詞\nあおいそら\n（モーラ数: 5。1モーラ = 1音符。拗音「きゃ」は1、「ー」は前の母音を伸ばす1音符、「っ」「ん」も1音符）\n\n## イメージ\nサビを高くしてください\n\n## 返答の形式\n次の SongDoc 形式の JSON を 1 つだけ、```json ... ``` で囲んで返してください。返答は ```json フェンス1つに SongDoc 全体だけを返す。MML も JSON の文字列フィールド mml に入れる。外部ツールやファイル操作は不要、返答テキストだけを生成する。\n\n- bpm, beatsPerBar(4), key, bars（小節数）, chords（\"| C | G | Am | F |\" の形、任意）\n- 歌トラック: {\"id\":\"vo\",\"kind\":\"vocal\",\"singer\":\"ritsu\",\"effects\":[],\"notes\":[...]}\n  - 音符: {\"bar\":小節(1始まり),\"beat\":拍(1始まり、小数可。1.5 = 1拍目の裏),\"len\":音価,\"pitch\":音名,\"lyric\":かな1モーラ}\n  - 音価: \"1\"=全 \"2\"=2分 \"4\"=4分 \"8\"=8分 \"16\"=16分。付点は \"4.\" 、3連は \"8t\"、タイは \"2+8\"\n  - 音名: \"C4\"=ド（中央）〜。歌の音域は C3〜C6（女声なら A3〜E5 が歌いやすい）。音符は重ねない（単音）\n  - 歌詞はひらがな。音符の数 = モーラの数にする\n  - effects: [{\"type\": \"kero\"|\"vocoder\"|\"bitcrusher\"|\"doubling\"|\"vocaloid\", \"amount\": 0〜1}]（任意）\n- 伴奏パート（2つ以上）: {\"id\":\"pf\",\"kind\":\"inst\",\"program\":GM楽器名,\"mml\":\"このパートの MML\"}\n  - MML は dtm（onjmin/dtm）の記法: o<n> オクターブ（o4 の c = 中央のド）、l<n> 既定の音価、c d e f g a b、\n    # / + でシャープ、- でフラット、数字で音価（c8 c4. c2）、r 休符、> < でオクターブ上下、'ceg' で和音（和音の中で > < は使わない）\n  - ; @ # は書かない（パートの区切りと宣言はアプリが付ける）。各パートの長さを bars 小節ぴったりにする\n  - instrument にGM名（例 \"Acoustic Grand Piano\"）または0始まりのGM番号（0〜127。0=ピアノ、4=Electric Piano 1、24=Acoustic Guitar (nylon)、33=Electric Bass (finger)、48=String Ensemble 1、73=Flute）を指定可。既定はFluidR3 GM SoundFont。従来のprogramも可。\n  - program の例: acoustic_grand_piano, electric_piano_1, electric_bass_finger, acoustic_guitar_nylon, string_ensemble_1\n- ドラム（任意）: {\"id\":\"dr\",\"kind\":\"drums\",\"pattern\":\"8beat\"}（4beat, 8beat, 16beat, shuffle, dance, bossa, disco など）\n\n## 今の曲を土台にする\n{\n \"version\": 1,\n \"title\": \"mcp-smoke\",\n \"bpm\": 110,\n \"beatsPerBar\": 4,\n \"key\": \"C\",\n \"bars\": 2,\n \"tracks\": [\n  {\n   \"id\": \"vo\",\n   \"kind\": \"vocal\",\n   \"engine\": \"vocatab\",\n   \"singer\": \"ritsu\",\n   \"notes\": [\n    {\n     \"bar\": 1,\n     \"beat\": 1,\n     \"len\": \"4\",\n     \"pitch\": \"E4\",\n     \"lyric\": \"あ\"\n    },\n    {\n     \"bar\": 1,\n     \"beat\": 2,\n     \"len\": \"4\",\n     \"pitch\": \"G4\",\n     \"lyric\": \"お\"\n    },\n    {\n     \"bar\": 1,\n     \"beat\": 3,\n     \"len\": \"2\",\n     \"pitch\": \"A4\",\n     \"lyric\": \"い\"\n    },\n    {\n     \"bar\": 2,\n     \"beat\": 1,\n     \"len\": \"4\",\n     \"pitch\": \"G4\",\n     \"lyric\": \"そ\"\n    },\n    {\n     \"bar\": 2,\n     \"beat\": 2,\n     \"len\": \"2.\",\n     \"pitch\": \"E4\",\n     \"lyric\": \"ら\"\n    }\n   ],\n   \"effects\": [\n    {\n     \"type\": \"vocaloid\",\n     \"amount\": 0.5\n    }\n   ]\n  },\n  {\n   \"id\": \"pf\",\n   \"kind\": \"inst\",\n   \"mml\": \"o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'dgb' 'dgb' 'dgb' 'dgb'\",\n   \"instrument\": 0\n  },\n  {\n   \"id\": \"ba\",\n   \"kind\": \"inst\",\n   \"mml\": \"o2 l2 c c g g\",\n   \"instrument\": \"Electric Bass (finger)\"\n  },\n  {\n   \"id\": \"dr\",\n   \"kind\": \"drums\",\n   \"pattern\": \"8beat\"\n  }\n ]\n}\n\n\n## 例（2小節）\n```json\n{\n \"version\": 1,\n \"title\": \"例\",\n \"bpm\": 120,\n \"beatsPerBar\": 4,\n \"key\": \"C\",\n \"bars\": 2,\n \"chords\": \"| C | G |\",\n \"tracks\": [\n  {\n   \"id\": \"vo\",\n   \"kind\": \"vocal\",\n   \"engine\": \"vocatab\",\n   \"singer\": \"ritsu\",\n   \"effects\": [],\n   \"notes\": [\n    {\n     \"bar\": 1,\n     \"beat\": 1,\n     \"len\": \"4\",\n     \"pitch\": \"E4\",\n     \"lyric\": \"さ\"\n    },\n    {\n     \"bar\": 1,\n     \"beat\": 2,\n     \"len\": \"4\",\n     \"pitch\": \"G4\",\n     \"lyric\": \"く\"\n    },\n    {\n     \"bar\": 1,\n     \"beat\": 3,\n     \"len\": \"2\",\n     \"pitch\": \"A4\",\n     \"lyric\": \"ら\"\n    },\n    {\n     \"bar\": 2,\n     \"beat\": 1,\n     \"len\": \"2.\",\n     \"pitch\": \"G4\",\n     \"lyric\": \"ー\"\n    }\n   ]\n  },\n  {\n   \"id\": \"pf\",\n   \"kind\": \"inst\",\n   \"program\": \"acoustic_grand_piano\",\n   \"mml\": \"o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'dgb' 'dgb' 'dgb' 'dgb'\"\n  },\n  {\n   \"id\": \"ba\",\n   \"kind\": \"inst\",\n   \"program\": \"electric_bass_finger\",\n   \"mml\": \"o2 l4 c c g c g g d g\"\n  },\n  {\n   \"id\": \"dr\",\n   \"kind\": \"drums\",\n   \"pattern\": \"8beat\"\n  }\n ]\n}\n```\n"
+        }
+      },
+      {
+        "name": "load_song_json",
+        "result": {
+          "loaded": true,
+          "doc": {
+            "version": 1,
+            "title": "mcp-smoke",
+            "bpm": 110,
+            "beatsPerBar": 4,
+            "key": "C",
+            "bars": 2,
+            "tracks": [
+              {
+                "id": "vo",
+                "kind": "vocal",
+                "engine": "vocatab",
+                "singer": "ritsu",
+                "notes": [
+                  {
+                    "bar": 1,
+                    "beat": 1,
+                    "len": "4",
+                    "pitch": "E4",
+                    "lyric": "あ"
+                  },
+                  {
+                    "bar": 1,
+                    "beat": 2,
+                    "len": "4",
+                    "pitch": "G4",
+                    "lyric": "お"
+                  },
+                  {
+                    "bar": 1,
+                    "beat": 3,
+                    "len": "2",
+                    "pitch": "A4",
+                    "lyric": "い"
+                  },
+                  {
+                    "bar": 2,
+                    "beat": 1,
+                    "len": "4",
+                    "pitch": "G4",
+                    "lyric": "そ"
+                  },
+                  {
+                    "bar": 2,
+                    "beat": 2,
+                    "len": "2.",
+                    "pitch": "E4",
+                    "lyric": "ら"
+                  }
+                ],
+                "effects": [
+                  {
+                    "type": "vocaloid",
+                    "amount": 0.5
+                  }
+                ]
+              },
+              {
+                "id": "pf",
+                "kind": "inst",
+                "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'dgb' 'dgb' 'dgb' 'dgb'",
+                "instrument": 0
+              },
+              {
+                "id": "ba",
+                "kind": "inst",
+                "mml": "o2 l2 c c g g",
+                "instrument": "Electric Bass (finger)"
+              },
+              {
+                "id": "dr",
+                "kind": "drums",
+                "pattern": "8beat"
+              }
+            ]
+          },
+          "repairs": [],
+          "problems": [],
+          "fixRequest": null
+        }
+      },
+      {
+        "name": "get_song",
+        "result": {
+          "version": 1,
+          "title": "mcp-smoke",
+          "bpm": 110,
+          "beatsPerBar": 4,
+          "key": "C",
+          "bars": 2,
+          "tracks": [
+            {
+              "id": "vo",
+              "kind": "vocal",
+              "engine": "vocatab",
+              "singer": "ritsu",
+              "notes": [
+                {
+                  "bar": 1,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "E4",
+                  "lyric": "あ"
+                },
+                {
+                  "bar": 1,
+                  "beat": 2,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "お"
+                },
+                {
+                  "bar": 1,
+                  "beat": 3,
+                  "len": "2",
+                  "pitch": "A4",
+                  "lyric": "い"
+                },
+                {
+                  "bar": 2,
+                  "beat": 1,
+                  "len": "4",
+                  "pitch": "G4",
+                  "lyric": "そ"
+                },
+                {
+                  "bar": 2,
+                  "beat": 2,
+                  "len": "2.",
+                  "pitch": "E4",
+                  "lyric": "ら"
+                }
+              ],
+              "effects": [
+                {
+                  "type": "vocaloid",
+                  "amount": 0.5
+                }
+              ]
+            },
+            {
+              "id": "pf",
+              "kind": "inst",
+              "mml": "o4 l4 'ceg' 'ceg' 'ceg' 'ceg' 'dgb' 'dgb' 'dgb' 'dgb'",
+              "instrument": 0
+            },
+            {
+              "id": "ba",
+              "kind": "inst",
+              "mml": "o2 l2 c c g g",
+              "instrument": "Electric Bass (finger)"
+            },
+            {
+              "id": "dr",
+              "kind": "drums",
+              "pattern": "8beat"
+            }
+          ]
+        }
+      },
+      {
+        "name": "check",
+        "result": {
+          "problems": []
+        }
+      },
+      {
+        "name": "export",
+        "result": {
+          "saved": "out/mcp-smoke.json"
+        }
+      },
+      {
+        "name": "export",
+        "result": {
+          "file": "mcp-smoke.mp3",
+          "bytes": 141688,
+          "seconds": 5.863650793650794,
+          "mixL": {
+            "rmsDb": -15.72,
+            "peakDb": -1.61,
+            "clipped": 0
+          },
+          "mixR": {
+            "rmsDb": -15.72,
+            "peakDb": -1.61,
+            "clipped": 0
+          },
+          "acc": {
+            "rmsDb": -19.3,
+            "peakDb": -3.51,
+            "clipped": 0
+          },
+          "vox": {
+            "rmsDb": -22.32,
+            "peakDb": -10.71,
+            "clipped": 0
+          },
+          "scheduled": {
+            "accStart": 0.4728344671201814,
+            "vocalSongZero": 0.4728344671201814
+          },
+          "playback": {
+            "elapsedSeconds": 5.867868480725624,
+            "maxRms": 0.29216500347866964,
+            "observations": 196
+          },
+          "soundfont": {
+            "mode": "soundfont",
+            "files": [
+              "0000_FluidR3_GM_sf2_file",
+              "0330_FluidR3_GM_sf2_file",
+              "12836_0_FluidR3_GM_sf2_file",
+              "12842_0_FluidR3_GM_sf2_file",
+              "12838_0_FluidR3_GM_sf2_file",
+              "12839_0_FluidR3_GM_sf2_file"
+            ]
+          },
+          "vocalRender": {
+            "ms": 3869.594999998808,
+            "analyzeMs": 2166.919999986887,
+            "cached": false,
+            "phrases": 1,
+            "phraseTimings": [
+              {
+                "index": 0,
+                "startSec": -0.24961451247165534,
+                "seconds": 4.864580498866213,
+                "ms": 1699.219999998808,
+                "notes": 5
+              }
+            ]
+          },
+          "saved": [
+            "out/mcp-smoke.mp3"
+          ]
+        }
+      }
+    ],
+    "export": {
+      "file": "mcp-smoke.mp3",
+      "bytes": 141688,
+      "seconds": 5.863650793650794,
+      "mixL": {
+        "rmsDb": -15.72,
+        "peakDb": -1.61,
+        "clipped": 0
+      },
+      "mixR": {
+        "rmsDb": -15.72,
+        "peakDb": -1.61,
+        "clipped": 0
+      },
+      "acc": {
+        "rmsDb": -19.3,
+        "peakDb": -3.51,
+        "clipped": 0
+      },
+      "vox": {
+        "rmsDb": -22.32,
+        "peakDb": -10.71,
+        "clipped": 0
+      },
+      "scheduled": {
+        "accStart": 0.4728344671201814,
+        "vocalSongZero": 0.4728344671201814
+      },
+      "playback": {
+        "elapsedSeconds": 5.867868480725624,
+        "maxRms": 0.29216500347866964,
+        "observations": 196
+      },
+      "soundfont": {
+        "mode": "soundfont",
+        "files": [
+          "0000_FluidR3_GM_sf2_file",
+          "0330_FluidR3_GM_sf2_file",
+          "12836_0_FluidR3_GM_sf2_file",
+          "12842_0_FluidR3_GM_sf2_file",
+          "12838_0_FluidR3_GM_sf2_file",
+          "12839_0_FluidR3_GM_sf2_file"
+        ]
+      },
+      "vocalRender": {
+        "ms": 3869.594999998808,
+        "analyzeMs": 2166.919999986887,
+        "cached": false,
+        "phrases": 1,
+        "phraseTimings": [
+          {
+            "index": 0,
+            "startSec": -0.24961451247165534,
+            "seconds": 4.864580498866213,
+            "ms": 1699.219999998808,
+            "notes": 5
+          }
+        ]
+      },
+      "saved": [
+        "out/mcp-smoke.mp3"
+      ]
+    },
+    "ok": true
+  }
+}
