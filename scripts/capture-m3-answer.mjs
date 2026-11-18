@@ -5,7 +5,8 @@ const jobs=[{id:"20261116-112030-creative-sonnet-1a3b",answer:"gallery-answer-1.
 const sha=b=>createHash("sha256").update(b).digest("hex");
 const entries=[];
 for(const job of jobs) {
- const status=JSON.parse(readFileSync(`/home/box/jev-starter/status/${job.id}.json`,"utf8"));
+ const statusDir=process.env.JEV_STATUS_DIR ?? `${process.env.HOME}/jev-starter/status`;
+ const status=JSON.parse(readFileSync(`${statusDir}/${job.id}.json`,"utf8"));
  if(status.state!=="done"||status.exit_code!==0||!status.result_text) {console.log(`${job.id}: ${status.state}`);continue;}
  const file=`fixtures/llm-real/${job.answer}`;
  if(existsSync(file)&&readFileSync(file,"utf8")!==status.result_text) throw new Error("既存の未編集返答と異なります");

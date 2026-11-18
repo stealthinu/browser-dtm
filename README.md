@@ -1,14 +1,15 @@
-# browser-dtm（非公開）
+# browser-dtm
 
 ブラウザで「歌＋楽器」の曲を作る DTM アプリの最小版。歌は VocaTab の歌声合成エンジン、楽器は onjmin/dtm を使い、曲や歌詞は LLM から操作できるようにする。
 
 - 指示書: [SPEC.md](SPEC.md)（3手法共通） / 設計メモ: [docs/design-memo.md](docs/design-memo.md)
 - ライセンス方針: [LICENSE-POLICY.md](LICENSE-POLICY.md) / 著作権表示: [NOTICE.md](NOTICE.md)
-- 正本は `main-v1`。過去の3手法の比較結果は旧ブランチと REPORT の履歴に残す。
+- デモ: https://stealthinu.github.io/browser-dtm/ （サンプル集: https://stealthinu.github.io/browser-dtm/gallery.html ）
+- 正本は `main`。開発履歴は `main-v1` と REPORT に残す。
 - 使用量ログ: `logs/usage-<手法>.md`（集計は `tools/collect-usage.py`）
-- 正本ブランチ（`main-v1`）の結果: [REPORT.md](REPORT.md)
+- 結果メモ: [REPORT.md](REPORT.md)
 
-**このリポジトリは公開しない。** 歌声モデル・ボコーダ・SoundFont は commit しない（SPEC §4）。
+**歌声モデルは同梱しません。** ブラウザが [VocaTab 公式配布](https://wavtechyukky.github.io/vocatab/) から直接読み込みます（個人・非商用、再配布禁止）。SoundFont も同梱せず、実行時に配信元から読みます（SPEC §4）。
 
 ---
 
@@ -24,7 +25,7 @@ LLM の返答 → src/core/prompt.ts（候補選択・軽い修復・検査）�
   → 同じ PCM を AudioContext で実再生 / lamejs で MP3 化 / WAV
 ```
 
-- 歌は `$VOCATAB_DIR/ui/src/engine-web/worker.ts` を import してビルドする。モデル・ボコーダはローカルの上流 clone から読むだけで、同梱しない。onnxruntime-web は上流どおり jsDelivr から読む。CPU / WASM のみ。
+- 歌は `$VOCATAB_DIR/ui/src/engine-web/worker.ts` を import してビルドする。公開サイトではモデル・ボコーダを VocaTab 公式 GitHub Pages から読む。手元の `npm run serve` では既定で `/vocatab/`（ローカルの上流 clone）を読む。`?model_base=` で上書きできる。onnxruntime-web は上流どおり jsDelivr から読む。CPU / WASM のみ。GitHub Pages は Cross-Origin Isolation 用ヘッダを付けられないため、公開サイトでは WASM は単スレッドになる（再生はできるが初回の合成は遅め）。
 - dtm は npm の `@onjmin/dtm` を import/wrap する。楽器・ドラムはFluidR3 GM SoundFont（失敗時は警告して内蔵シンセ）。内部のSoundFontローダーだけは同版の上流cloneからimportする。上流は変更しない。オフライン予約中の時計・タイマー・乱数は同期区間だけ差し替え、`finally` で戻す。
 - 書き出し用 PCM は実時間録音に依存しない。再生と書き出しは同じ処理を通り、繰り返し書き出しの歌・ミックス・MP3 の相関を検査する。ブラウザ内部の演算微差で MP3 のバイト列が完全一致しない場合がある。MP3 の符号化遅延は約25 ms。
 
@@ -85,24 +86,22 @@ LLM の返答 → src/core/prompt.ts（候補選択・軽い修復・検査）�
 # 1) 依存（lockfile あり）
 npm ci
 
-# 2) 上流 VocaTab（コードは MIT。歌声モデル・ボコーダは個人・非商用・再配布禁止 → commit しない）
-#    a) 既にある clone を指す（box では /workspace/dtm-research/vocatab。読み取りだけで使う）
-export VOCATAB_DIR=/workspace/dtm-research/vocatab
-#    b) または .gitignore 済みの vendor/ へ clone（モデルは Git LFS ではなく通常のファイル）
-#    git clone https://github.com/wavtechyukky/vocatab vendor/vocatab
-#    （VOCATAB_DIR 未設定なら vendor/vocatab、次に /workspace/dtm-research/vocatab を探す）
+# 2) 上流 VocaTab のソース（MIT。ビルドでエンジンを束ねるだけ。歌声モデルは commit しない）
+git clone https://github.com/wavtechyukky/vocatab vendor/vocatab
+export VOCATAB_DIR="$PWD/vendor/vocatab"
+# または既にある clone を VOCATAB_DIR で指す（未設定なら vendor/vocatab を探す）
 
 # 3) dtm は npm の @onjmin/dtm（2.1.38, AGPL-3.0-or-later）を使う（手順 1 で入る）
 
-# 4) 同版のdtm上流ソース（SoundFontクラスだけを読取専用import）
-export DTM_DIR=/workspace/dtm-research/dtm
-# 別環境ではdtmリポジトリをcloneし、確認済みcommitをcheckout:
-# git clone https://github.com/onjmin/dtm /path/to/dtm
-# git -C /path/to/dtm checkout 3a89f4f1bc12a6c4e9562bcc551b6abf5132892a
-# export DTM_DIR=/path/to/dtm
-# npmのdtmとDTM_DIRのpackage.jsonのversionが一致しないとbuildは停止する。
+# 4) 同版の dtm 上流ソース（SoundFont クラスだけを読取専用 import）
+git clone https://github.com/onjmin/dtm vendor/dtm
+git -C vendor/dtm checkout 3a89f4f1bc12a6c4e9562bcc551b6abf5132892a
+export DTM_DIR="$PWD/vendor/dtm"
+# npm の dtm と DTM_DIR の package.json の version が一致しないと build は停止する。
 
 # 5) ビルド（dist/ は .gitignore）
+# 公開サイト向けはモデル根を公式に固定する:
+#   MODEL_BASE=https://wavtechyukky.github.io/vocatab/ npm run build && npm run package:pages
 npm run build
 ```
 
@@ -153,7 +152,7 @@ npm run mcp:smoke    # A6: 14道具、instrument/vocaloid・JSON往復・prompt�
 # 最終検証は npm ci → npm run build → npm test の後、上記すべてを実行
 ```
 
-e2e はポート 5500、LLM e2e は 5502、MCP の書き出しは 5501、SoundFont は 5503、ピアノロールは 5504、ギャラリーは5505、M3実返答は5506を使い、終わったらサーバーと Chrome を閉じる。音声ファイルは `out/`（commit しない）。受け渡し用 MP3 と画面は `/workspace/browser-dtm-final/` に保存する。
+e2e はポート 5500、LLM e2e は 5502、MCP の書き出しは 5501、SoundFont は 5503、ピアノロールは 5504、ギャラリーは5505、M3実返答は5506を使い、終わったらサーバーと Chrome を閉じる。音声ファイルは `out/`（commit しない）。受け渡し用 MP3 と画面は `FINAL_DIR`（未設定なら `out/final/`）に保存する。
 
 ## MCP サーバー
 
@@ -165,7 +164,7 @@ Claude Code / Claude Desktop などの設定例（パスは手元に合わせる
 
 ```json
 { "mcpServers": { "browser-dtm": { "command": "npx", "args": ["tsx", "mcp/server.ts"],
-  "cwd": "/path/to/browser-dtm", "env": { "VOCATAB_DIR": "/workspace/dtm-research/vocatab" } } } }
+  "cwd": "/path/to/browser-dtm", "env": { "VOCATAB_DIR": "/path/to/vocatab" } } } }
 ```
 
 道具: `load_song_json` `get_prompt` `get_song` `new_song` `set_chords` `set_track_notes` `set_lyrics` `set_track_mml` `set_drums` `set_effects` `set_mix` `check` `export`（mp3 既定 / wav / json / mml）`finish`。道具は事実（過不足・音域・はみ出し・エラーの場所）だけを返し、点数は返さない。`export` の mp3/wav は headless Chrome でアプリを開いて鳴らし、`out/<name>.mp3` に書き出す。`set_effects` は `{ "effects": [{ "type": "vocaloid", "amount": 0.5 }] }` に対応する。定義はブラウザと共有（`src/core/tools.ts`）。
@@ -193,7 +192,7 @@ Claude Code / Claude Desktop などの設定例（パスは手元に合わせる
 ## 著作権表示
 
 - VocaTab — MIT License, Copyright (c) 2026 wavtechyukky（https://github.com/wavtechyukky/vocatab）。歌声モデル・ボコーダは個人・非商用・再配布禁止。歌い手のクレジット: 波音リツ（「波音リツ」「カノン」）、夏目悠李（歌声DB制作: アマノケイ／音声提供者: 霧野蒼太）、御丹宮くるみ。
-- dtm — AGPL-3.0-or-later, (c) onjmin（https://github.com/onjmin/dtm）。本アプリは AGPL を継承する前提（LICENSE-POLICY.md）。
+- dtm — AGPL-3.0-or-later, (c) onjmin（https://github.com/onjmin/dtm）。本アプリも AGPL-3.0-or-later（[LICENSE](LICENSE)、方針は LICENSE-POLICY.md）。
 - 詳細は [NOTICE.md](NOTICE.md)。
 
 
@@ -217,6 +216,6 @@ JEV_AUTH_FALLBACK=0 JEV_AUTH_NOTIFY=0 JEV_NO_PREAMBLE=1 jev-route run exec-sol -
 
 今回のジョブIDとハッシュは `fixtures/llm-real/m3-provenance.json`、未編集返答は `gallery-answer-1.txt` / `long-answer-1.txt`。`scripts/capture-m3-answer.mjs` は今回のジョブ専用です。新規取得時は新しいstatusを参照し、既存返答を上書きせず保存してください。通常のテストは保存済み返答を使い、LLMを呼びません。
 
-dtmのnpm配布物は `dist/index.mjs` に内部SoundFontを含みますが、そのクラスをexportせず元ソース/source mapも含みません。上流改変や抽出コピーはせず、DTM_DIRは上の固定commit（package version 2.1.38）を引き続き使います。環境変数未設定の既定値は `/workspace/dtm-research/dtm`。VocaTabソースも別途必要です。
+dtmのnpm配布物は `dist/index.mjs` に内部SoundFontを含みますが、そのクラスをexportせず元ソース/source mapも含みません。上流改変や抽出コピーはせず、DTM_DIRは上の固定commit（package version 2.1.38）を引き続き使います。DTM_DIR の指定は必須です。VocaTab ソースも別途必要です。
 
 最終チェックを同じ順序でまとめて再実行する場合は `node scripts/final-verify.mjs`。`npm ci` から全e2eとMCPまでを順番に実行し、失敗時は停止して `docs/evidence/main-v1-m3-*.log` と `out/final-verification.json` に結果を残します。その後の `node scripts/final-evidence.mjs` は最終フォルダ内の全MP3をffmpegで測り、スクリーンショットの更新時刻と集約JSONを保存します。

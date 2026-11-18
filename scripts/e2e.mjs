@@ -5,7 +5,8 @@ import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { corr, decodeMp3, diffDb, lagMs, levels, onsetMs, readWav, SR } from "./analyze.mjs";
 import { openApp } from "./browser.mjs";
-import { ROOT } from "./paths.mjs";
+import { ROOT, finalDir } from "./paths.mjs";
+const final = finalDir();
 import { build } from "esbuild";
 import { spectralMetrics } from "./vocaloid-metrics.mjs";
 
@@ -127,7 +128,7 @@ try {
     const dryMetrics = spectralMetrics(b0,b0,confidence);
     const originalV2 = spectralMetrics(b0,applyVocaloid(b0,SR,1),confidence);
     const vocaloid = { dry: dryMetrics, originalV2, amounts: {} };
-    mkdirSync("/workspace/browser-dtm-final",{recursive:true});
+    mkdirSync(finalDir(),{recursive:true});
     for(const amount of [0,0.5,1]) {
       await page.evaluate(fx=>window.app.setEffects(fx),[{type:"vocaloid",amount}]);
       const name=`vocaloid-${amount}`;
@@ -145,7 +146,7 @@ try {
         const lift=metrics.centroidHz-dryMetrics.centroidHz,originalLift=originalV2.centroidHz-dryMetrics.centroidHz;
         check("vocaloid.timbre",lift>0&&lift>=originalLift*0.7,{liftHz:lift,originalLiftHz:originalLift,retained:lift/originalLift});
       }
-      copyFileSync(out(`${name}.mp3`),`/workspace/browser-dtm-final/${name}.mp3`);
+      copyFileSync(out(`${name}.mp3`),`${final}/${name}.mp3`);
     }
     results.vocaloid=vocaloid;
   }

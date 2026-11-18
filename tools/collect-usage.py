@@ -7,7 +7,7 @@ Sources (read-only, nothing is sent anywhere):
   - Claude sessions: ~/.claude/projects/<cwd-slug>/*.jsonl (assistant message.usage, deduped by message id)
 Cursor usage is not on this machine: take it from the Cursor dashboard (Usage → Export CSV) or the Admin API.
 
-Usage: tools/collect-usage.py --lane codex --cwd /workspace/browser-dtm-wt/codex --job <jev-job-id> [--out logs/usage-codex.md]
+Usage: tools/collect-usage.py --lane codex --cwd <repo-worktree> --job <jev-job-id> [--out logs/usage-codex.md]
 """
 import argparse, glob, json, os, re
 from datetime import datetime, timezone

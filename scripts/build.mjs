@@ -6,7 +6,8 @@ import { ROOT, vocatabDir } from "./paths.mjs";
 
 const VT = vocatabDir();
 // npm は内部 SoundFont クラスを export しないため、同版の上流ソースを読取専用 import。
-const DTM = resolve(process.env.DTM_DIR ?? "/workspace/dtm-research/dtm");
+const DTM = resolve(process.env.DTM_DIR || "");
+if (!DTM || DTM === process.cwd()) throw new Error("DTM_DIR に dtm 2.1.38 のソースを指定してください");
 if (!existsSync(resolve(DTM, "src/instruments/sf/SoundFont.ts"))) throw new Error("DTM_DIR に dtm 2.1.38 のソースを指定してください");
 const installed = JSON.parse(readFileSync(resolve(ROOT, "node_modules/@onjmin/dtm/package.json")));
 if (JSON.parse(readFileSync(resolve(DTM, "package.json"))).version !== installed.version) throw new Error("DTM_DIR と npm の dtm の版が異なります");
@@ -14,7 +15,9 @@ const dtmInternal = { name: "dtm-soundfont", setup(b) {
   b.onResolve({ filter: /^@dtm-soundfont$/ }, () => ({ path: resolve(DTM, "src/instruments/sf/SoundFont.ts") }));
 }};
 const BUILD = new Date().toISOString().replace(/\D/g, "").slice(0, 14);
-const common = { bundle: true, target: "es2022", sourcemap: true, logLevel: "warning", define: { __BUILD__: JSON.stringify(BUILD) } };
+const MODEL_BASE = process.env.MODEL_BASE ?? "";
+const common = { bundle: true, target: "es2022", sourcemap: true, logLevel: "warning",
+                define: { __BUILD__: JSON.stringify(BUILD), __MODEL_BASE__: JSON.stringify(MODEL_BASE) } };
 const vocatabAlias = {
   name: "vocatab-alias",
   setup(b) {

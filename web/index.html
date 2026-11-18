@@ -27,7 +27,7 @@
 <body>
 <header>
   <h1>browser-dtm 最小版</h1>
-  <a href="/gallery.html" style="color:#9ecbff">サンプル集</a>
+  <a href="gallery.html" style="color:#9ecbff">サンプル集</a>
   <button id="play" disabled>▶ 再生</button><button id="stop" class="sub">■ 停止</button>
   <button id="expMp3" disabled>MP3 書き出し</button><button id="expWav" class="sub" disabled>WAV</button><button id="expJson" class="sub">SongDoc JSON</button>
   <span id="status">エンジンを準備中…</span>
@@ -73,10 +73,12 @@
   </div>
 </main>
 <footer>
-  歌声: VocaTab（MIT, Copyright (c) 2026 wavtechyukky）の歌声合成エンジン。歌声モデル・ボコーダは個人・非商用・再配布禁止（同梱しない）。
+  <div id="model-source">歌声モデルは同梱せず、VocaTab から読み込み（個人・非商用・再配布禁止）。公開版の既定は VocaTab 公式配布です。</div>
+  歌声: VocaTab（MIT, Copyright (c) 2026 wavtechyukky）の歌声合成エンジン。
   歌い手: 波音リツ（波音リツ・カノン）/ 夏目悠李（歌声DB制作: アマノケイ／音声提供者: 霧野蒼太）/ 御丹宮くるみ。
-  伴奏: onjmin/dtm（AGPL-3.0-or-later, (c) onjmin）。SoundFont: FluidR3 GM © 2000–2002, 2008 Frank Wen（MIT）/ WebAudioFont data © 2017 Srgy Surkv（MIT、実行時のみ読込、非同梱）。onnxruntime-web（MIT）。本アプリは AGPL-3.0-or-later・非公開。
+  伴奏: onjmin/dtm（AGPL-3.0-or-later, (c) onjmin）。SoundFont: FluidR3 GM © 2000–2002, 2008 Frank Wen（MIT）/ WebAudioFont data © 2017 Srgy Surkv（MIT、実行時のみ読込、非同梱）。onnxruntime-web（MIT）。
+  本アプリは <a href="https://github.com/stealthinu/browser-dtm" style="color:#9ecbff">AGPL-3.0-or-later</a>（ソース: GitHub リポジトリ / <a href="LICENSE" style="color:#9ecbff">LICENSE</a> / <a href="NOTICE.md" style="color:#9ecbff">NOTICE</a>）。
 </footer>
-<script type="module" src="/dist/app.js"></script>
+<script type="module" src="dist/app.js"></script>
 </body>
 </html>

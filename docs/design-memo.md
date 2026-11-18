@@ -1,6 +1,6 @@
 # ブラウザで動く「歌＋楽器」DTM 設計メモ v0（2026-11-12 JST）
 
-実装・リポジトリ作成・公開・上流への issue/PR はまだしない。読んだのは次の2つの shallow clone（/workspace/dtm-research/）。
+実装・リポジトリ作成・公開・上流への issue/PR はまだしない。読んだのは次の2つの shallow clone。
 - vocatab: wavtechyukky/vocatab @2d2a48b（2026-11-08 13:59 JST）
 - dtm: onjmin/dtm @3a89f4f（2026-11-09 15:28 JST、package 2.1.38）
 

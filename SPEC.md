@@ -35,10 +35,10 @@ LLM に「この歌詞で、こんな曲」と頼むと、**歌＋数パート�
 - **A7**: `README.md` に起動方法（依存の取得、上流ソース・モデルの取得手順、テスト、書き出しの手順）が書かれていて、そのとおりに再現できる。
 
 ## 4. 制約（必ず守る）
-- 正本は**非公開** GitHub リポジトリ `stealthinu/browser-dtm`。自分のブランチ（`impl/<手法>`）だけに commit/push。**main へ直接 push しない、force-push しない、他のブランチに触らない**。節目ごとに commit/push。
-- **公開しない**（リポジトリを public にしない、GitHub Pages・外部ホスティングに出さない）。**上流（VocaTab・dtm）に issue/PR/コメントをしない**。作った曲を SNS 等に**投稿しない**。
+- 正本は GitHub リポジトリ `stealthinu/browser-dtm`（AGPL-3.0-or-later）。デモは GitHub Pages（https://stealthinu.github.io/browser-dtm/）。歌声モデルは同梱せず VocaTab 公式配布から読む。
+- **上流（VocaTab・dtm）に issue/PR/コメントをしない**。作った曲を SNS 等に**投稿しない**。歌声モデル・ボコーダは再ホストしない。
 - **著作権表示を残す**: VocaTab（MIT, Copyright (c) 2026 wavtechyukky、THIRD_PARTY_NOTICES）と dtm（AGPL-3.0-or-later, onjmin）の表示を `NOTICE.md`／README に残し、取り込んだコードのヘッダも消さない。本リポジトリは dtm の AGPL を継承する前提（`LICENSE-POLICY.md`）。
-- **歌声モデル・ボコーダ・SoundFont をリポジトリに commit しない**。VocaTab の `voicebanks/`・`vocoders/` は「個人・非商用・再配布禁止」。実行時に上流の clone（`.gitignore` した `vendor/` 等）から読むか、ローカルの置き場所（環境変数 `VOCATAB_DIR`。box では `/workspace/dtm-research/vocatab` に clone 済み）を指す。SoundFont は実行時に CDN（dtm 既定、FluidR3 / GeneralUser GS のみ）から読む。`.gitignore` に `vendor/`, `*.onnx`, `*.sf2`, `node_modules/`, 生成した音声（`out/`）を入れる。
+- **歌声モデル・ボコーダ・SoundFont をリポジトリに commit しない**。VocaTab の `voicebanks/`・`vocoders/` は「個人・非商用・再配布禁止」。実行時は VocaTab 公式配布（GitHub Pages）から読むか、開発時は上流の clone（`.gitignore` した `vendor/` 等、環境変数 `VOCATAB_DIR`）を指す。SoundFont は実行時に CDN（dtm 既定、FluidR3 / GeneralUser GS のみ）から読む。`.gitignore` に `vendor/`, `*.onnx`, `*.sf2`, `node_modules/`, 生成した音声（`out/`）を入れる。
 - 生成したサンプルの音声（MP3/WAV）は commit しない（`out/` に置く）。確認用の数値・スクリーンショット（小さな PNG）は可。
 - **秘密の値（トークン・APIキー・パスワード）をどこにも書かない**（コード、コミット、ログ、REPORT）。
 - GPU は使わない（必要なら止めて REPORT に書く。GPU 処理は gpuq 経由の別作業）。MogulSim のジョブ・プロセスに触らない。他のジョブのプロセスを kill しない（kill は自分が起こした PID 指定だけ）。

@@ -1607,7 +1607,7 @@
       },
       "llm1.mp3-button": {
         "ok": true,
-        "download": "/workspace/browser-dtm-wt/main-v1/out/llm-downloads-1794794987046/さくら.mp3"
+        "download": "./out/llm-downloads-1794794987046/さくら.mp3"
       },
       "llm1.actual-playback": {
         "ok": true,
@@ -1769,7 +1769,7 @@
       },
       "llm2.mp3-button": {
         "ok": true,
-        "download": "/workspace/browser-dtm-wt/main-v1/out/llm-downloads-1794794987046/つきのひかり.mp3"
+        "download": "./out/llm-downloads-1794794987046/つきのひかり.mp3"
       },
       "llm2.actual-playback": {
         "ok": true,
@@ -1985,15 +1985,15 @@
     "internalImport": "src/instruments/sf/SoundFont.ts"
   },
   "artifacts": {
-    "/workspace/browser-dtm-final/soundfont-song.mp3": {
+    "out/final/soundfont-song.mp3": {
       "bytes": 228832,
       "sha256": "3bac7411d30519c01ab0f7e23892c8c4b091a2abc99517bccc527a5912485980"
     },
-    "/workspace/browser-dtm-final/screenshot-pianoroll.png": {
+    "out/final/screenshot-pianoroll.png": {
       "bytes": 218792,
       "sha256": "0475b1d8827443ffa3cdc16aea3bd24bf7754349bed446bc5ade6dd80b14959e"
     },
-    "/workspace/browser-dtm-final/pianoroll-edited.mp3": {
+    "out/final/pianoroll-edited.mp3": {
       "bytes": 132911,
       "sha256": "ef41f510336dfaaff49a2389a4e98ffa6a7a94be30be62d0f30e032593ebb139"
     }

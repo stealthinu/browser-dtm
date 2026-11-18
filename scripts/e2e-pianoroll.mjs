@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { writeFileSync, mkdirSync, copyFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { ROOT } from "./paths.mjs";
+import { ROOT, finalDir } from "./paths.mjs";
+const final = finalDir();
 import { openApp } from "./browser.mjs";
 import { decodeMp3, levels, corr, readWav } from "./analyze.mjs";
 const results = { checks: [] };
@@ -51,8 +52,8 @@ try {
   check("変更後の歌を再合成",Math.abs(corr(before,after))<.99,{correlation:corr(before,after),voice:results.export.vox});
   const [L,R]=decodeMp3(out("pianoroll-edited.mp3"));results.mp3={L:levels(L),R:levels(R)};
   check("編集後Chrome実再生・MP3・clip0",results.export.playback.maxRms>.001&&results.mp3.L.rmsDb> -40&&results.mp3.L.clipped+results.mp3.R.clipped===0&&results.export.vox.rmsDb> -40&&results.export.acc.rmsDb> -40,{mp3:results.mp3,playback:results.export.playback,soundfont:results.export.soundfont});
-  mkdirSync("/workspace/browser-dtm-final",{recursive:true});
-  await page.screenshot({path:"/workspace/browser-dtm-final/screenshot-pianoroll.png",fullPage:true});
-  copyFileSync("/workspace/browser-dtm-final/screenshot-pianoroll.png",resolve(ROOT,"docs/evidence/main-v1-m2-pianoroll.png"));
-  copyFileSync(out("pianoroll-edited.mp3"),"/workspace/browser-dtm-final/pianoroll-edited.mp3");
+  mkdirSync(finalDir(),{recursive:true});
+  await page.screenshot({path:`${final}/screenshot-pianoroll.png`,fullPage:true});
+  copyFileSync(`${final}/screenshot-pianoroll.png`,resolve(ROOT,"docs/evidence/main-v1-m2-pianoroll.png"));
+  copyFileSync(out("pianoroll-edited.mp3"),`${final}/pianoroll-edited.mp3`);
 } finally {await close();writeFileSync(out("e2e-pianoroll.json"),JSON.stringify(results,null,2));}

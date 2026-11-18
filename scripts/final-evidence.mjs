@@ -2,7 +2,8 @@
 import { readdirSync, readFileSync, writeFileSync, statSync, copyFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { decodeMp3, SR } from "./analyze.mjs";
-const final="/workspace/browser-dtm-final";
+import { finalDir } from "./paths.mjs";
+const final=finalDir();
 const sha=path=>createHash("sha256").update(readFileSync(path)).digest("hex");
 const verification=JSON.parse(readFileSync("out/final-verification.json","utf8"));
 if (verification.length !== 11 || verification.some(r => r.code !== 0)) throw new Error("最終検証11コマンドの成功を先に確認してください");

@@ -16,7 +16,9 @@
     "e2e:soundfont": "node scripts/e2e-soundfont.mjs",
     "e2e:pianoroll": "node scripts/e2e-pianoroll.mjs",
     "e2e:gallery": "node scripts/e2e-gallery.mjs",
-    "e2e:real": "node scripts/e2e-real.mjs"
+    "e2e:real": "node scripts/e2e-real.mjs",
+    "package:pages": "node scripts/package-pages.mjs",
+    "e2e:pages": "node scripts/e2e-pages.mjs"
   },
   "dependencies": {
     "@onjmin/dtm": "^2.1.38"

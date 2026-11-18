@@ -2,7 +2,8 @@ import { mkdirSync, readFileSync, writeFileSync, copyFileSync } from "node:fs";
 import { resolve } from "node:path";
 import assert from "node:assert/strict";
 import { openApp } from "./browser.mjs";
-import { ROOT } from "./paths.mjs";
+import { ROOT, finalDir } from "./paths.mjs";
+const final = finalDir();
 import { corr, decodeMp3, levels, readWav } from "./analyze.mjs";
 import { spectralMetrics } from "./vocaloid-metrics.mjs";
 const out = (n) => resolve(ROOT, "out", n);
@@ -40,7 +41,7 @@ try {
   results.fallback = await failurePage.evaluate(() => window.app.exportAudio({ name: "soundfont-fallback", toServer: true, stems: true }));
   const warning = await failurePage.$eval("#soundfontWarning", e => e.textContent);
   check("失敗時に警告・内蔵で有音", aborted > 0 && results.fallback.soundfont.mode === "synth" && warning.includes("内蔵シンセ") && results.fallback.acc.rmsDb > -40 && results.fallback.playback.maxRms > .001, { aborted, soundfont: results.fallback.soundfont, warning, acc: results.fallback.acc });
-  mkdirSync("/workspace/browser-dtm-final", { recursive: true });
-  copyFileSync(out("soundfont-song.mp3"), "/workspace/browser-dtm-final/soundfont-song.mp3");
+  mkdirSync(finalDir(), { recursive: true });
+  copyFileSync(out("soundfont-song.mp3"), `${final}/soundfont-song.mp3`);
 } finally { await close(); writeFileSync(out("e2e-soundfont.json"), JSON.stringify(results, null, 2)); }
 assert(results.checks.every(c => c.ok), "SoundFont受入テスト失敗");

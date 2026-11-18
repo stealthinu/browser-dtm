@@ -62,7 +62,7 @@ VocaTab の歌声（画面なし engine-web Worker）＋ dtm の伴奏（2パー
 - **SongDoc**（`src/core/songdoc.ts`）: 型、検査（場所つきの問題一覧: 音域外・読めない音価/音名・重なり・はみ出し・歌詞）、変換（VocaTab Note: TPQ=480・MIDI・かな / dtm MML: `#drum=`・`#t<n>inst=`・`@n`・`t<bpm>`）、歌詞の割り当て（1モーラ=1音符、拗音は1、`ー` 伸ばし、`っ`・`ん` は1、カタカナはひらがなに。余り・不足を返す）。音価の表記は README に書いた。
 - **道具**（`src/core/tools.ts`）: get_song / new_song / set_chords / set_track_notes / set_lyrics / set_track_mml（dtm の parseMML で音符数・長さの過不足・音域を返す）/ set_drums / set_effects / set_mix / check / export / finish。ブラウザと MCP で同じ定義を使う。点数は返さない。
 - **プロンプトコピペ方式**（`src/core/prompt.ts`、画面）: プロンプト（歌詞・モーラ数・イメージ・書式・例）を作ってコピー。返答から ```json を取り出して検査し、問題があれば LLM に返す修正依頼文を出す。見本返答 `fixtures/sample-response.txt`。
-- **歌**（`src/web/vocal.ts`）: VocaTab の `engine-web/worker.ts` を esbuild で包み、上流の `composeF0`・`phraseParams` を import して、画面なしで analyze → F0 → synthesize → 句を並べる。上流のファイルは書き換えていない（`/workspace/dtm-research/vocatab` の `git status` は空のまま）。4 小節（12 音符、1 句）の合成は約 5 秒（CPU、WASM 4 スレッド）。
+- **歌**（`src/web/vocal.ts`）: VocaTab の `engine-web/worker.ts` を esbuild で包み、上流の `composeF0`・`phraseParams` を import して、画面なしで analyze → F0 → synthesize → 句を並べる。上流のファイルは書き換えていない（`$VOCATAB_DIR` の `git status` は空のまま）。4 小節（12 音符、1 句）の合成は約 5 秒（CPU、WASM 4 スレッド）。
 - **伴奏と同期・録音**（`src/web/player.ts`）: 上の A3 の方法。AudioWorklet で「ミックス L/R・伴奏だけ・歌だけ」の 4 チャンネルを曲頭から録る。ミックスの最後に軽いリミッタ。
 - **エフェクト**（`src/core/fx.ts` と `vocal.ts`）: SongDoc の `effects: [{type, amount}]` に保存し、再生と書き出しの両方に掛かる。
 - **ピアノロール**（canvas）: 歌（歌詞つき）と伴奏の音符、小節線、再生位置。
@@ -91,7 +91,7 @@ VocaTab の歌声（画面なし engine-web Worker）＋ dtm の伴奏（2パー
 
 ## 再現コマンド
 ```bash
-npm ci && export VOCATAB_DIR=/workspace/dtm-research/vocatab && npm run build
+npm ci && export VOCATAB_DIR=... DTM_DIR=... && npm run build
 npm test && npm run e2e && npm run e2e:fx && npm run mcp:smoke
 npm run serve   # http://127.0.0.1:5100/
 ```
@@ -196,10 +196,10 @@ M2/M3、公開、上流改変、音声・モデルの commit は対象外。
 
 受け渡し（音声はcommitしない）:
 
-- `/workspace/browser-dtm-final/llm-answer-1.mp3`（228,832bytes）
-- `/workspace/browser-dtm-final/llm-answer-2.mp3`（277,106bytes）
-- `/workspace/browser-dtm-final/vocaloid-0.mp3`, `vocaloid-0.5.mp3`, `vocaloid-1.mp3`（各228,832bytes）
-- `/workspace/browser-dtm-final/screenshot-main.png`
+- `out/final/llm-answer-1.mp3`（228,832bytes）
+- `out/final/llm-answer-2.mp3`（277,106bytes）
+- `out/final/vocaloid-0.mp3`, `vocaloid-0.5.mp3`, `vocaloid-1.mp3`（各228,832bytes）
+- `out/final/screenshot-main.png`
 
 #### 失敗・修復回数と残る制限
 
@@ -291,9 +291,9 @@ M1の実装を維持し、実行時ロードのFluidR3 GMによる旋律楽器�
 
 受け渡し（音声はcommitしない）:
 
-- `/workspace/browser-dtm-final/soundfont-song.mp3`（228832bytes）
-- `/workspace/browser-dtm-final/screenshot-pianoroll.png`（編集後の歌詞可視）
-- `/workspace/browser-dtm-final/pianoroll-edited.mp3`（132911bytes）
+- `out/final/soundfont-song.mp3`（228832bytes）
+- `out/final/screenshot-pianoroll.png`（編集後の歌詞可視）
+- `out/final/pianoroll-edited.mp3`（132911bytes）
 
 #### commits
 
@@ -380,7 +380,7 @@ M3の必須項目は完了。サンプル7枚、用途別コピー、実LLM往�
 | `node scripts/final-evidence.mjs` | PASS | 全MP3 10本、clip0、画面3枚すべて今回の検証開始後に更新 | main-v1-m3.json |
 | 日本語ドキュメント・ライセンス | PASS | SPEC §7/8、README、NOTICE、LICENSE-POLICY | 各ファイル |
 
-集約: `docs/evidence/main-v1-m3.json`。各テストの全数値、曲データ、CLI出所、音声SHA-256、画面更新時刻を参照。音声は `/workspace/browser-dtm-final/` と `out/` のみに保存、commitしない。
+集約: `docs/evidence/main-v1-m3.json`。各テストの全数値、曲データ、CLI出所、音声SHA-256、画面更新時刻を参照。音声は `out/final/` と `out/` のみに保存、commitしない。
 
 ### 実LLM往復と音声・同期
 
@@ -423,9 +423,9 @@ M3の必須項目は完了。サンプル7枚、用途別コピー、実LLM往�
 
 | 画面 | 最終ファイル | 更新JST | commitする写し |
 |---|---|---|---|
-| main | /workspace/browser-dtm-final/screenshot-main.png | 11:30:42 | docs/evidence/main-v1-m3-main.png |
-| pianoroll | /workspace/browser-dtm-final/screenshot-pianoroll.png | 11:29:46 | docs/evidence/main-v1-m3-pianoroll.png |
-| gallery | /workspace/browser-dtm-final/screenshot-gallery.png | 11:30:13 | docs/evidence/main-v1-m3-gallery.png |
+| main | out/final/screenshot-main.png | 11:30:42 | docs/evidence/main-v1-m3-main.png |
+| pianoroll | out/final/screenshot-pianoroll.png | 11:29:46 | docs/evidence/main-v1-m3-pianoroll.png |
+| gallery | out/final/screenshot-gallery.png | 11:30:13 | docs/evidence/main-v1-m3-gallery.png |
 
 3枚とも今回のbuild後。mainは実gallery返答の歌詞・音符、pianorollは編集後の「さ・きゃ・ら」、galleryは7カードとコピー成功を視認した。全ファイルのSHA-256は集約JSON。
 
@@ -441,9 +441,9 @@ M3の必須項目は完了。サンプル7枚、用途別コピー、実LLM往�
 ### ローカルでの動かし方
 
 ```bash
-cd /workspace/browser-dtm-wt/main-v1
-export VOCATAB_DIR=/workspace/dtm-research/vocatab
-export DTM_DIR=/workspace/dtm-research/dtm
+cd <repo>
+export VOCATAB_DIR=<vocatab-checkout>
+export DTM_DIR=<dtm-checkout>
 npm ci
 npm run build
 npm run serve

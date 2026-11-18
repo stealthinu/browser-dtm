@@ -31,8 +31,8 @@ export class VocaTabEngine {
   onProgress: (loaded: number, total: number) => void = () => {};
   private cache = new Map<string, { wav: Float32Array; phraseTimings: PhraseTiming[] }>();
 
-  constructor(workerUrl = "/dist/engine-worker.js") {
-    this.worker = new Worker(workerUrl);
+  constructor(workerUrl?: string) {
+    this.worker = new Worker(workerUrl ?? new URL("engine-worker.js", import.meta.url).href);
     this.worker.onmessage = (e: MessageEvent<WorkerReply>) => {
       const m = e.data;
       if (m.type === "progress") return this.onProgress(m.loaded, m.total);

@@ -3,7 +3,8 @@ import { existsSync, statSync, readFileSync, writeFileSync, copyFileSync, mkdirS
 import { resolve } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { ROOT } from "./paths.mjs";
+import { ROOT, finalDir } from "./paths.mjs";
+const final = finalDir();
 
 const client = new Client({ name: "smoke", version: "0" });
 await client.connect(new StdioClientTransport({ command: "npx", args: ["tsx", "mcp/server.ts"], cwd: ROOT, stderr: "ignore" }));
@@ -48,8 +49,8 @@ try {
   ok &&= existsSync(f) && statSync(f).size > 10000 && ex.vox.rmsDb > -40 && ex.acc.rmsDb > -40 && ex.playback?.maxRms > 0.001 && ex.mixL.clipped === 0;
   ok &&= ex.soundfont?.mode === "soundfont";
   results.export = ex;
-  mkdirSync("/workspace/browser-dtm-final",{recursive:true});
-  copyFileSync(f,"/workspace/browser-dtm-final/mcp-song.mp3");
+  mkdirSync(finalDir(),{recursive:true});
+  copyFileSync(f,`${final}/mcp-song.mp3`);
   console.log(`mp3: ${existsSync(f) ? statSync(f).size : 0} bytes, vox ${ex.vox?.rmsDb} dB, acc ${ex.acc?.rmsDb} dB, mix ${ex.mixL?.rmsDb} dB`);
 } catch (e) {
   ok = false;

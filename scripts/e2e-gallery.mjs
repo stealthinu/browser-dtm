@@ -1,9 +1,9 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { openApp } from "./browser.mjs";
-import { ROOT } from "./paths.mjs";
+import { ROOT, finalDir } from "./paths.mjs";
 import { levels } from "./analyze.mjs";
-const final="/workspace/browser-dtm-final";
+const final=finalDir();
 mkdirSync(final,{recursive:true});
 const results={checks:{}};
 function check(name,ok,detail={}) {results.checks[name]={ok,...detail};console.log(`${ok?"PASS":"FAIL"} ${name} ${JSON.stringify(detail)}`);}

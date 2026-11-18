@@ -6,22 +6,22 @@ PASS 曲の読み込み {}
 PASS クリック追加・snap1/8 {"note":{"bar":1,"beat":2,"len":"8","pitch":"C4","lyric":"あ"}}
 PASS ドラッグ移動・時間と音高 {"note":{"bar":1,"beat":3,"len":"8","pitch":"G4","lyric":"あ"}}
 PASS 右端ドラッグで長さ {"note":{"bar":1,"beat":3,"len":"4","pitch":"G4","lyric":"あ"}}
-file:///workspace/browser-dtm-wt/main-v1/node_modules/puppeteer-core/lib/puppeteer/common/QueryHandler.js:211
+file://./node_modules/puppeteer-core/lib/puppeteer/common/QueryHandler.js:211
                 const waitForSelectorError = new (error instanceof TimeoutError ? TimeoutError : Error)(`Waiting for selector \`${selector}\` failed`);
                                              ^
 
 TimeoutError: Waiting for selector `#noteLyric` failed
-    at CSSQueryHandler.waitFor (file:///workspace/browser-dtm-wt/main-v1/node_modules/puppeteer-core/lib/puppeteer/common/QueryHandler.js:211:46)
-    at async CdpFrame.waitForSelector (file:///workspace/browser-dtm-wt/main-v1/node_modules/puppeteer-core/lib/puppeteer/api/Frame.js:546:21)
-    at async CdpPage.waitForSelector (file:///workspace/browser-dtm-wt/main-v1/node_modules/puppeteer-core/lib/puppeteer/api/Page.js:1482:20)
-    at async file:///workspace/browser-dtm-wt/main-v1/scripts/e2e-pianoroll.mjs:35:91 {
+    at CSSQueryHandler.waitFor (file://./node_modules/puppeteer-core/lib/puppeteer/common/QueryHandler.js:211:46)
+    at async CdpFrame.waitForSelector (file://./node_modules/puppeteer-core/lib/puppeteer/api/Frame.js:546:21)
+    at async CdpPage.waitForSelector (file://./node_modules/puppeteer-core/lib/puppeteer/api/Page.js:1482:20)
+    at async file://./scripts/e2e-pianoroll.mjs:35:91 {
   cause: TimeoutError: Waiting failed: 30000ms exceeded
-      at new WaitTask (file:///workspace/browser-dtm-wt/main-v1/node_modules/puppeteer-core/lib/puppeteer/common/WaitTask.js:46:34)
-      at IsolatedWorld.waitForFunction (file:///workspace/browser-dtm-wt/main-v1/node_modules/puppeteer-core/lib/puppeteer/api/Realm.js:49:26)
-      at CSSQueryHandler.waitFor (file:///workspace/browser-dtm-wt/main-v1/node_modules/puppeteer-core/lib/puppeteer/common/QueryHandler.js:176:95)
-      at async CdpFrame.waitForSelector (file:///workspace/browser-dtm-wt/main-v1/node_modules/puppeteer-core/lib/puppeteer/api/Frame.js:546:21)
-      at async CdpPage.waitForSelector (file:///workspace/browser-dtm-wt/main-v1/node_modules/puppeteer-core/lib/puppeteer/api/Page.js:1482:20)
-      at async file:///workspace/browser-dtm-wt/main-v1/scripts/e2e-pianoroll.mjs:35:91
+      at new WaitTask (file://./node_modules/puppeteer-core/lib/puppeteer/common/WaitTask.js:46:34)
+      at IsolatedWorld.waitForFunction (file://./node_modules/puppeteer-core/lib/puppeteer/api/Realm.js:49:26)
+      at CSSQueryHandler.waitFor (file://./node_modules/puppeteer-core/lib/puppeteer/common/QueryHandler.js:176:95)
+      at async CdpFrame.waitForSelector (file://./node_modules/puppeteer-core/lib/puppeteer/api/Frame.js:546:21)
+      at async CdpPage.waitForSelector (file://./node_modules/puppeteer-core/lib/puppeteer/api/Page.js:1482:20)
+      at async file://./scripts/e2e-pianoroll.mjs:35:91
 }
 
 Node.js v24.22.1

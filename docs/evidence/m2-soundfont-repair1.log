@@ -13,7 +13,7 @@ node:internal/modules/run_main:107
     ^
 
 AssertionError [ERR_ASSERTION]: SoundFont受入テスト失敗
-    at file:///workspace/browser-dtm-wt/main-v1/scripts/e2e-soundfont.mjs:43:1
+    at file://./scripts/e2e-soundfont.mjs:43:1
     at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
   generatedMessage: false,
   code: 'ERR_ASSERTION',

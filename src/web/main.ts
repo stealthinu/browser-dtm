@@ -10,6 +10,7 @@ import {
   validateSong, vocalTrack,
 } from "../core/songdoc";
 import { Player, type Recording, SR } from "./player";
+import { appUrl, isOfficialModelBase, modelBase } from "./urls";
 import { VocaTabEngine } from "./vocal";
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -29,10 +30,17 @@ let engineReady = false;
 let action = 0;
 
 engine.onProgress = (l, t) => status(`モデルを読み込み中… ${Math.round((l / t) * 100)}%`);
-const ready = engine.init(new URL("/vocatab/", location.href).href).then((idx) => {
+const voiceBase = modelBase();
+const ready = engine.init(voiceBase).then((idx) => {
   engineReady = true;
   status(`エンジン準備完了（${idx.voicebanks[0].name}）`);
-  log(`VocaTab engine ready: ${idx.voicebanks.map((v) => v.key).join(",")} / vocoders ${idx.vocoders.map((v) => v.key).join(",")}`);
+  log(`VocaTab engine ready: ${idx.voicebanks.map((v) => v.key).join(",")} / vocoders ${idx.vocoders.map((v) => v.key).join(",")} / models ${voiceBase}`);
+  const src = document.getElementById("model-source");
+  if (src) {
+    src.textContent = isOfficialModelBase(voiceBase)
+      ? "歌声モデルは VocaTab 公式配布から読み込み（個人・非商用・再配布禁止）"
+      : `歌声モデルは同梱せず ${voiceBase} から読み込み（個人・非商用・再配布禁止）。公開版の既定は VocaTab 公式配布です。`;
+  }
   refreshButtons();
 });
 ready.catch((e) => status(`エンジンの準備に失敗: ${e}`));
@@ -97,7 +105,7 @@ async function save(bytes: Uint8Array, name: string) {
   return (await r.json()).saved as string;
 }
 
-interface ExportOpts { format?: "mp3" | "wav"; name?: string; toServer?: boolean; stems?: boolean }
+interface ExportOpts { format?: "mp3" | "wav"; name?: string; toServer?: boolean; stems?: boolean; returnBytes?: boolean }
 
 async function exportAudio(o: ExportOpts = {}) {
   const fmt = o.format ?? "mp3";
@@ -128,7 +136,7 @@ async function exportAudio(o: ExportOpts = {}) {
   }
   status(`書き出し完了: ${file}`);
   log(`export ${file}: ${JSON.stringify(stats)}`);
-  return { ...stats, saved };
+  return { ...stats, saved, data: o.returnBytes ? bytes : undefined };
 }
 
 // ---------------------------------------------------------------- ピアノロール
@@ -239,7 +247,7 @@ async function copyText(text: string, field: HTMLTextAreaElement) {
 $("copyPrompt").onclick = () => copyText(updatePrompt(), $("prompt") as HTMLTextAreaElement);
 $("copyFix").onclick = () => copyText(($("fix") as HTMLTextAreaElement).value, $("fix") as HTMLTextAreaElement);
 $("sample").onclick = async () => {
-  ($("answer") as HTMLTextAreaElement).value = await (await fetch("/fixtures/sample-response.txt")).text();
+  ($("answer") as HTMLTextAreaElement).value = await (await fetch(appUrl("fixtures/sample-response.txt"))).text();
 };
 let loading = false;
 $("load").onclick = async () => {
@@ -267,7 +275,7 @@ $("expJson").onclick = () => doc && download(new TextEncoder().encode(JSON.strin
 
 // 自動操作（e2e・MCP サーバー）用
 (window as any).app = {
-  ready, importText, loadDoc, play, exportAudio, renderVocal,
+  ready, importText, loadDoc, play, exportAudio, renderVocal, modelBase: voiceBase,
   getDoc: () => doc,
   rollLayout: () => roll.layout(),
   setEffects: (fx: Array<{ type: EffectType; amount: number }>) => {
@@ -280,7 +288,7 @@ $("expJson").onclick = () => doc && download(new TextEncoder().encode(JSON.strin
 // URL は一覧のIDだけを受け付ける。
 const sampleId = new URLSearchParams(location.search).get("sample");
 if (GALLERY.some(s => s.id === sampleId)) {
-  fetch(`/fixtures/gallery/${sampleId}.json`).then(r => r.json()).then(d => {
+  fetch(appUrl(`fixtures/gallery/${sampleId}.json`)).then(r => r.json()).then(d => {
     ($("lyrics") as HTMLInputElement).value = vocalTrack(d)!.notes.map(n => n.lyric ?? "").join("");
     ($("answer") as HTMLTextAreaElement).value = JSON.stringify(d, null, 2);
     importText(JSON.stringify(d));

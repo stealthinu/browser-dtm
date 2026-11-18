@@ -1,6 +1,7 @@
 // Copyright (c) 2026 browser-dtm authors. AGPL-3.0-or-later.
 import { GALLERY, galleryPrompt, type PromptTarget } from "../core/gallery";
 import { importResponse } from "../core/prompt";
+import { appUrl } from "./urls";
 import type { SongDoc } from "../core/songdoc";
 const cards = document.querySelector<HTMLElement>("#cards")!;
 const status = document.querySelector<HTMLElement>("#status")!;
@@ -8,7 +9,7 @@ const docs = new Map<string, SongDoc>();
 async function getDoc(id: string) {
   if (!GALLERY.some(s => s.id === id)) throw new Error("サンプルがありません");
   if (!docs.has(id)) {
-    const response = await fetch(`/fixtures/gallery/${id}.json`);
+    const response = await fetch(appUrl(`fixtures/gallery/${id}.json`));
     if (!response.ok) throw new Error("サンプルを読み込めませんでした");
     const r = importResponse(await response.text());
     if (!r.doc || r.problems.length) throw new Error(r.problems.map(p => p.message).join("、"));
@@ -75,7 +76,7 @@ async function copy(id: string, target: PromptTarget) {
 const colors = ["#527069", "#5c5a7a", "#805b4b", "#5c708c", "#675d53", "#6d5485", "#437f77"];
 for (const [i, sample] of GALLERY.entries()) {
   const card = document.createElement("article"); card.className = "card"; card.id = sample.id; card.dataset.category = sample.category;
-  card.innerHTML = `<div class="art" style="--tint:${colors[i]}"><div class="number">0${i + 1} / ${sample.category}</div>${Array.from({ length: 27 }, (_, n) => `<span style="--h:${18 + ((n * 31 + i * 17) % 69)}px;--d:${n * .037}s"></span>`).join("")}</div><div class="info"><div class="meta">${sample.category} · ${sample.bpm} BPM · 4小節</div><h2>${sample.title}</h2><p class="desc">${sample.description}</p><div class="actions"><button class="play" aria-pressed="false">▶ 試聴</button><a class="open" href="/?sample=${sample.id}">アプリで開く ↗</a></div><div class="copies"><button data-target="claude">Claude 用にコピー</button><button data-target="chatgpt">ChatGPT 用にコピー</button></div><p class="message" role="status"></p></div>`;
+  card.innerHTML = `<div class="art" style="--tint:${colors[i]}"><div class="number">0${i + 1} / ${sample.category}</div>${Array.from({ length: 27 }, (_, n) => `<span style="--h:${18 + ((n * 31 + i * 17) % 69)}px;--d:${n * .037}s"></span>`).join("")}</div><div class="info"><div class="meta">${sample.category} · ${sample.bpm} BPM · 4小節</div><h2>${sample.title}</h2><p class="desc">${sample.description}</p><div class="actions"><button class="play" aria-pressed="false">▶ 試聴</button><a class="open" href="${appUrl("./")}?sample=${sample.id}">アプリで開く ↗</a></div><div class="copies"><button data-target="claude">Claude 用にコピー</button><button data-target="chatgpt">ChatGPT 用にコピー</button></div><p class="message" role="status"></p></div>`;
   card.querySelector<HTMLButtonElement>(".play")!.onclick = () => { preview(sample.id).catch(e => { status.textContent = `試聴に失敗: ${e.message}`; }); };
   card.querySelectorAll<HTMLButtonElement>("[data-target]").forEach(b => b.onclick = () => { copy(sample.id, b.dataset.target as PromptTarget).catch(e => { status.textContent = e.message; }); });
   cards.append(card);

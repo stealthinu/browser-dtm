@@ -1345,7 +1345,7 @@
       },
       "llm1.mp3-button": {
         "ok": true,
-        "download": "/workspace/browser-dtm-wt/main-v1/out/llm-downloads-1794794009457/さくら.mp3"
+        "download": "./out/llm-downloads-1794794009457/さくら.mp3"
       },
       "llm1.actual-playback": {
         "ok": true,
@@ -1507,7 +1507,7 @@
       },
       "llm2.mp3-button": {
         "ok": true,
-        "download": "/workspace/browser-dtm-wt/main-v1/out/llm-downloads-1794794009457/つきのひかり.mp3"
+        "download": "./out/llm-downloads-1794794009457/つきのひかり.mp3"
       },
       "llm2.actual-playback": {
         "ok": true,
@@ -1691,7 +1691,7 @@
   },
   "artifacts": [
     {
-      "path": "/workspace/browser-dtm-final/llm-answer-1.mp3",
+      "path": "out/final/llm-answer-1.mp3",
       "bytes": 228832,
       "sha256": "1724a3a4b38515279c81cfd574607e9a96079fcda3c9209e5e5e6d6e42746e27",
       "decodedSeconds": 9.534693877551021,
@@ -1707,7 +1707,7 @@
       }
     },
     {
-      "path": "/workspace/browser-dtm-final/llm-answer-2.mp3",
+      "path": "out/final/llm-answer-2.mp3",
       "bytes": 277106,
       "sha256": "ab925b7087ddff058bb501a5a6f8a108411a862d2ee7ef1674aae8df8afe3c94",
       "decodedSeconds": 11.546122448979592,
@@ -1723,7 +1723,7 @@
       }
     },
     {
-      "path": "/workspace/browser-dtm-final/vocaloid-0.mp3",
+      "path": "out/final/vocaloid-0.mp3",
       "bytes": 228832,
       "sha256": "c7504953ac105a8e719b2389709924546ed63962f72b1b4a15efd2d920eb58a2",
       "decodedSeconds": 9.534693877551021,
@@ -1739,7 +1739,7 @@
       }
     },
     {
-      "path": "/workspace/browser-dtm-final/vocaloid-0.5.mp3",
+      "path": "out/final/vocaloid-0.5.mp3",
       "bytes": 228832,
       "sha256": "fca6cfe8b337ae0870e457da2c4b763964a5f3d3de80fbcae74410825c9c0be2",
       "decodedSeconds": 9.534693877551021,
@@ -1755,7 +1755,7 @@
       }
     },
     {
-      "path": "/workspace/browser-dtm-final/vocaloid-1.mp3",
+      "path": "out/final/vocaloid-1.mp3",
       "bytes": 228832,
       "sha256": "526f8cc73f0f882a891ae07c32f5b8e45a7a235196f08741ce534290e95b80b6",
       "decodedSeconds": 9.534693877551021,

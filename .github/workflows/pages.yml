@@ -1,0 +1,60 @@
+# アプリ本体を GitHub Pages に出す。歌声モデルは同梱せず、実行時に VocaTab 公式配布から読む。
+name: pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Checkout VocaTab (engine source only; models are not copied to the site)
+        run: git clone --depth 1 https://github.com/wavtechyukky/vocatab.git "$RUNNER_TEMP/vocatab"
+      - name: Checkout dtm 2.1.38 source (SoundFont class import)
+        run: |
+          git clone https://github.com/onjmin/dtm.git "$RUNNER_TEMP/dtm"
+          git -C "$RUNNER_TEMP/dtm" checkout 3a89f4f1bc12a6c4e9562bcc551b6abf5132892a
+      - run: npm ci
+      - run: npm test
+      - name: Build with official model base
+        env:
+          VOCATAB_DIR: ${{ runner.temp }}/vocatab
+          DTM_DIR: ${{ runner.temp }}/dtm
+          MODEL_BASE: https://wavtechyukky.github.io/vocatab/
+        run: npm run build
+      - run: npm run package:pages
+      - name: Reject models or soundfonts in the Pages artifact
+        run: |
+          if find site -type f \( -iname '*.onnx' -o -iname '*.sf2' -o -iname '*.sf3' -o -iname '*.mp3' -o -iname '*.wav' \) | grep -q .; then
+            echo "forbidden media in site/" >&2
+            find site -type f \( -iname '*.onnx' -o -iname '*.sf2' -o -iname '*.sf3' -o -iname '*.mp3' -o -iname '*.wav' \) >&2
+            exit 1
+          fi
+          if find site -type d \( -iname voicebanks -o -iname vocoders -o -iname breaths \) | grep -q .; then
+            echo "forbidden model directories in site/" >&2
+            exit 1
+          fi
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

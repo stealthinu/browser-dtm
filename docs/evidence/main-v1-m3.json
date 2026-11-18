@@ -203,21 +203,21 @@
   ],
   "screenshots": [
     {
-      "path": "/workspace/browser-dtm-final/screenshot-main.png",
+      "path": "out/final/screenshot-main.png",
       "bytes": 230381,
       "mtime": "2026-11-16T02:30:42.168Z",
       "fresh": true,
       "sha256": "ec1cac72eb18059212d5ed8787847f3e7e96216a7c4dc45341aea9bc9ece2beb"
     },
     {
-      "path": "/workspace/browser-dtm-final/screenshot-pianoroll.png",
+      "path": "out/final/screenshot-pianoroll.png",
       "bytes": 222064,
       "mtime": "2026-11-16T02:29:46.333Z",
       "fresh": true,
       "sha256": "5827c5cf268b2718e8d1d9d59b759e4da36455afc25cebb13ac0196f103ef394"
     },
     {
-      "path": "/workspace/browser-dtm-final/screenshot-gallery.png",
+      "path": "out/final/screenshot-gallery.png",
       "bytes": 401193,
       "mtime": "2026-11-16T02:30:13.509Z",
       "fresh": true,
@@ -1365,7 +1365,7 @@
       },
       "llm1.mp3-button": {
         "ok": true,
-        "download": "/workspace/browser-dtm-wt/main-v1/out/llm-downloads-1794796065033/さくら.mp3"
+        "download": "./out/llm-downloads-1794796065033/さくら.mp3"
       },
       "llm1.actual-playback": {
         "ok": true,
@@ -1527,7 +1527,7 @@
       },
       "llm2.mp3-button": {
         "ok": true,
-        "download": "/workspace/browser-dtm-wt/main-v1/out/llm-downloads-1794796065033/つきのひかり.mp3"
+        "download": "./out/llm-downloads-1794796065033/つきのひかり.mp3"
       },
       "llm2.actual-playback": {
         "ok": true,
