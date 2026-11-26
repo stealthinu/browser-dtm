@@ -19,9 +19,9 @@ for (const sample of GALLERY) test(`gallery ${sample.id}: M1パーサ・検査�
     assert.ok(prompt.includes(target === "claude" ? "Claude へ" : "ChatGPT へ"));
   }
 });
-test("ギャラリーの全JSONを一覧に登録し、曲3/伴奏2/効果2を含む", () => {
+test("ギャラリーの全JSONを一覧に登録し、曲4/伴奏2/効果2を含む", () => {
   assert.equal(readdirSync("fixtures/gallery").filter(f => f.endsWith(".json")).length, GALLERY.length);
-  for (const [kind, count] of [["曲", 3], ["伴奏", 2], ["エフェクト", 2]] as const)
+  for (const [kind, count] of [["曲", 4], ["伴奏", 2], ["エフェクト", 2]] as const)
     assert.ok(GALLERY.filter(s => s.category === kind).length >= count);
   assert.equal(new Set(GALLERY.map(s => s.bpm)).size, GALLERY.length);
 });

@@ -9,6 +9,7 @@ export async function openApp({ port = 5500, log = console.error } = {}) {
   const browser = await puppeteer.launch({
     executablePath: CHROME,
     headless: true,
+    protocolTimeout: 1800000,
     // GPU は使わない（SPEC §4）。音は実際の AudioContext で鳴らす（出力先は headless の仮の音声装置）
     args: ["--autoplay-policy=no-user-gesture-required", "--disable-gpu", "--no-sandbox", "--mute-audio=false"],
   });
