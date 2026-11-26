@@ -4,13 +4,13 @@ VocaTab と onjmin/dtm を使った、歌と楽器のブラウザ DTM。担当 b
 
 ## 置き場所（2026-11-26）
 - 正本: デスクトップ WSL `~/browser-dtm/repo`（GitHub `stealthinu/browser-dtm`、`main`）。T3 プロジェクト名 `browser-dtm`。
-- box の `/workspace/browser-dtm` に未コミットだった作業（fullchorus、gallery 差し替え）は、ブランチ `wip/box-fullchorus-20261126` に写してある。取り込むかは担当 bot と Kiyoshiさんが決める。
+- **正本はデスクトップ**（Kiyoshiさん 2026-11-26）。box の `/workspace/browser-dtm` は旧作業場所で、消さずに残してある（未コミットだった fullchorus・gallery 作業は `wip/box-fullchorus-20261126` 経由で 2026-11-26 に main へ取り込み済み）。box 側では新しい作業をしない。
 
 ## 動かし方（WSL）
 - `npm ci`
 - 上流ソース（`vendor/` は .gitignore 済み。ワークツリーでは正本の vendor を指せばよい）:
   `export VOCATAB_DIR=~/browser-dtm/repo/vendor/vocatab DTM_DIR=~/browser-dtm/repo/vendor/dtm`
-- テスト: `npm test`（2026-11-26 時点で 48 件 pass）。ビルド: `npm run build`。
+- テスト: `npm test`（2026-11-26 時点で 49 件 pass）。ビルド: `npm run build`。
 - 手元サーバー: `npm run serve`（`127.0.0.1:5500`）。
 - 歌声モデル・ボコーダ・SoundFont はコミットしない（再配布禁止）。
 
