@@ -1,0 +1,1592 @@
+{
+  "version": 1,
+  "title": "風を切れ",
+  "bpm": 168,
+  "beatsPerBar": 4,
+  "key": "A",
+  "bars": 96,
+  "chords": "| A | A | D | E | A | A | D | E | A | E | F#m | D | A | E | D | E | F#m | D | A | E | F#m | D | E | E | D | E | C#m | F#m | D | E | Bm | E | A | E | F#m | D | A | E | D | A | F#m | D | A | E | F#m | D | E | E | A | E | F#m | D | A | E | D | E | F#m | D | A | E | F#m | D | E | E | F#m | D | A | E | Bm | D | E | E | A | E | F#m | D | A | E | D | A | D | E | F#m | D | E | A | D | E | A | A | D | E | A | A | D | A |",
+  "tracks": [
+    {
+      "id": "vo",
+      "kind": "vocal",
+      "engine": "vocatab",
+      "singer": "ritsu",
+      "volume": 0.7,
+      "effects": [
+        {
+          "type": "vocaloid",
+          "amount": 0.3
+        }
+      ],
+      "notes": [
+        {
+          "bar": 9,
+          "beat": 2,
+          "len": "8",
+          "pitch": "E4",
+          "lyric": "さ"
+        },
+        {
+          "bar": 9,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "E4",
+          "lyric": "び"
+        },
+        {
+          "bar": 9,
+          "beat": 3,
+          "len": "4",
+          "pitch": "F#4",
+          "lyric": "た"
+        },
+        {
+          "bar": 9,
+          "beat": 4,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "ふぇ"
+        },
+        {
+          "bar": 10,
+          "beat": 1,
+          "len": "8",
+          "pitch": "E4",
+          "lyric": "ん"
+        },
+        {
+          "bar": 10,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "C#4",
+          "lyric": "す"
+        },
+        {
+          "bar": 10,
+          "beat": 2,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "の"
+        },
+        {
+          "bar": 10,
+          "beat": 3,
+          "len": "4",
+          "pitch": "F#4",
+          "lyric": "む"
+        },
+        {
+          "bar": 10,
+          "beat": 4,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 11,
+          "beat": 1,
+          "len": "2.",
+          "pitch": "G#4",
+          "lyric": "う"
+        },
+        {
+          "bar": 13,
+          "beat": 2,
+          "len": "8",
+          "pitch": "E4",
+          "lyric": "ゆ"
+        },
+        {
+          "bar": 13,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "E4",
+          "lyric": "め"
+        },
+        {
+          "bar": 13,
+          "beat": 3,
+          "len": "4",
+          "pitch": "F#4",
+          "lyric": "を"
+        },
+        {
+          "bar": 13,
+          "beat": 4,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "わ"
+        },
+        {
+          "bar": 14,
+          "beat": 1,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ら"
+        },
+        {
+          "bar": 14,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "う"
+        },
+        {
+          "bar": 14,
+          "beat": 2,
+          "len": "4",
+          "pitch": "G#4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 14,
+          "beat": 3,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "え"
+        },
+        {
+          "bar": 14,
+          "beat": 4,
+          "len": "8",
+          "pitch": "F#4",
+          "lyric": "が"
+        },
+        {
+          "bar": 14,
+          "beat": 4.5,
+          "len": "8",
+          "pitch": "E4",
+          "lyric": "す"
+        },
+        {
+          "bar": 15,
+          "beat": 1,
+          "len": "2.",
+          "pitch": "F#4",
+          "lyric": "る"
+        },
+        {
+          "bar": 17,
+          "beat": 2,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "ふ"
+        },
+        {
+          "bar": 17,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "る"
+        },
+        {
+          "bar": 17,
+          "beat": 3,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "え"
+        },
+        {
+          "bar": 17,
+          "beat": 4,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "る"
+        },
+        {
+          "bar": 18,
+          "beat": 1,
+          "len": "8",
+          "pitch": "F#4",
+          "lyric": "ひ"
+        },
+        {
+          "bar": 18,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "F#4",
+          "lyric": "ざ"
+        },
+        {
+          "bar": 18,
+          "beat": 2,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "を"
+        },
+        {
+          "bar": 18,
+          "beat": 3,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "た"
+        },
+        {
+          "bar": 18,
+          "beat": 3.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "た"
+        },
+        {
+          "bar": 18,
+          "beat": 4,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "い"
+        },
+        {
+          "bar": 19,
+          "beat": 1,
+          "len": "2.",
+          "pitch": "A4",
+          "lyric": "て"
+        },
+        {
+          "bar": 21,
+          "beat": 2,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "つ"
+        },
+        {
+          "bar": 21,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "め"
+        },
+        {
+          "bar": 21,
+          "beat": 3,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "を"
+        },
+        {
+          "bar": 21,
+          "beat": 4,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "た"
+        },
+        {
+          "bar": 22,
+          "beat": 1,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "て"
+        },
+        {
+          "bar": 22,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "F#4",
+          "lyric": "て"
+        },
+        {
+          "bar": 22,
+          "beat": 2,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "た"
+        },
+        {
+          "bar": 22,
+          "beat": 3,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ち"
+        },
+        {
+          "bar": 22,
+          "beat": 3.5,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "あ"
+        },
+        {
+          "bar": 22,
+          "beat": 4,
+          "len": "4",
+          "pitch": "D5",
+          "lyric": "が"
+        },
+        {
+          "bar": 23,
+          "beat": 1,
+          "len": "2.",
+          "pitch": "B4",
+          "lyric": "る"
+        },
+        {
+          "bar": 25,
+          "beat": 2,
+          "len": "8",
+          "pitch": "F#4",
+          "lyric": "ま"
+        },
+        {
+          "bar": 25,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "け"
+        },
+        {
+          "bar": 25,
+          "beat": 3,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "て"
+        },
+        {
+          "bar": 25,
+          "beat": 4,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "も"
+        },
+        {
+          "bar": 26,
+          "beat": 1,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "い"
+        },
+        {
+          "bar": 26,
+          "beat": 2,
+          "len": "2",
+          "pitch": "B4",
+          "lyric": "い"
+        },
+        {
+          "bar": 27,
+          "beat": 2,
+          "len": "8",
+          "pitch": "G#4",
+          "lyric": "に"
+        },
+        {
+          "bar": 27,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "げ"
+        },
+        {
+          "bar": 27,
+          "beat": 3,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "た"
+        },
+        {
+          "bar": 27,
+          "beat": 4,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "く"
+        },
+        {
+          "bar": 28,
+          "beat": 1,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "な"
+        },
+        {
+          "bar": 28,
+          "beat": 2,
+          "len": "2",
+          "pitch": "C#5",
+          "lyric": "い"
+        },
+        {
+          "bar": 29,
+          "beat": 2,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "い"
+        },
+        {
+          "bar": 29,
+          "beat": 3,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "ま"
+        },
+        {
+          "bar": 29,
+          "beat": 4,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "だ"
+        },
+        {
+          "bar": 30,
+          "beat": 1,
+          "len": "4",
+          "pitch": "D5",
+          "lyric": "け"
+        },
+        {
+          "bar": 30,
+          "beat": 2,
+          "len": "2.",
+          "pitch": "E5",
+          "lyric": "は"
+        },
+        {
+          "bar": 33,
+          "beat": 1,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "か"
+        },
+        {
+          "bar": 33,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "ぜ"
+        },
+        {
+          "bar": 33,
+          "beat": 2,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "を"
+        },
+        {
+          "bar": 33,
+          "beat": 3,
+          "len": "8",
+          "pitch": "E5",
+          "lyric": "き"
+        },
+        {
+          "bar": 33,
+          "beat": 3.5,
+          "len": "4.",
+          "pitch": "C#5",
+          "lyric": "れ"
+        },
+        {
+          "bar": 34,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ま"
+        },
+        {
+          "bar": 34,
+          "beat": 2,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "え"
+        },
+        {
+          "bar": 34,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "G#4",
+          "lyric": "へ"
+        },
+        {
+          "bar": 34,
+          "beat": 3,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ま"
+        },
+        {
+          "bar": 34,
+          "beat": 3.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "え"
+        },
+        {
+          "bar": 34,
+          "beat": 4,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "へ"
+        },
+        {
+          "bar": 35,
+          "beat": 2,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 35,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "え"
+        },
+        {
+          "bar": 35,
+          "beat": 3,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "を"
+        },
+        {
+          "bar": 35,
+          "beat": 4,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "か"
+        },
+        {
+          "bar": 35,
+          "beat": 4.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ら"
+        },
+        {
+          "bar": 36,
+          "beat": 1,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "し"
+        },
+        {
+          "bar": 36,
+          "beat": 2,
+          "len": "2",
+          "pitch": "A4",
+          "lyric": "て"
+        },
+        {
+          "bar": 37,
+          "beat": 1,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "か"
+        },
+        {
+          "bar": 37,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "ぜ"
+        },
+        {
+          "bar": 37,
+          "beat": 2,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "を"
+        },
+        {
+          "bar": 37,
+          "beat": 3,
+          "len": "8",
+          "pitch": "E5",
+          "lyric": "き"
+        },
+        {
+          "bar": 37,
+          "beat": 3.5,
+          "len": "4.",
+          "pitch": "C#5",
+          "lyric": "れ"
+        },
+        {
+          "bar": 38,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "と"
+        },
+        {
+          "bar": 38,
+          "beat": 2,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ま"
+        },
+        {
+          "bar": 38,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "る"
+        },
+        {
+          "bar": 38,
+          "beat": 3,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "な"
+        },
+        {
+          "bar": 38,
+          "beat": 3.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "い"
+        },
+        {
+          "bar": 38,
+          "beat": 4,
+          "len": "4",
+          "pitch": "G#4",
+          "lyric": "け"
+        },
+        {
+          "bar": 39,
+          "beat": 2,
+          "len": "8",
+          "pitch": "F#4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 39,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 39,
+          "beat": 3,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "が"
+        },
+        {
+          "bar": 39,
+          "beat": 4,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "す"
+        },
+        {
+          "bar": 39,
+          "beat": 4.5,
+          "len": "8",
+          "pitch": "E5",
+          "lyric": "た"
+        },
+        {
+          "bar": 40,
+          "beat": 1,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "ー"
+        },
+        {
+          "bar": 40,
+          "beat": 2,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "と"
+        },
+        {
+          "bar": 40,
+          "beat": 2.5,
+          "len": "2",
+          "pitch": "A4",
+          "lyric": "だ"
+        },
+        {
+          "bar": 49,
+          "beat": 2,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 49,
+          "beat": 3,
+          "len": "4",
+          "pitch": "E4",
+          "lyric": "わ"
+        },
+        {
+          "bar": 49,
+          "beat": 4,
+          "len": "4",
+          "pitch": "F#4",
+          "lyric": "れ"
+        },
+        {
+          "bar": 50,
+          "beat": 1,
+          "len": "2",
+          "pitch": "E4",
+          "lyric": "た"
+        },
+        {
+          "bar": 50,
+          "beat": 4,
+          "len": "8",
+          "pitch": "E4",
+          "lyric": "ぎ"
+        },
+        {
+          "bar": 50,
+          "beat": 4.5,
+          "len": "8",
+          "pitch": "G#4",
+          "lyric": "た"
+        },
+        {
+          "bar": 51,
+          "beat": 1,
+          "len": "2",
+          "pitch": "G#4",
+          "lyric": "ー"
+        },
+        {
+          "bar": 51,
+          "beat": 3,
+          "len": "2",
+          "pitch": "B4",
+          "lyric": "の"
+        },
+        {
+          "bar": 53,
+          "beat": 2,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "げ"
+        },
+        {
+          "bar": 53,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "ん"
+        },
+        {
+          "bar": 53,
+          "beat": 3,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "を"
+        },
+        {
+          "bar": 53,
+          "beat": 4,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "は"
+        },
+        {
+          "bar": 53,
+          "beat": 4.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "り"
+        },
+        {
+          "bar": 54,
+          "beat": 1,
+          "len": "8",
+          "pitch": "G#4",
+          "lyric": "な"
+        },
+        {
+          "bar": 54,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "G#4",
+          "lyric": "お"
+        },
+        {
+          "bar": 54,
+          "beat": 2,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "し"
+        },
+        {
+          "bar": 54,
+          "beat": 3,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "て"
+        },
+        {
+          "bar": 55,
+          "beat": 2,
+          "len": "4",
+          "pitch": "F#4",
+          "lyric": "よ"
+        },
+        {
+          "bar": 55,
+          "beat": 3,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "る"
+        },
+        {
+          "bar": 55,
+          "beat": 3.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "を"
+        },
+        {
+          "bar": 55,
+          "beat": 4,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 56,
+          "beat": 1,
+          "len": "2",
+          "pitch": "B4",
+          "lyric": "え"
+        },
+        {
+          "bar": 57,
+          "beat": 2,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "ち"
+        },
+        {
+          "bar": 57,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "い"
+        },
+        {
+          "bar": 57,
+          "beat": 3,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "さ"
+        },
+        {
+          "bar": 57,
+          "beat": 4,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "な"
+        },
+        {
+          "bar": 58,
+          "beat": 1,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "へ"
+        },
+        {
+          "bar": 58,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "や"
+        },
+        {
+          "bar": 58,
+          "beat": 2,
+          "len": "4",
+          "pitch": "F#4",
+          "lyric": "の"
+        },
+        {
+          "bar": 58,
+          "beat": 3,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "ま"
+        },
+        {
+          "bar": 58,
+          "beat": 3.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ど"
+        },
+        {
+          "bar": 58,
+          "beat": 4,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "か"
+        },
+        {
+          "bar": 59,
+          "beat": 1,
+          "len": "2",
+          "pitch": "A4",
+          "lyric": "ら"
+        },
+        {
+          "bar": 61,
+          "beat": 2,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "あ"
+        },
+        {
+          "bar": 61,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "さ"
+        },
+        {
+          "bar": 61,
+          "beat": 3,
+          "len": "4",
+          "pitch": "D5",
+          "lyric": "ひ"
+        },
+        {
+          "bar": 61,
+          "beat": 4,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "を"
+        },
+        {
+          "bar": 62,
+          "beat": 1,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "に"
+        },
+        {
+          "bar": 62,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "ら"
+        },
+        {
+          "bar": 62,
+          "beat": 2,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "み"
+        },
+        {
+          "bar": 62,
+          "beat": 3,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "か"
+        },
+        {
+          "bar": 62,
+          "beat": 3.5,
+          "len": "8",
+          "pitch": "D5",
+          "lyric": "え"
+        },
+        {
+          "bar": 62,
+          "beat": 4,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "し"
+        },
+        {
+          "bar": 63,
+          "beat": 1,
+          "len": "2",
+          "pitch": "B4",
+          "lyric": "た"
+        },
+        {
+          "bar": 65,
+          "beat": 2,
+          "len": "8",
+          "pitch": "F#4",
+          "lyric": "な"
+        },
+        {
+          "bar": 65,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "F#4",
+          "lyric": "ん"
+        },
+        {
+          "bar": 65,
+          "beat": 3,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "ど"
+        },
+        {
+          "bar": 65,
+          "beat": 4,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "も"
+        },
+        {
+          "bar": 66,
+          "beat": 1,
+          "len": "8",
+          "pitch": "F#4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 66,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "ろ"
+        },
+        {
+          "bar": 66,
+          "beat": 2,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "ん"
+        },
+        {
+          "bar": 66,
+          "beat": 3,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "で"
+        },
+        {
+          "bar": 67,
+          "beat": 2,
+          "len": "8",
+          "pitch": "E4",
+          "lyric": "き"
+        },
+        {
+          "bar": 67,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "E4",
+          "lyric": "ず"
+        },
+        {
+          "bar": 67,
+          "beat": 3,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "が"
+        },
+        {
+          "bar": 67,
+          "beat": 4,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "ふ"
+        },
+        {
+          "bar": 68,
+          "beat": 1,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "え"
+        },
+        {
+          "bar": 68,
+          "beat": 2,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "て"
+        },
+        {
+          "bar": 68,
+          "beat": 3,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "も"
+        },
+        {
+          "bar": 69,
+          "beat": 2,
+          "len": "8",
+          "pitch": "D5",
+          "lyric": "そ"
+        },
+        {
+          "bar": 69,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "D5",
+          "lyric": "の"
+        },
+        {
+          "bar": 69,
+          "beat": 3,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "た"
+        },
+        {
+          "bar": 69,
+          "beat": 4,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "び"
+        },
+        {
+          "bar": 70,
+          "beat": 1,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "ひ"
+        },
+        {
+          "bar": 70,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "か"
+        },
+        {
+          "bar": 70,
+          "beat": 2,
+          "len": "2",
+          "pitch": "D5",
+          "lyric": "る"
+        },
+        {
+          "bar": 71,
+          "beat": 2,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ぼ"
+        },
+        {
+          "bar": 71,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "く"
+        },
+        {
+          "bar": 71,
+          "beat": 3,
+          "len": "4",
+          "pitch": "D5",
+          "lyric": "ら"
+        },
+        {
+          "bar": 71,
+          "beat": 4,
+          "len": "4",
+          "pitch": "D5",
+          "lyric": "の"
+        },
+        {
+          "bar": 72,
+          "beat": 1,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "め"
+        },
+        {
+          "bar": 72,
+          "beat": 2,
+          "len": "2",
+          "pitch": "E5",
+          "lyric": "は"
+        },
+        {
+          "bar": 73,
+          "beat": 1,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "か"
+        },
+        {
+          "bar": 73,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "ぜ"
+        },
+        {
+          "bar": 73,
+          "beat": 2,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "を"
+        },
+        {
+          "bar": 73,
+          "beat": 3,
+          "len": "8",
+          "pitch": "E5",
+          "lyric": "き"
+        },
+        {
+          "bar": 73,
+          "beat": 3.5,
+          "len": "4.",
+          "pitch": "C#5",
+          "lyric": "れ"
+        },
+        {
+          "bar": 74,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ま"
+        },
+        {
+          "bar": 74,
+          "beat": 2,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "え"
+        },
+        {
+          "bar": 74,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "G#4",
+          "lyric": "へ"
+        },
+        {
+          "bar": 74,
+          "beat": 3,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ま"
+        },
+        {
+          "bar": 74,
+          "beat": 3.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "え"
+        },
+        {
+          "bar": 74,
+          "beat": 4,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "へ"
+        },
+        {
+          "bar": 75,
+          "beat": 2,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 75,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "え"
+        },
+        {
+          "bar": 75,
+          "beat": 3,
+          "len": "4",
+          "pitch": "C#5",
+          "lyric": "を"
+        },
+        {
+          "bar": 75,
+          "beat": 4,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "か"
+        },
+        {
+          "bar": 75,
+          "beat": 4.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ら"
+        },
+        {
+          "bar": 76,
+          "beat": 1,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "し"
+        },
+        {
+          "bar": 76,
+          "beat": 2,
+          "len": "2",
+          "pitch": "A4",
+          "lyric": "て"
+        },
+        {
+          "bar": 77,
+          "beat": 1,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "か"
+        },
+        {
+          "bar": 77,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "ぜ"
+        },
+        {
+          "bar": 77,
+          "beat": 2,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "を"
+        },
+        {
+          "bar": 77,
+          "beat": 3,
+          "len": "8",
+          "pitch": "E5",
+          "lyric": "き"
+        },
+        {
+          "bar": 77,
+          "beat": 3.5,
+          "len": "4.",
+          "pitch": "C#5",
+          "lyric": "れ"
+        },
+        {
+          "bar": 78,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "と"
+        },
+        {
+          "bar": 78,
+          "beat": 2,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "ま"
+        },
+        {
+          "bar": 78,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "る"
+        },
+        {
+          "bar": 78,
+          "beat": 3,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "な"
+        },
+        {
+          "bar": 78,
+          "beat": 3.5,
+          "len": "8",
+          "pitch": "B4",
+          "lyric": "い"
+        },
+        {
+          "bar": 78,
+          "beat": 4,
+          "len": "4",
+          "pitch": "G#4",
+          "lyric": "け"
+        },
+        {
+          "bar": 79,
+          "beat": 2,
+          "len": "8",
+          "pitch": "F#4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 79,
+          "beat": 2.5,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "こ"
+        },
+        {
+          "bar": 79,
+          "beat": 3,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "が"
+        },
+        {
+          "bar": 79,
+          "beat": 4,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "す"
+        },
+        {
+          "bar": 79,
+          "beat": 4.5,
+          "len": "8",
+          "pitch": "E5",
+          "lyric": "た"
+        },
+        {
+          "bar": 80,
+          "beat": 1,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "ー"
+        },
+        {
+          "bar": 80,
+          "beat": 2,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "と"
+        },
+        {
+          "bar": 80,
+          "beat": 2.5,
+          "len": "2",
+          "pitch": "A4",
+          "lyric": "だ"
+        },
+        {
+          "bar": 81,
+          "beat": 1,
+          "len": "8",
+          "pitch": "A4",
+          "lyric": "か"
+        },
+        {
+          "bar": 81,
+          "beat": 1.5,
+          "len": "8",
+          "pitch": "C#5",
+          "lyric": "ぜ"
+        },
+        {
+          "bar": 81,
+          "beat": 2,
+          "len": "4",
+          "pitch": "E5",
+          "lyric": "を"
+        },
+        {
+          "bar": 81,
+          "beat": 3,
+          "len": "8",
+          "pitch": "E5",
+          "lyric": "き"
+        },
+        {
+          "bar": 81,
+          "beat": 3.5,
+          "len": "4",
+          "pitch": "D5",
+          "lyric": "れ"
+        },
+        {
+          "bar": 83,
+          "beat": 1,
+          "len": "4",
+          "pitch": "A4",
+          "lyric": "い"
+        },
+        {
+          "bar": 83,
+          "beat": 2,
+          "len": "4",
+          "pitch": "B4",
+          "lyric": "ま"
+        },
+        {
+          "bar": 83,
+          "beat": 3,
+          "len": "2",
+          "pitch": "C#5",
+          "lyric": "を"
+        },
+        {
+          "bar": 84,
+          "beat": 3,
+          "len": "4",
+          "pitch": "D5",
+          "lyric": "か"
+        },
+        {
+          "bar": 84,
+          "beat": 4,
+          "len": "4",
+          "pitch": "D5",
+          "lyric": "け"
+        },
+        {
+          "bar": 85,
+          "beat": 1,
+          "len": "2",
+          "pitch": "E5",
+          "lyric": "ぬ"
+        },
+        {
+          "bar": 85,
+          "beat": 3,
+          "len": "2",
+          "pitch": "B4",
+          "lyric": "け"
+        },
+        {
+          "bar": 86,
+          "beat": 1,
+          "len": "1",
+          "pitch": "C#5",
+          "lyric": "ろ"
+        }
+      ]
+    },
+    {
+      "id": "dg",
+      "kind": "inst",
+      "instrument": 30,
+      "volume": 0.6,
+      "mml": "o3 l8 'ea'1 'ea'1 'da'1 'eb'1 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'ea'4 'ea'4 'ea'4 'ea'4 'eb'4 'eb'4 'eb'4 'eb'4 'c+f+'4 'c+f+'4 'c+f+'4 'c+f+'4 'da'4 'da'4 'da'4 'da'4 'ea'4 'ea'4 'ea'4 'ea'4 'eb'4 'eb'4 'eb'4 'eb'4 'da'4 'da'4 'da'4 'da'4 'eb'4 'eb'4 'eb'4 'eb'4 'c+f+'4 'c+f+'4 'c+f+'4 'c+f+'4 'da'4 'da'4 'da'4 'da'4 'ea'4 'ea'4 'ea'4 'ea'4 'eb'4 'eb'4 'eb'4 'eb'4 'c+f+'4 'c+f+'4 'c+f+'4 'c+f+'4 'da'4 'da'4 'da'4 'da'4 'eb'4 'eb'4 'eb'4 'eb'4 'eb'4 'eb'4 'eb'4 'eb'4 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'c+g+' 'c+g+' 'c+g+' 'c+g+' 'c+g+' 'c+g+' 'c+g+' 'c+g+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'f+b' 'f+b' 'f+b' 'f+b' 'f+b' 'f+b' 'f+b' 'f+b' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'ea'4 'ea'4 'ea'4 'ea'4 'eb'4 'eb'4 'eb'4 'eb'4 'c+f+'4 'c+f+'4 'c+f+'4 'c+f+'4 'da'4 'da'4 'da'4 'da'4 'ea'4 'ea'4 'ea'4 'ea'4 'eb'4 'eb'4 'eb'4 'eb'4 'da'4 'da'4 'da'4 'da'4 'eb'4 'eb'4 'eb'4 'eb'4 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'c+f+'1 'da'1 'ea'1 'eb'1 'f+b'1 'da'1 'eb'1 'eb'1 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'c+f+' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'ea' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'da' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'eb' 'ea'1 'ea'1 'da'1 'ea'1"
+    },
+    {
+      "id": "og",
+      "kind": "inst",
+      "instrument": 29,
+      "volume": 0.62,
+      "mml": "l8 o4 a8 a8 >c+8 <a8 >e8 <a8 >d8 c+8 o4 a8 a8 >c+8 <a8 >e4 d8 c+8 o4 f+8 f+8 a8 f+8 >d4 c+8 <b8 o4 g+8 g+8 b8 g+8 >e4 d8 <b8 o4 a8 a8 >c+8 <a8 >e8 <a8 >d8 c+8 o4 a8 a8 >c+8 <a8 >e4 d8 c+8 o4 f+8 f+8 a8 f+8 >d4 c+8 <b8 o4 g+8 g+8 b8 g+8 >e4 d8 <b8 r1 r1 r1 r2 o5 d8 c+8 <a8 f+8 r1 r1 r1 r2 o5 e8 d8 <b8 g+8 r1 r1 r1 r2 o5 e8 d8 <b8 g+8 r1 r1 r1 r2 o5 e8 f+8 g+8 b8 o4 d8 f+8 a8 >d8 <a8 f+8 d8 f+8 o4 e8 g+8 b8 >e8 <b8 g+8 e8 g+8 o4 c+8 e8 g+8 >c+8 <g+8 e8 c+8 e8 o4 f+8 a8 >c+8 f+8 c+8 <a8 f+8 a8 o4 d8 f+8 a8 >d8 <a8 f+8 d8 f+8 o4 e8 g+8 b8 >e8 <b8 g+8 e8 g+8 o4 f+8 b8 >d8 f+8 d8 <b8 f+8 b8 o4 e8 g+8 b8 >e8 <b8 g+8 e8 g+8 o5 c+2 e2 o4 b2 >e2 o5 c+2 f+2 o5 d2 f+2 o5 c+2 e2 o4 b2 >e2 o5 d2 f+2 o5 c+2 e2 o5 c+8 e8 f+4 e8 c+8 <a4 o4 a8 b8 >d4 f+4 e8 d8 o5 c+4. e8 a4 e4 o5 g+8 f+8 e8 d8 <b4 g+4 o5 c+8 c+8 e8 f+8 a4 f+8 e8 o5 f+4 e8 d8 c+4 <a4 o4 b8 >c+8 d8 e8 f+8 g+8 a4 o5 b2 g+4 e4 r1 r1 r1 r2 o5 d8 c+8 <a8 f+8 r1 r1 r1 r2 o5 e8 d8 <b8 g+8 r1 r1 r1 r2 o5 e8 d8 <b8 g+8 r1 r1 r1 r2 o5 e8 f+8 g+8 b8 o5 c+1 o4 a1 o5 c+1 o4 b1 o5 d1 o4 a1 o4 b1 o4 b8 >c+8 d8 e8 f+8 g+8 a8 b8 o5 c+2 e2 o4 b2 >e2 o5 c+2 f+2 o5 d2 f+2 o5 c+2 e2 o4 b2 >e2 o5 d2 f+2 o5 c+2 e2 o5 d2 f+2 o4 b2 >e2 o5 c+2 f+2 o5 d2 f+2 o4 b2 >e2 o5 c+2 e2 o5 d2 f+2 o4 b2 >e2 o4 a8 a8 >c+8 <a8 >e8 <a8 >d8 c+8 o4 a8 a8 >c+8 <a8 >e4 d8 c+8 o4 f+8 f+8 a8 f+8 >d4 c+8 <b8 o4 g+8 g+8 b8 g+8 >e4 d8 <b8 o4 a8 a8 >c+8 <a8 >e8 <a8 >d8 c+8 o4 a8 a8 >c+8 <a8 >e4 d8 c+8 o4 f+8 f+8 a8 f+8 >d4 c+8 <b8 o4 a1"
+    },
+    {
+      "id": "ba",
+      "kind": "inst",
+      "instrument": 34,
+      "volume": 0.7,
+      "mml": "o2 l8 a1 a1 d1 e1 a a a a a a a a a a a a a a a a d d d d d d d d e e e e e e e e a a a a a a a a e e e e e e e e f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d a a a a a a a a e e e e e e e e d d d d d d d d e e e e e e e e f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d a a a a a a a a e e e e e e e e f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d e e e e e e e e e e e e e e e e d d d d d d d d e e e e e e e e c+ c+ c+ c+ c+ c+ c+ c+ f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d e e e e e e e e b b b b b b b b e e e e e e e e a a a a a a a a e e e e e e e e f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d a a a a a a a a e e e e e e e e d d d d d d d d a a a a a a a a f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d a a a a a a a a e e e e e e e e f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d e e e e e e e e e e e e e e e e a a a a a a a a e e e e e e e e f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d a a a a a a a a e e e e e e e e d d d d d d d d e e e e e e e e f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d a a a a a a a a e e e e e e e e f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d e e e e e e e e e e e e e e e e f+4 f+4 f+4 f+4 d4 d4 d4 d4 a4 a4 a4 a4 e4 e4 e4 e4 b4 b4 b4 b4 d4 d4 d4 d4 e4 e4 e4 e4 e4 e4 e4 e4 a a a a a a a a e e e e e e e e f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d a a a a a a a a e e e e e e e e d d d d d d d d a a a a a a a a d d d d d d d d e e e e e e e e f+ f+ f+ f+ f+ f+ f+ f+ d d d d d d d d e e e e e e e e a a a a a a a a d d d d d d d d e e e e e e e e a a a a a a a a a a a a a a a a d d d d d d d d e e e e e e e e a a a a a a a a a a a a a a a a d d d d d d d d a1"
+    },
+    {
+      "id": "or",
+      "kind": "inst",
+      "instrument": 18,
+      "volume": 0.55,
+      "mml": "o4 l1 r r r r r r r r r r r r r r r r 'c+f+a' 'df+a' 'c+ea' 'eg+b' 'c+f+a' 'df+a' 'eg+b' 'eg+b' 'df+a' 'eg+b' 'c+eg+' 'c+f+a' 'df+a' 'eg+b' 'df+b' 'eg+b' 'c+ea'2 'c+ea'2 'eg+b'2 'eg+b'2 'c+f+a'2 'c+f+a'2 'df+a'2 'df+a'2 'c+ea'2 'c+ea'2 'eg+b'2 'eg+b'2 'df+a'2 'df+a'2 'c+ea'2 'c+ea'2 'c+f+a' 'df+a' 'c+ea' 'eg+b' 'c+f+a' 'df+a' 'eg+b' 'eg+b' 'c+ea' 'eg+b' 'c+f+a' 'df+a' 'c+ea' 'eg+b' 'df+a' 'eg+b' 'c+f+a' 'df+a' 'c+ea' 'eg+b' 'c+f+a' 'df+a' 'eg+b' 'eg+b' 'c+f+a' 'df+a' 'c+ea' 'eg+b' 'df+b' 'df+a' 'eg+b' 'eg+b' 'c+ea'2 'c+ea'2 'eg+b'2 'eg+b'2 'c+f+a'2 'c+f+a'2 'df+a'2 'df+a'2 'c+ea'2 'c+ea'2 'eg+b'2 'eg+b'2 'df+a'2 'df+a'2 'c+ea'2 'c+ea'2 'df+a'2 'df+a'2 'eg+b'2 'eg+b'2 'c+f+a'2 'c+f+a'2 'df+a'2 'df+a'2 'eg+b'2 'eg+b'2 'c+ea'2 'c+ea'2 'df+a'2 'df+a'2 'eg+b'2 'eg+b'2 'c+ea' 'c+ea' 'df+a' 'eg+b' 'c+ea' r r 'c+ea'"
+    },
+    {
+      "id": "dr",
+      "kind": "drums",
+      "pattern": "8beat"
+    }
+  ]
+}

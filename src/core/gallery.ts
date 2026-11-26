@@ -3,31 +3,43 @@ import { buildPrompt } from "./prompt";
 import type { SongDoc } from "./songdoc";
 export const GALLERY = [
   {
-    "id": "sunset-pop",
-    "title": "夕空ポップ",
+    "id": "hidamari-skip",
+    "title": "ひだまりスキップ",
     "category": "曲",
-    "bpm": 120,
-    "description": "明るいポップ。ピアノとベース、8ビート。"
+    "bpm": 140,
+    "bars": 76,
+    "description": "約2分10秒・76小節。ピアノ・ベース・ギター・ブラス・ストリングスの16ビート。"
   },
   {
-    "id": "moon-ballad",
-    "title": "月あかりのバラード",
+    "id": "yukidoke-no-tegami",
+    "title": "雪解けの手紙",
     "category": "曲",
-    "bpm": 76,
-    "description": "ゆったりしたバラード。ギターとストリングス。"
+    "bpm": 72,
+    "bars": 52,
+    "description": "約2分53秒・52小節。ピアノとストリングスのバラード。"
   },
   {
-    "id": "city-dance",
-    "title": "街のダンス",
+    "id": "kaze-wo-kire",
+    "title": "風を切れ",
     "category": "曲",
-    "bpm": 138,
-    "description": "軽快なダンス。エレピとベース。"
+    "bpm": 168,
+    "bars": 96,
+    "description": "約2分17秒・96小節。ギター・ベースの8ビートのロック。"
+  },
+  {
+    "id": "mayonaka-loop-line",
+    "title": "真夜中ループライン",
+    "category": "曲",
+    "bpm": 104,
+    "bars": 72,
+    "description": "約2分46秒・72小節。エレピ・ベース・ギター・シンセのディスコビート。"
   },
   {
     "id": "eight-beat",
     "title": "まっすぐ8ビート",
     "category": "伴奏",
     "bpm": 112,
+    "bars": 4,
     "description": "ピアノとベースの8ビート。歌は音合わせの短いガイド。"
   },
   {
@@ -35,6 +47,7 @@ export const GALLERY = [
     "title": "やわらかいバラード伴奏",
     "category": "伴奏",
     "bpm": 68,
+    "bars": 4,
     "description": "ギターと低音のバラード。歌は音合わせの短いガイド。"
   },
   {
@@ -42,6 +55,7 @@ export const GALLERY = [
     "title": "ボカロ風 0.8",
     "category": "エフェクト",
     "bpm": 124,
+    "bars": 4,
     "description": "歌のボカロ風エフェクトを0.8で試す。"
   },
   {
@@ -49,6 +63,7 @@ export const GALLERY = [
     "title": "ケロケロの階段",
     "category": "エフェクト",
     "bpm": 128,
+    "bars": 4,
     "description": "歌のケロケロエフェクトを1.0で試す。"
   }
 ] as const;
